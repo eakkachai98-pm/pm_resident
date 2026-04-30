@@ -69,7 +69,7 @@ const Sidebar = ({
         <div className={`group cursor-pointer flex flex-col ${expanded ? '' : 'items-center w-full'}`} onClick={() => { onNavigate('user-dashboard'); onClose(); }}>
           <div className={`flex items-center ${expanded ? 'gap-3 mb-1' : 'justify-center'}`}>
             <div className={`bg-primary-brand shrink-0 transition-all ${expanded ? 'w-3 h-3 rounded-[3px]' : 'w-6 h-6 rounded-[6px]'}`} />
-            {expanded && <span className="font-headline font-bold text-white text-xl tracking-tight whitespace-nowrap">Primus Pro</span>}
+            {expanded && <span className="font-headline font-bold text-white text-xl tracking-tight whitespace-nowrap">Resident soft</span>}
           </div>
           {expanded && (
             <div className="text-[10px] font-bold uppercase tracking-widest text-primary-brand/60 ml-6 flex items-center gap-1 whitespace-nowrap">

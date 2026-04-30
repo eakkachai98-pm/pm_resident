@@ -53,9 +53,9 @@ export async function createNotification({
     // 2. Send Email if requested AND user prefers it
     if (sendEmail && user.notifyEmail && user.email) {
       const mailOptions = {
-        from: '"Primus Pro System" <noreply@primus.pro>',
+        from: '"Resident soft System" <noreply@primus.pro>',
         to: user.email,
-        subject: `[Primus Pro] ${title}`,
+        subject: `[Resident soft] ${title}`,
         html: `
           <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
             <h2 style="color: #111827;">IT Fixit System Notification</h2>

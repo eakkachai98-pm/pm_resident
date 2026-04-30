@@ -52,12 +52,12 @@ export default function Login({ onLogin }: { onLogin: (u: Personnel) => void }) 
           >
             <img 
               src="/images/logo.png" 
-              alt="Primus Pro Logo" 
+              alt="Resident soft Logo" 
               className="h-20 w-auto object-contain drop-shadow-md" 
               onError={(e) => (e.currentTarget.style.display = 'none')} 
             />
             <div>
-              <h1 className="text-4xl font-black text-[#111827] tracking-tighter leading-none mb-2">Primus Pro</h1>
+              <h1 className="text-4xl font-black text-[#111827] tracking-tighter leading-none mb-2">Resident soft</h1>
               <p className="text-gray-400 font-bold uppercase tracking-[0.25em] text-[10px]">Infrastructure OS</p>
             </div>
           </motion.div>
