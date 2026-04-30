@@ -49,8 +49,8 @@
 
 ---
 **🚀 Next Phase (Future Enhancements):**
-- [ ] **Smart Calendar Booking System (Staff & Resident):**
-  - ฝั่งลูกบ้านเลือกระบุวัน/เวลา (Slot) ในการแจ้งซ่อมได้
-  - ฝั่งช่าง (Staff Dashboard) มีหน้าจอ Weekly Calendar ดูคิวงาน พร้อมตั้งค่า Working Hours และ Block Time วันหยุดได้
+- [x] **Smart Calendar Booking System (Staff & Resident):**
+  - ฝั่งลูกบ้านเลือกระบุวัน/เวลา (Slot) ในการแจ้งซ่อมได้ (เสร็จสมบูรณ์ในหน้า Tickets)
+  - ฝั่งช่าง (Technician Dashboard) มีหน้าจอ Monthly Calendar เพื่อดูคิวงาน พร้อมระบบ Claim งานจาก Pool และแสดงงานของตัวเอง (แก้ไขปัญหาการดึงข้อมูลและระบบผูก ID ช่างเรียบร้อยแล้ว)
 - [ ] Payment Gateway Integration (QR PromptPay & Slip Upload)
 - [ ] Line Notify Integration (แจ้งเตือนบิลใหม่ และสถานะการซ่อมบำรุงให้ลูกบ้าน)
