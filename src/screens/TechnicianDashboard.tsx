@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Wrench, AlertTriangle, CheckCircle, Search, QrCode, Cpu, Cable, Play, Check, Package, FileText, ChevronDown, History, X } from 'lucide-react';
+import { Wrench, AlertTriangle, CheckCircle, Search, QrCode, Play, Check, Package, FileText, ChevronDown, History, X, Home, ClipboardList, Calendar, Settings as SettingsIcon, Clock, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { api } from '../services/api';
 import { Asset, Ticket, Personnel } from '../types';
@@ -15,8 +15,20 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
   const [queue, setQueue] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
+  const [selectedDate, setSelectedDate] = useState<number>(new Date().getDate());
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+  const monthName = new Date().toLocaleString('default', { month: 'long' });
+  const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+  const firstDayOfMonth = new Date(currentYear, currentMonth - 1, 1).getDay();
+  const currentMonthStr = `${currentYear}-${currentMonth.toString().padStart(2, '0')}`;
   const [showResolveModal, setShowResolveModal] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [showScheduleSettings, setShowScheduleSettings] = useState(false);
+  const [workingDays, setWorkingDays] = useState<string[]>(['Mon', 'Tue', 'Wed', 'Thu', 'Fri']);
+  const [blockedSlots, setBlockedSlots] = useState<{id: string, date: string, type: string, reason: string}[]>([]);
+  const [isAddingBlock, setIsAddingBlock] = useState(false);
+  const [newBlock, setNewBlock] = useState({ date: '', type: 'Full Day', reason: '' });
   const [resolvingTicketId, setResolvingTicketId] = useState<string | null>(null);
   const [resolutionNotes, setResolutionNotes] = useState('');
   const [expandedTasks, setExpandedTasks] = useState<string[]>([]);
@@ -28,31 +40,33 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
 
   const fetchData = async () => {
     try {
-      const [statsData, allTickets, assetsData, personnelData] = await Promise.all([
-        api.getStats(),
+      const [allTickets, assetsData, personnelData] = await Promise.all([
         api.getTickets(),
         api.getAssets(),
         api.getPersonnel()
       ]);
 
-      const mappedTickets = allTickets.map((t: Ticket) => {
+      const mappedTickets = allTickets.map((t: any) => {
         const reporter = personnelData.find(p => p.id === t.reporterId);
         return {
           id: t.id,
-          title: t.subject,
+          title: t.title || t.subject,
           description: t.description,
           status: t.status,
-          priority: t.priority,
+          priority: t.priority || 'Medium',
           assetId: t.assetId,
           assigneeId: t.assigneeId,
           resolution: t.resolution,
           resolvedAt: t.resolvedAt,
+          scheduledDate: t.scheduledDate,
+          scheduledSlot: t.scheduledSlot,
+          room: t.room,
           person: reporter ? `${reporter.name} (${reporter.department})` : 'Unknown User'
         };
       });
 
-      const activeMyTasks = mappedTickets.filter(t => t.status === 'In Progress' && t.assigneeId === user.id);
-      const openUnassigned = mappedTickets.filter(t => t.status === 'Open' && !t.assigneeId).sort((a, b) => {
+      const activeMyTasks = mappedTickets.filter(t => (t.status === 'IN_PROGRESS' || t.status === 'RESOLVED') && t.assigneeId === user.id);
+      const openUnassigned = mappedTickets.filter(t => t.status === 'OPEN' && !t.assigneeId).sort((a, b) => {
         const pScore = (p: string) => {
           if (p === 'Urgent') return 3;
           if (p === 'High') return 2;
@@ -61,7 +75,7 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
         };
         return pScore(b.priority) - pScore(a.priority);
       });
-      const myCompleted = mappedTickets.filter(t => t.status === 'Resolved' && t.assigneeId === user.id);
+      const myCompleted = mappedTickets.filter(t => t.status === 'RESOLVED' && t.assigneeId === user.id);
 
       setMyTasks(activeMyTasks);
       setUnassignedPool(openUnassigned);
@@ -74,7 +88,7 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
       ]);
 
       setQueue(assetsData.filter(a => a.status === 'In Maintenance').map(a => {
-        const relatedTicket = allTickets.find(t => t.assetId === a.id && t.status !== 'Resolved');
+        const relatedTicket = allTickets.find(t => t.assetId === a.id && t.status !== 'RESOLVED');
         return {
           id: a.id,
           type: a.type,
@@ -88,6 +102,21 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
       console.error('Error fetching technician data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleClaimTask = async (ticketId: string) => {
+    try {
+      const res = await fetch(`/api/maintenance/${ticketId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'IN_PROGRESS', assigneeId: user.id })
+      });
+      if (!res.ok) throw new Error('Failed to claim');
+      showToast('Task claimed successfully!', 'success');
+      fetchData(); // Reload data
+    } catch (err) {
+      showToast('Failed to claim task', 'error');
     }
   };
 
@@ -211,7 +240,237 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-        <div className="md:col-span-8 space-y-8">
+        <div className="md:col-span-12 space-y-8">
+          
+          {/* Smart Calendar Section (NEW - Monthly Hybrid) */}
+          <section className="bg-white rounded-[2rem] border border-gray-200/50 shadow-sm overflow-hidden mb-8">
+            <div className="px-8 py-6 border-b border-gray-50 flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-emerald-50/30">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-emerald-100 text-emerald-600 rounded-xl"><Calendar size={20} /></div>
+                <div>
+                  <h2 className="text-lg font-bold text-[#111827]">Monthly Booking Schedule</h2>
+                  <p className="text-xs text-gray-500 font-medium mt-1">{monthName} {currentYear} Overview</p>
+                </div>
+              </div>
+              <button onClick={() => setShowScheduleSettings(true)} className="px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-all text-xs font-bold flex items-center gap-2 shadow-sm whitespace-nowrap">
+                <SettingsIcon size={14} /> Set Availability
+              </button>
+            </div>
+            
+            <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
+              {/* Monthly Overview */}
+              <div className="flex-1 p-6 md:p-8">
+                <div className="grid grid-cols-7 gap-2 mb-4">
+                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
+                    <div key={d} className="text-center text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">{d}</div>
+                  ))}
+                </div>
+                <div className="grid grid-cols-7 gap-2 md:gap-3">
+                  {/* Empty slots before first day */}
+                  {Array.from({length: firstDayOfMonth}).map((_, i) => <div key={`empty-${i}`} className="h-12 md:h-16"></div>)}
+                  
+                  {Array.from({length: daysInMonth}, (_, i) => i + 1).map(date => {
+                    const dayIndex = (date + firstDayOfMonth - 1) % 7; // 0=Sun, 1=Mon, ..., 6=Sat
+                    const dayStr = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dayIndex];
+                    const isOffDay = !workingDays.includes(dayStr);
+                    const isSelected = selectedDate === date;
+                    
+                    const morningBlocks = blockedSlots.filter(b => {
+                      const [y, m, d] = b.date.split('-');
+                      const dateObj = new Date(parseInt(y), parseInt(m)-1, parseInt(d));
+                      return dateObj.getDate() === date && (b.type === 'Full Day' || b.type === 'Morning');
+                    });
+                    const afternoonBlocks = blockedSlots.filter(b => {
+                      const [y, m, d] = b.date.split('-');
+                      const dateObj = new Date(parseInt(y), parseInt(m)-1, parseInt(d));
+                      return dateObj.getDate() === date && (b.type === 'Full Day' || b.type === 'Afternoon');
+                    });
+
+                    const isMorningBlocked = isOffDay || morningBlocks.length > 0;
+                    const isAfternoonBlocked = isOffDay || afternoonBlocks.length > 0;
+
+                    // Actual Data
+                    const fullDateStr = `${currentMonthStr}-${date.toString().padStart(2, '0')}`;
+                    
+                    const mUnassigned = unassignedPool.filter(t => t.scheduledDate === fullDateStr && t.scheduledSlot === 'Morning');
+                    const aUnassigned = unassignedPool.filter(t => t.scheduledDate === fullDateStr && t.scheduledSlot === 'Afternoon');
+                    const mMyTasks = myTasks.filter(t => t.scheduledDate === fullDateStr && t.scheduledSlot === 'Morning');
+                    const aMyTasks = myTasks.filter(t => t.scheduledDate === fullDateStr && t.scheduledSlot === 'Afternoon');
+
+                    const hasMorningMyTask = mMyTasks.length > 0 && !isMorningBlocked;
+                    const hasAfternoonMyTask = aMyTasks.length > 0 && !isAfternoonBlocked;
+                    const hasMorningUnassigned = mUnassigned.length > 0 && !isMorningBlocked;
+                    const hasAfternoonUnassigned = aUnassigned.length > 0 && !isAfternoonBlocked;
+
+                    return (
+                      <button 
+                        key={date} 
+                        onClick={() => setSelectedDate(date)} 
+                        className={`h-12 md:h-16 rounded-xl border flex flex-col items-center justify-center relative transition-all 
+                          ${isSelected ? 'bg-[#111827] text-white border-[#111827] shadow-md shadow-gray-900/20 hover:scale-[1.02]' 
+                            : (isMorningBlocked && isAfternoonBlocked) ? 'bg-gray-50 border-transparent text-gray-400 border-dashed' 
+                            : 'bg-white border-gray-100 text-gray-700 hover:border-primary-brand/30 hover:bg-blue-50/30'}`}
+                      >
+                        <span className={`text-sm md:text-base font-bold ${isSelected ? 'text-white' : ''}`}>{date}</span>
+                        <div className="flex gap-1 mt-1">
+                          {hasMorningMyTask && <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-blue-500'}`} title="My Morning Task"></span>}
+                          {hasMorningUnassigned && !hasMorningMyTask && <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-amber-500'}`} title="Unassigned Morning"></span>}
+                          
+                          {hasAfternoonMyTask && <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-blue-500'}`} title="My Afternoon Task"></span>}
+                          {hasAfternoonUnassigned && !hasAfternoonMyTask && <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-amber-500'}`} title="Unassigned Afternoon"></span>}
+                          
+                          {(isMorningBlocked && isAfternoonBlocked) && !hasMorningMyTask && !hasAfternoonMyTask && !hasMorningUnassigned && !hasAfternoonUnassigned && <span className={`text-[8px] font-bold uppercase mt-1 ${isSelected ? 'text-gray-300' : 'text-gray-400'}`}>OFF</span>}
+                          {((isMorningBlocked && !isAfternoonBlocked) || (!isMorningBlocked && isAfternoonBlocked)) && <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-red-400'}`} title="Partially Blocked"></span>}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Daily Detail Pane */}
+              <div className="w-full lg:w-[350px] bg-gray-50/50 p-6 md:p-8 flex flex-col">
+                 <h3 className="text-sm font-extrabold text-[#111827] mb-6 flex items-center gap-2"><Calendar size={16}/> Details for {monthName} {selectedDate}</h3>
+                 
+                 <div className="space-y-4 flex-1">
+                    {/* Morning Slot Detail */}
+                    <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-3 min-h-[140px]">
+                      <span className="text-[10px] font-bold text-gray-400 uppercase flex items-center gap-1"><Clock size={12} /> 09:00 - 12:00</span>
+                      {(() => {
+                        const dayIndex = (selectedDate + firstDayOfMonth - 1) % 7;
+                        const dayStr = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dayIndex];
+                        const isOffDay = !workingDays.includes(dayStr);
+                        const mBlocks = blockedSlots.filter(b => {
+                          const [y, m, d] = b.date.split('-');
+                          const dateObj = new Date(parseInt(y), parseInt(m)-1, parseInt(d));
+                          return dateObj.getDate() === selectedDate && (b.type === 'Full Day' || b.type === 'Morning');
+                        });
+                        const blocked = isOffDay || mBlocks.length > 0;
+
+                        const fullDateStr = `${currentMonthStr}-${selectedDate.toString().padStart(2, '0')}`;
+                        const mMyTasks = myTasks.filter(t => t.scheduledDate === fullDateStr && t.scheduledSlot === 'Morning');
+                        const mUnassigned = unassignedPool.filter(t => t.scheduledDate === fullDateStr && t.scheduledSlot === 'Morning');
+
+                        if (blocked) {
+                          return (
+                            <div className="flex-1 flex flex-col items-center justify-center p-3 bg-red-50/50 rounded-xl border border-red-100 border-dashed">
+                               <span className="text-xs font-bold text-red-400 uppercase">Blocked</span>
+                               {mBlocks[0]?.reason && <span className="text-[10px] font-medium text-red-300 mt-1 text-center">{mBlocks[0].reason}</span>}
+                             </div>
+                          );
+                        }
+
+                        if (mMyTasks.length > 0) {
+                          return (
+                            <div className="flex flex-col gap-2">
+                              {mMyTasks.map(t => (
+                                <div key={t.id} className={`p-3 border rounded-xl cursor-pointer hover:ring-2 transition-all ${t.status === 'RESOLVED' ? 'bg-green-50 border-green-100 hover:ring-green-200' : 'bg-blue-50 border-blue-100 hover:ring-blue-200'}`}>
+                                  <div className="flex justify-between items-start mb-1">
+                                    <p className={`text-xs font-bold flex items-center gap-1 ${t.status === 'RESOLVED' ? 'text-green-800' : 'text-blue-800'}`}><Home size={12}/> {t.room?.roomNumber ? `Room ${t.room.roomNumber}` : 'Room'}</p>
+                                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase ${t.status === 'RESOLVED' ? 'bg-green-200 text-green-800' : 'bg-blue-200 text-blue-800'}`}>{t.status === 'RESOLVED' ? 'Done' : 'My Task'}</span>
+                                  </div>
+                                  <p className={`text-[10px] font-medium line-clamp-2 mt-1 ${t.status === 'RESOLVED' ? 'text-green-600' : 'text-blue-600'}`}>{t.title}</p>
+                                </div>
+                              ))}
+                            </div>
+                          );
+                        }
+
+                        if (mUnassigned.length > 0) {
+                          return (
+                            <div className="flex flex-col gap-2">
+                              {mUnassigned.map(t => (
+                                <div key={t.id} className="p-3 bg-amber-50 border border-amber-100 rounded-xl cursor-pointer hover:ring-2 hover:ring-amber-200 transition-all relative overflow-hidden">
+                                  <div className="absolute top-0 right-0 w-1.5 h-full bg-amber-400"></div>
+                                  <div className="flex justify-between items-start mb-1">
+                                    <p className="text-xs font-bold text-amber-800 flex items-center gap-1"><Home size={12}/> {t.room?.roomNumber ? `Room ${t.room.roomNumber}` : 'Room'}</p>
+                                  </div>
+                                  <p className="text-[10px] font-medium text-amber-600 line-clamp-2 mt-1">{t.title}</p>
+                                  <div className="mt-3 flex items-center justify-between">
+                                    <span className="px-2 py-1 bg-amber-200 text-amber-800 rounded text-[9px] font-extrabold uppercase shadow-sm">Pool</span>
+                                    <button onClick={(e) => { e.stopPropagation(); handleClaimTask(t.id); }} className="px-2 py-1 bg-white text-amber-700 text-[9px] font-bold rounded shadow-sm border border-amber-200 hover:bg-amber-100">Claim</button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          );
+                        }
+                        
+                        return <div className="flex-1 flex items-center justify-center"><span className="text-xs font-bold text-gray-300">Available</span></div>;
+                      })()}
+                    </div>
+
+                    {/* Afternoon Slot Detail */}
+                    <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-3 min-h-[140px] max-h-[250px] overflow-y-auto custom-scrollbar">
+                      <span className="text-[10px] font-bold text-gray-400 uppercase flex items-center gap-1"><Clock size={12} /> 13:00 - 17:00</span>
+                      {(() => {
+                        const dayIndex = (selectedDate + firstDayOfMonth - 1) % 7;
+                        const dayStr = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dayIndex];
+                        const isOffDay = !workingDays.includes(dayStr);
+                        const aBlocks = blockedSlots.filter(b => {
+                          const [y, m, d] = b.date.split('-');
+                          const dateObj = new Date(parseInt(y), parseInt(m)-1, parseInt(d));
+                          return dateObj.getDate() === selectedDate && (b.type === 'Full Day' || b.type === 'Afternoon');
+                        });
+                        const blocked = isOffDay || aBlocks.length > 0;
+
+                        const fullDateStr = `${currentMonthStr}-${selectedDate.toString().padStart(2, '0')}`;
+                        const aMyTasks = myTasks.filter(t => t.scheduledDate === fullDateStr && t.scheduledSlot === 'Afternoon');
+                        const aUnassigned = unassignedPool.filter(t => t.scheduledDate === fullDateStr && t.scheduledSlot === 'Afternoon');
+
+                        if (blocked) {
+                          return (
+                            <div className="flex-1 flex flex-col items-center justify-center p-3 bg-red-50/50 rounded-xl border border-red-100 border-dashed">
+                               <span className="text-xs font-bold text-red-400 uppercase">Blocked</span>
+                               {aBlocks[0]?.reason && <span className="text-[10px] font-medium text-red-300 mt-1 text-center">{aBlocks[0].reason}</span>}
+                             </div>
+                          );
+                        }
+
+                        if (aMyTasks.length > 0) {
+                          return (
+                            <div className="flex flex-col gap-2">
+                              {aMyTasks.map(t => (
+                                <div key={t.id} className={`p-3 border rounded-xl cursor-pointer hover:ring-2 transition-all ${t.status === 'RESOLVED' ? 'bg-green-50 border-green-100 hover:ring-green-200' : 'bg-blue-50 border-blue-100 hover:ring-blue-200'}`}>
+                                  <div className="flex justify-between items-start mb-1">
+                                    <p className={`text-xs font-bold flex items-center gap-1 ${t.status === 'RESOLVED' ? 'text-green-800' : 'text-blue-800'}`}><Home size={12}/> {t.room?.roomNumber ? `Room ${t.room.roomNumber}` : 'Room'}</p>
+                                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase ${t.status === 'RESOLVED' ? 'bg-green-200 text-green-800' : 'bg-blue-200 text-blue-800'}`}>{t.status === 'RESOLVED' ? 'Done' : 'My Task'}</span>
+                                  </div>
+                                  <p className={`text-[10px] font-medium line-clamp-2 mt-1 ${t.status === 'RESOLVED' ? 'text-green-600' : 'text-blue-600'}`}>{t.title}</p>
+                                </div>
+                              ))}
+                            </div>
+                          );
+                        }
+
+                        if (aUnassigned.length > 0) {
+                          return (
+                            <div className="flex flex-col gap-2">
+                              {aUnassigned.map(t => (
+                                <div key={t.id} className="p-3 bg-amber-50 border border-amber-100 rounded-xl cursor-pointer hover:ring-2 hover:ring-amber-200 transition-all relative overflow-hidden">
+                                  <div className="absolute top-0 right-0 w-1.5 h-full bg-amber-400"></div>
+                                  <div className="flex justify-between items-start mb-1">
+                                    <p className="text-xs font-bold text-amber-800 flex items-center gap-1"><Home size={12}/> {t.room?.roomNumber ? `Room ${t.room.roomNumber}` : 'Room'}</p>
+                                  </div>
+                                  <p className="text-[10px] font-medium text-amber-600 line-clamp-2 mt-1">{t.title}</p>
+                                  <div className="mt-3 flex items-center justify-between">
+                                    <span className="px-2 py-1 bg-amber-200 text-amber-800 rounded text-[9px] font-extrabold uppercase shadow-sm">Pool</span>
+                                    <button onClick={(e) => { e.stopPropagation(); handleClaimTask(t.id); }} className="px-2 py-1 bg-white text-amber-700 text-[9px] font-bold rounded shadow-sm border border-amber-200 hover:bg-amber-100">Claim</button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          );
+                        }
+
+                        return <div className="flex-1 flex items-center justify-center"><span className="text-xs font-bold text-gray-300">Available</span></div>;
+                      })()}
+                    </div>
+                 </div>
+              </div>
+            </div>
+          </section>
+
           {/* My Assigned Tasks */}
           <section className="bg-white rounded-[2rem] border border-gray-200/50 shadow-sm overflow-hidden">
             <div className="px-8 py-6 border-b border-gray-50 flex justify-between items-center bg-blue-50/30">
@@ -240,26 +499,12 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
           </section>
         </div>
 
-        <section className="md:col-span-4 space-y-6">
-          <div className="bg-white rounded-[2rem] p-8 border border-gray-200/50 shadow-sm relative overflow-hidden">
-            <h2 className="text-xl font-extrabold text-[#111827] mb-6">{t('tech.deviceSearch' as any)}</h2>
-            <div className="relative group">
-              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input type="text" className="w-full bg-[#F4F6F8] border-none rounded-xl py-3.5 pl-12 pr-4 text-sm font-medium focus:ring-2 focus:ring-primary-brand/10 transition-all" placeholder={t('tech.enterAssetId' as any)} />
-            </div>
-            <div className="grid grid-cols-2 gap-4 mt-6">
-              <button className="flex flex-col items-center p-6 rounded-2xl bg-[#F9FAFB] hover:bg-primary-brand hover:text-white transition-all gap-2 border border-gray-100 group"><Cpu size={24} className="text-primary-brand group-hover:text-white" /><span className="text-[10px] font-bold uppercase tracking-widest">{t('tech.inventory' as any)}</span></button>
-              <button className="flex flex-col items-center p-6 rounded-2xl bg-[#F9FAFB] hover:bg-primary-brand hover:text-white transition-all gap-2 border border-gray-100 group"><Cable size={24} className="text-primary-brand group-hover:text-white" /><span className="text-[10px] font-bold uppercase tracking-widest">{t('tech.cables' as any)}</span></button>
-            </div>
-          </div>
-        </section>
-
         <section className="md:col-span-12 bg-white rounded-[2rem] border border-gray-200/50 shadow-sm overflow-hidden">
           <div className="px-8 py-6 border-b border-gray-50 flex justify-between items-center"><h2 className="text-lg font-bold text-[#111827]">{t('tech.maintenancePool' as any)}</h2></div>
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="bg-[#F9FAFB] text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em] border-b border-gray-50"><th className="px-8 py-4">{t('tech.assetId' as any)}</th><th className="px-8 py-4">{t('tech.subject' as any)}</th><th className="px-8 py-4">{t('tech.description' as any)}</th><th className="px-8 py-4 text-right">{t('tech.status' as any)}</th></tr>
+                <tr className="bg-[#F9FAFB] text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em] border-b border-gray-50"><th className="px-8 py-4">Room No.</th><th className="px-8 py-4">{t('tech.subject' as any)}</th><th className="px-8 py-4">{t('tech.description' as any)}</th><th className="px-8 py-4 text-right">{t('tech.status' as any)}</th></tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {queue.map((item) => (
@@ -277,6 +522,118 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
       </div>
 
       <AnimatePresence>
+        {showScheduleSettings && (
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowScheduleSettings(false)} className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden p-8">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-extrabold text-[#111827]">Set Availability</h3>
+                <button onClick={() => setShowScheduleSettings(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors"><X size={20} className="text-gray-500" /></button>
+              </div>
+              
+              <div className="space-y-6">
+                <div>
+                  <h4 className="text-sm font-bold text-[#111827] mb-3">Working Days</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => {
+                      const isActive = workingDays.includes(day);
+                      return (
+                      <button 
+                        key={day} 
+                        onClick={() => setWorkingDays(prev => prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day])}
+                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${isActive ? 'bg-primary-brand text-white border-primary-brand shadow-md' : 'bg-white text-gray-400 border-gray-200 hover:bg-gray-50'}`}
+                      >
+                        {day}
+                      </button>
+                    )})}
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-sm font-bold text-[#111827] mb-3">Time Slots per Day</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-3 border border-gray-100 rounded-xl bg-gray-50">
+                      <span className="text-xs font-bold text-gray-600 flex items-center gap-2"><Clock size={14}/> Morning (09:00 - 12:00)</span>
+                      <div className="flex items-center gap-3">
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Max capacity:</span>
+                        <input type="number" defaultValue={3} className="w-16 bg-white border border-gray-200 rounded-lg px-2 py-1 text-xs font-bold text-center" />
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between p-3 border border-gray-100 rounded-xl bg-gray-50">
+                      <span className="text-xs font-bold text-gray-600 flex items-center gap-2"><Clock size={14}/> Afternoon (13:00 - 17:00)</span>
+                      <div className="flex items-center gap-3">
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Max capacity:</span>
+                        <input type="number" defaultValue={4} className="w-16 bg-white border border-gray-200 rounded-lg px-2 py-1 text-xs font-bold text-center" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-sm font-bold text-[#111827] mb-3">Block Time (Time-off)</h4>
+                  
+                  {blockedSlots.length > 0 && (
+                    <div className="mb-3 space-y-2 max-h-32 overflow-y-auto custom-scrollbar">
+                      {blockedSlots.map(block => (
+                        <div key={block.id} className="flex items-center justify-between p-2.5 bg-red-50 border border-red-100 rounded-xl">
+                          <div>
+                            <p className="text-xs font-bold text-red-800">{block.date} <span className="text-[10px] bg-red-200 px-1.5 py-0.5 rounded ml-1">{block.type}</span></p>
+                            <p className="text-[10px] text-red-600 font-medium mt-0.5">{block.reason || 'No reason provided'}</p>
+                          </div>
+                          <button onClick={() => setBlockedSlots(prev => prev.filter(b => b.id !== block.id))} className="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-100 rounded-lg transition-colors"><Trash2 size={14} /></button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {!isAddingBlock ? (
+                    <button onClick={() => setIsAddingBlock(true)} className="w-full py-3 border-2 border-dashed border-gray-200 text-gray-400 rounded-xl text-xs font-bold hover:bg-gray-50 hover:text-gray-600 transition-all flex items-center justify-center gap-2">
+                      <span className="text-lg">+</span> Add Leave / Block Slot
+                    </button>
+                  ) : (
+                    <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 space-y-3">
+                      <div className="flex gap-3">
+                        <div className="flex-1">
+                          <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Date</label>
+                          <input type="date" value={newBlock.date} onChange={e => setNewBlock({...newBlock, date: e.target.value})} className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs font-bold focus:ring-2 focus:ring-primary-brand/20 transition-all" />
+                        </div>
+                        <div className="flex-1">
+                          <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Duration</label>
+                          <select value={newBlock.type} onChange={e => setNewBlock({...newBlock, type: e.target.value})} className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs font-bold focus:ring-2 focus:ring-primary-brand/20 transition-all">
+                            <option>Full Day</option>
+                            <option>Morning</option>
+                            <option>Afternoon</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Reason (Optional)</label>
+                        <input type="text" placeholder="e.g. Sick Leave, Buying parts" value={newBlock.reason} onChange={e => setNewBlock({...newBlock, reason: e.target.value})} className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs font-bold focus:ring-2 focus:ring-primary-brand/20 transition-all" />
+                      </div>
+                      <div className="flex gap-2 pt-2">
+                        <button onClick={() => { setIsAddingBlock(false); setNewBlock({ date: '', type: 'Full Day', reason: '' }); }} className="flex-1 py-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-gray-500 hover:bg-gray-50 transition-all">Cancel</button>
+                        <button onClick={() => { 
+                          if(newBlock.date) {
+                            setBlockedSlots([...blockedSlots, { ...newBlock, id: Date.now().toString() }]);
+                            setIsAddingBlock(false);
+                            setNewBlock({ date: '', type: 'Full Day', reason: '' });
+                          }
+                        }} className="flex-1 py-2 bg-red-500 text-white rounded-lg text-xs font-bold hover:bg-red-600 shadow-md shadow-red-500/20 transition-all disabled:opacity-50" disabled={!newBlock.date}>Block Slot</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="pt-4 border-t border-gray-100 mt-2">
+                  <button onClick={() => { setShowScheduleSettings(false); showToast('Availability schedule updated', 'success'); }} className="w-full py-4 rounded-2xl bg-[#111827] text-white text-xs font-bold uppercase tracking-widest shadow-xl shadow-gray-900/20 hover:scale-[1.02] active:scale-95 transition-all">
+                    Save Schedule
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
         {showResolveModal && (
           <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowResolveModal(false)} className="absolute inset-0 bg-black/60 backdrop-blur-sm" />

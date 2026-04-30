@@ -1,39 +1,43 @@
 import { useState, useEffect } from 'react';
-import { TrendingUp, Download, Package, Activity as ActivityIcon, ShieldCheck, Wrench, AlertCircle } from 'lucide-react';
+import { Download, Home, Activity as ActivityIcon, CheckCircle2, Wrench, AlertCircle, Users, DollarSign } from 'lucide-react';
 import { motion } from 'motion/react';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import Papa from 'papaparse';
 import { api } from '../services/api';
-import { Asset, Activity, Screen } from '../types';
+import { Screen } from '../types';
 import { useToast } from '../context/ToastContext';
 import { useLanguage } from '../context/LanguageContext';
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+const COLORS = ['#10b981', '#ef4444', '#f59e0b', '#3b82f6'];
 
-export default function CommandCenter({ onNavigate, onSelectAsset, setHeaderAction }: { onNavigate: (s: Screen) => void, onSelectAsset: (id: string) => void, setHeaderAction: (a: any) => void }) {
-  const [activities, setActivities] = useState<Activity[]>([]);
+export default function CommandCenter({ onNavigate, setHeaderAction }: { onNavigate: (s: Screen) => void, setHeaderAction: (a: any) => void }) {
+  const [activities, setActivities] = useState<any[]>([]);
   const [analytics, setAnalytics] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [dateRange, setDateRange] = useState<string>('all');
+  const [dateRange, setDateRange] = useState<string>('30');
   const { showToast } = useToast();
   const { t } = useLanguage();
 
   useEffect(() => {
     setHeaderAction({
-      label: t('admin.quickActions' as any),
+      label: 'Admin Overview',
       customContent: (
         <div className="flex items-center gap-2">
-          <button onClick={() => onNavigate('inventory')} className="bg-[#111827] text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-primary-brand transition-all">{t('admin.addAsset' as any)}</button>
-          <button onClick={() => onNavigate('personnel')} className="bg-white text-[#111827] border border-gray-200 px-4 py-2 rounded-xl text-xs font-bold hover:bg-gray-50 transition-all">{t('admin.addUser' as any)}</button>
+          <button onClick={() => onNavigate('inventory')} className="bg-[#111827] text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-primary-brand transition-all flex items-center gap-2">
+            <Home size={14} /> Rooms
+          </button>
+          <button onClick={() => onNavigate('personnel')} className="bg-white text-[#111827] border border-gray-200 px-4 py-2 rounded-xl text-xs font-bold hover:bg-gray-50 transition-all flex items-center gap-2">
+            <Users size={14} /> Tenants
+          </button>
           <select 
             value={dateRange} 
             onChange={(e) => setDateRange(e.target.value)}
             className="ml-2 bg-white border border-gray-200 text-[#111827] px-4 py-2 rounded-xl text-xs font-bold focus:ring-2 focus:ring-primary-brand focus:border-primary-brand outline-none cursor-pointer"
           >
-            <option value="all">{t('admin.allTime' as any)}</option>
-            <option value="7">{t('admin.last7Days' as any)}</option>
-            <option value="30">{t('admin.last30Days' as any)}</option>
-            <option value="365">{t('admin.thisYear' as any)}</option>
+            <option value="30">Last 30 Days</option>
+            <option value="90">Last Quarter</option>
+            <option value="365">This Year</option>
+            <option value="all">All-Time</option>
           </select>
         </div>
       )
@@ -58,13 +62,13 @@ export default function CommandCenter({ onNavigate, onSelectAsset, setHeaderActi
   }, [dateRange, t]);
 
   const handleExport = () => {
-    showToast(t('admin.downloadStarted' as any), 'success');
+    showToast('Download Started', 'success');
     const csvData = activities.map(a => ({
       ID: a.id,
-      Asset_ID: a.assetId || 'N/A',
+      Room: a.assetId || 'N/A',
       Description: a.description,
-      Operator: a.user,
-      Time: new Date(a.time).toLocaleString()
+      User: a.user,
+      Time: a.time
     }));
     const csv = Papa.unparse(csvData);
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -78,17 +82,23 @@ export default function CommandCenter({ onNavigate, onSelectAsset, setHeaderActi
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-brand"></div></div>;
 
-  const { summary, assetDist, ticketStatus } = analytics || { summary: {}, assetDist: [], ticketStatus: [] };
+  const { summary, revenueData, ticketData } = analytics || { summary: {}, revenueData: [], ticketData: [] };
+
+  const occupancyDist = [
+    { name: 'Available', value: summary.availableRooms || 0 },
+    { name: 'Occupied', value: summary.occupiedRooms || 0 },
+    { name: 'Maintenance', value: summary.maintenanceRooms || 0 }
+  ];
 
   return (
     <div className="space-y-8 font-sans">
       {/* Top Stats Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: t('admin.totalAssets' as any), value: summary.totalAssets, icon: Package, color: 'text-blue-600', bg: 'bg-blue-50' },
-          { label: t('admin.activeFleet' as any), value: summary.active, icon: ShieldCheck, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-          { label: t('admin.pendingRepairs' as any), value: summary.maintenance, icon: Wrench, color: 'text-amber-600', bg: 'bg-amber-50' },
-          { label: t('admin.totalTickets' as any), value: summary.totalTickets, icon: AlertCircle, color: 'text-red-600', bg: 'bg-red-50' },
+          { label: 'Occupancy Rate', value: summary.totalRooms ? Math.round((summary.occupiedRooms / summary.totalRooms) * 100) + '%' : '0%', icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+          { label: 'Total Rooms', value: summary.totalRooms || 0, icon: Home, color: 'text-blue-600', bg: 'bg-blue-50' },
+          { label: 'Unpaid Invoices', value: summary.pendingInvoices || 0, icon: DollarSign, color: 'text-red-600', bg: 'bg-red-50' },
+          { label: 'Active Repairs', value: ticketData.find((t: any) => t.name !== 'Resolved')?.value || 0, icon: Wrench, color: 'text-amber-600', bg: 'bg-amber-50' },
         ].map((stat, i) => (
           <motion.div 
             key={i}
@@ -109,14 +119,14 @@ export default function CommandCenter({ onNavigate, onSelectAsset, setHeaderActi
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Asset Distribution Chart */}
+        {/* Occupancy Distribution Chart */}
         <div className="lg:col-span-5 bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm">
-          <h4 className="text-lg font-bold text-[#111827] mb-8">{t('admin.assetCategories' as any)}</h4>
+          <h4 className="text-lg font-bold text-[#111827] mb-8">Room Status Overview</h4>
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={assetDist}
+                  data={occupancyDist}
                   cx="50%"
                   cy="50%"
                   innerRadius={80}
@@ -124,7 +134,7 @@ export default function CommandCenter({ onNavigate, onSelectAsset, setHeaderActi
                   paddingAngle={5}
                   dataKey="value"
                 >
-                  {assetDist.map((entry: any, index: number) => (
+                  {occupancyDist.map((entry: any, index: number) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -137,23 +147,20 @@ export default function CommandCenter({ onNavigate, onSelectAsset, setHeaderActi
           </div>
         </div>
 
-        {/* Ticket Status Chart */}
+        {/* Revenue Chart */}
         <div className="lg:col-span-7 bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm">
-          <h4 className="text-lg font-bold text-[#111827] mb-8">{t('admin.ticketStatusOverview' as any)}</h4>
+          <h4 className="text-lg font-bold text-[#111827] mb-8">Revenue (Past 6 Months)</h4>
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={ticketStatus}>
+              <BarChart data={revenueData}>
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 600, fill: '#9ca3af' }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 600, fill: '#9ca3af' }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 600, fill: '#9ca3af' }} tickFormatter={(val) => `฿${val/1000}k`} />
                 <Tooltip 
                    cursor={{ fill: '#f9fafb' }}
                    contentStyle={{ borderRadius: '1rem', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
+                   formatter={(value) => [`฿${value.toLocaleString()}`, 'Revenue']}
                 />
-                <Bar dataKey="value" radius={[10, 10, 10, 10]} barSize={40}>
-                  {ticketStatus.map((entry: any, index: number) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Bar>
+                <Bar dataKey="value" radius={[10, 10, 10, 10]} barSize={40} fill="#3b82f6" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -164,10 +171,10 @@ export default function CommandCenter({ onNavigate, onSelectAsset, setHeaderActi
           <div className="px-8 py-6 flex justify-between items-center border-b border-gray-50">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-50 text-primary-brand rounded-lg"><ActivityIcon size={18} /></div>
-              <h4 className="text-lg font-bold text-[#111827]">{t('admin.auditTrail' as any)}</h4>
+              <h4 className="text-lg font-bold text-[#111827]">Recent Activity Log</h4>
             </div>
             <button onClick={handleExport} className="text-[11px] font-bold text-gray-400 hover:text-primary-brand transition-colors uppercase tracking-widest flex items-center gap-2">
-              <Download size={14} /> {t('admin.exportReport' as any)}
+              <Download size={14} /> Export Log
             </button>
           </div>
           
@@ -175,23 +182,20 @@ export default function CommandCenter({ onNavigate, onSelectAsset, setHeaderActi
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-[#F9FAFB] text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-50">
-                  <th className="px-8 py-4">{t('admin.assetTarget' as any)}</th>
-                  <th className="px-8 py-4">{t('admin.eventDescription' as any)}</th>
-                  <th className="px-8 py-4">{t('admin.operator' as any)}</th>
-                  <th className="px-8 py-4 text-right">{t('admin.time' as any)}</th>
+                  <th className="px-8 py-4">Room</th>
+                  <th className="px-8 py-4">Event Description</th>
+                  <th className="px-8 py-4">Initiator</th>
+                  <th className="px-8 py-4 text-right">Time</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {activities.map((activity) => (
                   <tr key={activity.id} className="hover:bg-gray-50/50 transition-colors group">
                     <td className="px-8 py-5">
-                      <button 
-                        onClick={() => activity.assetId && onSelectAsset(activity.assetId)}
-                        className="font-bold text-primary-brand hover:underline flex items-center gap-2"
-                      >
-                        <Package size={14} className="opacity-50" />
+                      <span className="font-bold text-primary-brand flex items-center gap-2">
+                        <Home size={14} className="opacity-50" />
                         {activity.assetId || 'N/A'}
-                      </button>
+                      </span>
                     </td>
                     <td className="px-8 py-5 text-sm font-medium text-[#111827]">{activity.description}</td>
                     <td className="px-8 py-5">
@@ -202,6 +206,11 @@ export default function CommandCenter({ onNavigate, onSelectAsset, setHeaderActi
                     <td className="px-8 py-5 text-right text-gray-400 font-medium text-xs">{activity.time}</td>
                   </tr>
                 ))}
+                {activities.length === 0 && (
+                  <tr>
+                    <td colSpan={4} className="px-8 py-10 text-center text-gray-400 font-medium italic">No recent activities found.</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

@@ -1,11 +1,12 @@
 export const en = {
   // Sidebar
   'sidebar.dashboard': 'Dashboard',
-  'sidebar.technician': 'Technician',
-  'sidebar.commandCenter': 'Command Center',
-  'sidebar.inventory': 'Inventory',
-  'sidebar.personnel': 'Personnel',
-  'sidebar.tickets': 'Tickets',
+  'sidebar.technician': 'Staff Tools',
+  'sidebar.commandCenter': 'Admin Panel',
+  'sidebar.inventory': 'Rooms',
+  'sidebar.personnel': 'Tenants',
+  'sidebar.billing': 'Billing',
+  'sidebar.tickets': 'Maintenance',
   'sidebar.settings': 'Settings',
   'sidebar.signOut': 'Sign Out',
   'sidebar.mode': 'Mode',

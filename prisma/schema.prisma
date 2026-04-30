@@ -1,5 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// This is your Prisma schema file for Resident soft (Dormitory Management)
 
 generator client {
   provider = "prisma-client-js"
@@ -10,113 +9,98 @@ datasource db {
   provider = "postgresql"
 }
 
-model Personnel {
+model User {
   id          String   @id @default(cuid())
+  role        String   @default("RESIDENT") // 'ADMIN', 'STAFF', 'RESIDENT'
   name        String
-  username    String?  @unique
-  role        String
-  department  String
   email       String   @unique
   phone       String?
-  avatar      String?
   password    String   @default("password123")
-  userRole    String   @default("user") // 'user', 'staff', 'admin'
-  joinedDate  DateTime @default(now())
-  
-  // Notification Preferences
-  notifyEmail   Boolean @default(true)
-  notifyInApp   Boolean @default(true)
-  notifySystem  Boolean @default(true)
-  
-  assets          Asset[]
-  tickets         Ticket[] @relation("Reporter")
-  assignedTickets Ticket[] @relation("Assignee")
-  activities      Activity[]
-  notifications Notification[]
-}
-
-model Notification {
-  id          String   @id @default(cuid())
-  userId      String   
-  recipient   Personnel @relation(fields: [userId], references: [id])
-  title       String
-  message     String
-  type        String   // 'ticket', 'asset', 'system'
-  priority    String   @default("Medium") // 'Low', 'Medium', 'High'
-  isRead      Boolean  @default(false)
   createdAt   DateTime @default(now())
-  link        String?  // Deep link (e.g. '/asset/MBP-01')
+
+  // Relations
+  leases              Lease[]
+  maintenanceTickets  MaintenanceTicket[] @relation("Reporter")
+  assignedTickets     MaintenanceTicket[] @relation("Assignee")
 }
 
-model Asset {
-  id                  String   @id // Manual IDs like MBP-2023-084
-  name                String
-  type                String
-  spec                String?
-  status              String   @default("Active") // 'Active', 'In Maintenance', 'Retired'
-  serialNumber        String   @unique
-  purchaseDate        DateTime @default(now())
-  location            String?
-  department          String?
-  image               String?
-  
-  assignedPersonnelId String?
-  assignedTo          Personnel? @relation(fields: [assignedPersonnelId], references: [id])
-  
-  tickets             Ticket[]
-  activities          Activity[]
-}
-
-model Ticket {
+model Room {
   id          String   @id @default(cuid())
-  subject     String
-  description String?
-  resolution  String?  // New field for resolution notes
-  priority    String   @default("Medium") // 'Low', 'Medium', 'High', 'Urgent'
-  status      String   @default("Open") // 'Open', 'In Progress', 'Resolved', 'Closed'
-  createdAt   DateTime @default(now())
-  resolvedAt  DateTime?
-  rating      Int?     // CSAT Score 1-5
-  feedback    String?  // User's optional feedback upon resolution
-  
-  assetId     String
-  asset       Asset    @relation(fields: [assetId], references: [id])
-  
-  reporterId  String
-  reporter    Personnel @relation("Reporter", fields: [reporterId], references: [id])
-  
-  assigneeId  String?
-  assignee    Personnel? @relation("Assignee", fields: [assigneeId], references: [id])
+  roomNumber  String   @unique
+  floor       Int
+  roomType    String   @default("Standard") // 'Standard', 'Commercial'
+  price       Float
+  status      String   @default("AVAILABLE") // 'AVAILABLE', 'OCCUPIED', 'MAINTENANCE'
+
+  // Relations
+  leases             Lease[]
+  meterReadings      MeterReading[]
+  maintenanceTickets MaintenanceTicket[]
 }
 
-model Activity {
-  id          String   @id @default(cuid())
-  description String
-  user        String   
-  status      String   @default("Complete")
-  time        DateTime @default(now())
+model Lease {
+  id             String   @id @default(cuid())
+  startDate      DateTime @default(now())
+  endDate        DateTime?
+  depositAmount  Float    @default(0)
+  isActive       Boolean  @default(true)
+
+  // Relations
+  roomId         String
+  room           Room     @relation(fields: [roomId], references: [id])
+  tenantId       String
+  tenant         User     @relation(fields: [tenantId], references: [id])
+  invoices       Invoice[]
+}
+
+model MeterReading {
+  id             String   @id @default(cuid())
+  billingMonth   String   // e.g. "2024-10"
+  waterMeter     Float
+  electricMeter  Float
+  createdAt      DateTime @default(now())
+
+  // Relations
+  roomId         String
+  room           Room     @relation(fields: [roomId], references: [id])
+}
+
+model Invoice {
+  id             String   @id @default(cuid())
+  billingMonth   String
+  roomRent       Float
+  waterCharge    Float
+  electricCharge Float
+  otherCharges   Float    @default(0)
+  totalAmount    Float
+  status         String   @default("UNPAID") // 'UNPAID', 'PENDING_VERIFICATION', 'PAID'
+  slipImageUrl   String?
+  createdAt      DateTime @default(now())
+
+  // Relations
+  leaseId        String
+  lease          Lease    @relation(fields: [leaseId], references: [id])
+}
+
+model MaintenanceTicket {
+  id             String   @id @default(cuid())
+  title          String
+  description    String?
+  category       String   @default("General") // 'Water', 'Electric', 'AirCon', 'General'
+  status         String   @default("OPEN") // 'OPEN', 'IN_PROGRESS', 'RESOLVED'
+  createdAt      DateTime @default(now())
+  resolvedAt     DateTime?
+
+  // Relations
+  roomId         String
+  room           Room     @relation(fields: [roomId], references: [id])
   
-  assetId     String?
-  asset       Asset?   @relation(fields: [assetId], references: [id])
-  
-  personnelId String?
-  personnel   Personnel? @relation(fields: [personnelId], references: [id])
-}
+  reporterId     String
+  reporter       User     @relation("Reporter", fields: [reporterId], references: [id])
 
-// --- Metadata Models for Settings ---
+  assigneeId     String?
+  assignee       User?    @relation("Assignee", fields: [assigneeId], references: [id])
 
-model AssetCategory {
-  id    String @id @default(cuid())
-  name  String @unique
-}
-
-model Department {
-  id    String @id @default(cuid())
-  name  String @unique
-}
-
-model SystemSetting {
-  id    String @id @default(cuid())
-  key   String @unique
-  value String
+  scheduledDate  String?
+  scheduledSlot  String?
 }

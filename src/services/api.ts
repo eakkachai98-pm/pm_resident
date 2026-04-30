@@ -14,6 +14,16 @@ export const api = {
     return response.json();
   },
 
+  async login(credentials: any): Promise<any> {
+    const response = await fetch(`${API_BASE}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials)
+    });
+    if (!response.ok) throw new Error('Invalid credentials');
+    return response.json();
+  },
+
   // METADATA
   async getMetadata(): Promise<{ categories: any[], departments: any[] }> {
     const response = await fetch(`${API_BASE}/metadata`);
@@ -57,6 +67,12 @@ export const api = {
   async getAssetById(id: string): Promise<Asset> {
     const response = await fetch(`${API_BASE}/assets/${id}`);
     if (!response.ok) throw new Error('Failed to fetch asset');
+    return response.json();
+  },
+
+  async getRooms(): Promise<any[]> {
+    const response = await fetch(`${API_BASE}/rooms`);
+    if (!response.ok) throw new Error('Failed to fetch rooms');
     return response.json();
   },
 

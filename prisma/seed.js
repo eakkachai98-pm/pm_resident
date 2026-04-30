@@ -9,82 +9,109 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  console.log('Seeding Metadata and Initial Data...');
+  console.log('Clearing old data...');
+  // WARNING: Delete order matters due to foreign keys
+  await prisma.invoice.deleteMany({});
+  await prisma.meterReading.deleteMany({});
+  await prisma.maintenanceTicket.deleteMany({});
+  await prisma.lease.deleteMany({});
+  await prisma.room.deleteMany({});
+  await prisma.user.deleteMany({});
 
-  // 1. Seed Categories
-  const categories = ['Laptop', 'Monitor', 'Phone', 'Server', 'Peripheral'];
-  for (const name of categories) {
-    await prisma.assetCategory.upsert({
-      where: { name },
-      update: {},
-      create: { name }
-    });
-  }
-
-  // 2. Seed Departments
-  const departments = ['Engineering', 'Design', 'Marketing', 'Operations', 'Human Resources'];
-  for (const name of departments) {
-    await prisma.department.upsert({
-      where: { name },
-      update: {},
-      create: { name }
-    });
-  }
-
-  // 3. Personnel
-  await prisma.personnel.upsert({
-    where: { email: 'alex.r@primus.pro' },
-    update: { userRole: 'admin' },
-    create: {
-      id: 'P-001',
-      name: 'Alex Rivera',
-      role: 'Senior Designer',
-      department: 'Design',
-      email: 'alex.r@primus.pro',
-      avatar: 'https://picsum.photos/seed/alex/100/100',
+  console.log('Seeding Users...');
+  
+  const admin = await prisma.user.create({
+    data: {
+      name: 'System Admin',
+      email: 'admin@residentsoft.com',
       password: 'password123',
-      userRole: 'admin',
-      joinedDate: new Date('2022-03-12')
-    },
+      role: 'ADMIN',
+      phone: '081-111-1111'
+    }
   });
 
-  // 4. Sample Notifications
-  const notifications = [
-    {
-      userId: 'P-001',
-      title: 'New Urgent Ticket',
-      message: 'A new urgent ticket has been created for Asset MBP-2023-084.',
-      type: 'ticket',
-      priority: 'High',
-      link: '/tickets',
-      isRead: false
-    },
-    {
-      userId: 'P-001',
-      title: 'Asset Assigned',
-      message: 'You have been assigned a new asset: Dell UltraSharp 27.',
-      type: 'asset',
-      priority: 'Medium',
-      link: '/inventory',
-      isRead: true
-    },
-    {
-      userId: 'P-001',
-      title: 'System Update',
-      message: 'The inventory system will be down for maintenance at 2:00 AM.',
-      type: 'system',
-      priority: 'Low',
-      isRead: false
+  const staff = await prisma.user.create({
+    data: {
+      name: 'Maintenance Staff',
+      email: 'staff@residentsoft.com',
+      password: 'password123',
+      role: 'STAFF',
+      phone: '082-222-2222'
     }
-  ];
+  });
 
-  for (const notification of notifications) {
-    await prisma.notification.create({
-      data: notification
+  const resident = await prisma.user.create({
+    data: {
+      name: 'John Doe',
+      email: 'resident@residentsoft.com',
+      password: 'password123',
+      role: 'RESIDENT',
+      phone: '083-333-3333'
+    }
+  });
+
+  console.log('Seeding Rooms...');
+  
+  const roomsData = [];
+
+  // Floor 1: 3 Commercial Rooms (101-103)
+  for (let i = 1; i <= 3; i++) {
+    const roomNumber = `10${i}`;
+    roomsData.push({
+      roomNumber,
+      floor: 1,
+      roomType: 'Commercial',
+      price: 15000,
+      status: 'AVAILABLE'
     });
   }
 
-  console.log('Seeding finished.');
+  // Floor 2 to 7: 20 Standard Rooms per floor
+  for (let floor = 2; floor <= 7; floor++) {
+    for (let i = 1; i <= 20; i++) {
+      const formattedNum = i < 10 ? `0${i}` : `${i}`;
+      const roomNumber = `${floor}${formattedNum}`;
+      roomsData.push({
+        roomNumber,
+        floor: floor,
+        roomType: 'Standard',
+        price: 5000,
+        status: 'AVAILABLE'
+      });
+    }
+  }
+
+  // Insert all 123 rooms
+  await prisma.room.createMany({
+    data: roomsData
+  });
+
+  console.log(`Created ${roomsData.length} rooms successfully!`);
+
+  // Create an example lease for the 'resident' user in room 201
+  const room201 = await prisma.room.findUnique({ where: { roomNumber: '201' } });
+  
+  if (room201) {
+    console.log('Seeding example lease for Room 201...');
+    // Update room status
+    await prisma.room.update({
+      where: { id: room201.id },
+      data: { status: 'OCCUPIED' }
+    });
+
+    // Create Lease
+    await prisma.lease.create({
+      data: {
+        roomId: room201.id,
+        tenantId: resident.id,
+        startDate: new Date(),
+        depositAmount: 10000,
+        isActive: true
+      }
+    });
+  }
+
+  console.log('Seeding finished successfully.');
 }
 
 main()

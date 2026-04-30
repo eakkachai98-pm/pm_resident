@@ -23,9 +23,9 @@ export default function Login({ onLogin }: { onLogin: (u: Personnel) => void }) 
     } catch (err) {
       console.warn('API Login failed, trying local fallback...', err);
       const localUsers = [
-        { id: 'P-001', name: 'Alex Rivera', role: 'Senior Designer', department: 'Design', email: 'alex.r@primus.pro', avatar: 'https://picsum.photos/seed/alex/100/100', joinedDate: '2022-03-12', userRole: 'admin' },
-        { id: 'P-002', name: 'Sarah Jenkins', role: 'Marketing Manager', department: 'Marketing', email: 'sarah.j@primus.pro', avatar: 'https://picsum.photos/seed/sarah/100/100', joinedDate: '2023-01-15', userRole: 'staff' },
-        { id: 'P-003', name: 'Marcus Wade', role: 'Lead Developer', department: 'Engineering', email: 'marcus.w@primus.pro', avatar: 'https://picsum.photos/seed/marcus/100/100', joinedDate: '2021-11-05', userRole: 'user' }
+        { id: 'admin1', name: 'System Admin', role: 'System Admin', department: 'Management', email: 'admin@residentsoft.com', avatar: 'https://picsum.photos/seed/alex/100/100', joinedDate: '2022-03-12', userRole: 'admin' },
+        { id: 'staff1', name: 'Maintenance Staff', role: 'Staff', department: 'Maintenance', email: 'staff@residentsoft.com', avatar: 'https://picsum.photos/seed/sarah/100/100', joinedDate: '2023-01-15', userRole: 'staff' },
+        { id: 'user1', name: 'John Doe', role: 'Resident', department: 'Resident', email: 'resident@residentsoft.com', avatar: 'https://picsum.photos/seed/marcus/100/100', joinedDate: '2021-11-05', userRole: 'user' }
       ];
 
       const foundUser = localUsers.find(u => u.email === email && password === 'password123');
@@ -73,9 +73,9 @@ export default function Login({ onLogin }: { onLogin: (u: Personnel) => void }) 
           <div className="mt-8 pt-8 border-t border-gray-100 text-center">
             <p className="text-[10px] text-gray-400 font-extrabold uppercase tracking-widest mb-4">Quick Demo Access</p>
             <div className="grid grid-cols-3 gap-2">
-              <button type="button" className="bg-emerald-50 text-emerald-700 p-2 rounded-xl text-[9px] font-bold border border-emerald-100 hover:bg-emerald-100 transition-colors" onClick={() => { setEmail('alex.r@primus.pro'); setPassword('password123'); }}>Admin</button>
-              <button type="button" className="bg-blue-50 text-blue-700 p-2 rounded-xl text-[9px] font-bold border border-blue-100 hover:bg-blue-100 transition-colors" onClick={() => { setEmail('sarah.j@primus.pro'); setPassword('password123'); }}>Staff</button>
-              <button type="button" className="bg-purple-50 text-purple-700 p-2 rounded-xl text-[9px] font-bold border border-purple-100 hover:bg-purple-100 transition-colors" onClick={() => { setEmail('marcus.w@primus.pro'); setPassword('password123'); }}>User</button>
+              <button type="button" className="bg-emerald-50 text-emerald-700 p-2 rounded-xl text-[9px] font-bold border border-emerald-100 hover:bg-emerald-100 transition-colors" onClick={() => { setEmail('admin@residentsoft.com'); setPassword('password123'); }}>Admin</button>
+              <button type="button" className="bg-blue-50 text-blue-700 p-2 rounded-xl text-[9px] font-bold border border-blue-100 hover:bg-blue-100 transition-colors" onClick={() => { setEmail('staff@residentsoft.com'); setPassword('password123'); }}>Staff</button>
+              <button type="button" className="bg-purple-50 text-purple-700 p-2 rounded-xl text-[9px] font-bold border border-purple-100 hover:bg-purple-100 transition-colors" onClick={() => { setEmail('resident@residentsoft.com'); setPassword('password123'); }}>User</button>
             </div>
           </div>
         </motion.div>

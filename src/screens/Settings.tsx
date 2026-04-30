@@ -16,7 +16,9 @@ export default function SettingsScreen({ user, onUpdateUser, setHeaderAction }: 
   
   const [smtpSettings, setSmtpSettings] = useState({ smtpHost: '', smtpPort: '', smtpUser: '', smtpPass: '' });
   const [savingSmtp, setSavingSmtp] = useState(false);
-  const [activeTab, setActiveTab] = useState<'preferences' | 'smtp' | 'metadata' | 'roles'>('preferences');
+  const [utilityRates, setUtilityRates] = useState({ waterRate: '18', electricRate: '8' });
+  const [savingRates, setSavingRates] = useState(false);
+  const [activeTab, setActiveTab] = useState<'preferences' | 'smtp' | 'pricing' | 'roles'>('preferences');
 
   // Notification states
   const [prefs, setPrefs] = useState({
@@ -27,9 +29,8 @@ export default function SettingsScreen({ user, onUpdateUser, setHeaderAction }: 
 
   const fetchData = async () => {
     try {
-      const data = await api.getMetadata().catch(() => ({ categories: [], departments: [] }));
-      setCategories(data.categories || []);
-      setDepartments(data.departments || []);
+      // Pricing configs could be fetched from api.getSettings() if backend supports it
+      // For now we will just use the hardcoded state as default
       
       try {
         const settingsData = await api.getSettings();
@@ -39,6 +40,8 @@ export default function SettingsScreen({ user, onUpdateUser, setHeaderAction }: 
           smtpUser: settingsData?.smtpUser || '',
           smtpPass: settingsData?.smtpPass || ''
         });
+        if (settingsData?.waterRate) setUtilityRates(prev => ({...prev, waterRate: settingsData.waterRate}));
+        if (settingsData?.electricRate) setUtilityRates(prev => ({...prev, electricRate: settingsData.electricRate}));
       } catch (e) {
         console.warn('Settings API not available yet or failed', e);
       }
@@ -69,16 +72,16 @@ export default function SettingsScreen({ user, onUpdateUser, setHeaderAction }: 
     }
   };
 
-  const handleAddCategory = async (e: React.FormEvent) => {
+  const handleSavePricing = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newCat) return;
+    setSavingRates(true);
     try {
-      await api.addCategory(newCat);
-      showToast('Category added successfully');
-      setNewCat('');
-      fetchData();
+      await api.saveSettings({ ...smtpSettings, ...utilityRates });
+      showToast('Utility rates updated successfully');
     } catch (error) {
-      showToast('Failed to add category', 'error');
+      showToast('Failed to update utility rates', 'error');
+    } finally {
+      setSavingRates(false);
     }
   };
 
@@ -92,43 +95,6 @@ export default function SettingsScreen({ user, onUpdateUser, setHeaderAction }: 
       showToast('Failed to save SMTP settings', 'error');
     } finally {
       setSavingSmtp(false);
-    }
-  };
-
-  const handleAddDept = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newDept) return;
-    try {
-      await api.addDepartment(newDept);
-      showToast('Department registered');
-      setNewDept('');
-      fetchData();
-    } catch (error) {
-      showToast('Failed to register department', 'error');
-    }
-  };
-
-  const handleDeleteCat = async (id: string) => {
-    if (confirm('Delete this category?')) {
-      try {
-        await api.deleteCategory(id);
-        showToast('Category deleted', 'info');
-        fetchData();
-      } catch (error) {
-        showToast('Deletion failed', 'error');
-      }
-    }
-  };
-
-  const handleDeleteDept = async (id: string) => {
-    if (confirm('Delete this department?')) {
-      try {
-        await api.deleteDepartment(id);
-        showToast('Department removed', 'info');
-        fetchData();
-      } catch (error) {
-        showToast('Deletion failed', 'error');
-      }
     }
   };
 
@@ -149,8 +115,8 @@ export default function SettingsScreen({ user, onUpdateUser, setHeaderAction }: 
         <button onClick={() => setActiveTab('smtp')} className={`w-full flex items-center gap-3 px-5 py-3.5 rounded-2xl text-sm font-bold transition-all ${activeTab === 'smtp' ? 'bg-[#111827] text-white shadow-xl shadow-gray-900/20' : 'text-gray-500 hover:bg-white hover:text-[#111827] hover:shadow-sm border border-transparent hover:border-gray-100'}`}>
           <Mail size={18} /> Email & SMTP
         </button>
-        <button onClick={() => setActiveTab('metadata')} className={`w-full flex items-center gap-3 px-5 py-3.5 rounded-2xl text-sm font-bold transition-all ${activeTab === 'metadata' ? 'bg-[#111827] text-white shadow-xl shadow-gray-900/20' : 'text-gray-500 hover:bg-white hover:text-[#111827] hover:shadow-sm border border-transparent hover:border-gray-100'}`}>
-          <Database size={18} /> Categories & Depts
+        <button onClick={() => setActiveTab('pricing')} className={`w-full flex items-center gap-3 px-5 py-3.5 rounded-2xl text-sm font-bold transition-all ${activeTab === 'pricing' ? 'bg-[#111827] text-white shadow-xl shadow-gray-900/20' : 'text-gray-500 hover:bg-white hover:text-[#111827] hover:shadow-sm border border-transparent hover:border-gray-100'}`}>
+          <Database size={18} /> Utility Pricing
         </button>
         <button onClick={() => setActiveTab('roles')} className={`w-full flex items-center gap-3 px-5 py-3.5 rounded-2xl text-sm font-bold transition-all ${activeTab === 'roles' ? 'bg-[#111827] text-white shadow-xl shadow-gray-900/20' : 'text-gray-500 hover:bg-white hover:text-[#111827] hover:shadow-sm border border-transparent hover:border-gray-100'}`}>
           <ShieldCheck size={18} /> Access Roles
@@ -231,21 +197,34 @@ export default function SettingsScreen({ user, onUpdateUser, setHeaderAction }: 
             </motion.div>
           )}
 
-          {activeTab === 'metadata' && (
-            <motion.div key="metadata" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <section className="bg-white rounded-[2rem] p-6 md:p-8 border border-gray-200/50 shadow-sm flex flex-col h-full">
-                  <div className="flex items-center gap-3 mb-8"><div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-primary-brand shadow-sm"><Package size={20} /></div><h3 className="text-lg font-bold text-[#111827]">Hardware Categories</h3></div>
-                  <form onSubmit={handleAddCategory} className="flex gap-2 mb-6"><input type="text" placeholder="e.g. Tablet" className="flex-1 bg-[#F4F6F8] border-none rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-primary-brand/20 transition-all" value={newCat} onChange={(e) => setNewCat(e.target.value)} /><button type="submit" className="bg-[#111827] text-white p-2.5 rounded-xl hover:bg-primary-brand transition-all shadow-lg"><Plus size={20} /></button></form>
-                  <div className="space-y-2 flex-1 overflow-y-auto max-h-96 pr-2 custom-scrollbar">{categories.map((cat) => (<div key={cat.id} className="flex justify-between items-center p-4 bg-[#F9FAFB] rounded-xl group hover:bg-white hover:shadow-md transition-all"><span className="text-sm font-bold text-[#111827]">{cat.name}</span><button onClick={() => handleDeleteCat(cat.id)} className="text-gray-300 hover:text-red-500 md:opacity-0 md:group-hover:opacity-100 transition-all"><Trash2 size={16} /></button></div>))}</div>
-                </section>
-
-                <section className="bg-white rounded-[2rem] p-6 md:p-8 border border-gray-200/50 shadow-sm flex flex-col h-full">
-                  <div className="flex items-center gap-3 mb-8"><div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 shadow-sm"><Users size={20} /></div><h3 className="text-lg font-bold text-[#111827]">Departments</h3></div>
-                  <form onSubmit={handleAddDept} className="flex gap-2 mb-6"><input type="text" placeholder="e.g. Legal" className="flex-1 bg-[#F4F6F8] border-none rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-emerald-500/20 transition-all" value={newDept} onChange={(e) => setNewDept(e.target.value)} /><button type="submit" className="bg-[#111827] text-white p-2.5 rounded-xl hover:bg-emerald-600 transition-all shadow-lg"><Plus size={20} /></button></form>
-                  <div className="space-y-2 flex-1 overflow-y-auto max-h-96 pr-2 custom-scrollbar">{departments.map((dept) => (<div key={dept.id} className="flex justify-between items-center p-4 bg-[#F9FAFB] rounded-xl group hover:bg-white hover:shadow-md transition-all"><span className="text-sm font-bold text-[#111827]">{dept.name}</span><button onClick={() => handleDeleteDept(dept.id)} className="text-gray-300 hover:text-red-500 md:opacity-0 md:group-hover:opacity-100 transition-all"><Trash2 size={16} /></button></div>))}</div>
-                </section>
-              </div>
+          {activeTab === 'pricing' && (
+            <motion.div key="pricing" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
+              <section className="bg-white rounded-[2rem] p-8 border border-gray-200/50 shadow-sm overflow-hidden">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shadow-sm"><Database size={20} /></div>
+                  <div>
+                    <h3 className="text-lg font-bold text-[#111827]">Utility Pricing</h3>
+                    <p className="text-xs text-gray-400 font-medium">Configure base rates for electricity and water billing.</p>
+                  </div>
+                </div>
+                <form onSubmit={handleSavePricing} className="space-y-5 max-w-xl">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Electric Rate (฿/Unit)</label>
+                      <input type="number" step="0.1" className="w-full bg-[#F4F6F8] border-none rounded-xl px-5 py-3.5 text-sm font-bold focus:ring-2 focus:ring-blue-500/20 transition-all text-[#111827]" value={utilityRates.electricRate} onChange={e => setUtilityRates({...utilityRates, electricRate: e.target.value})} />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Water Rate (฿/Unit)</label>
+                      <input type="number" step="0.1" className="w-full bg-[#F4F6F8] border-none rounded-xl px-5 py-3.5 text-sm font-bold focus:ring-2 focus:ring-blue-500/20 transition-all text-[#111827]" value={utilityRates.waterRate} onChange={e => setUtilityRates({...utilityRates, waterRate: e.target.value})} />
+                    </div>
+                  </div>
+                  <div className="pt-4 border-t border-gray-100 mt-6">
+                    <button type="submit" disabled={savingRates} className="bg-[#111827] text-white px-6 py-3.5 rounded-xl text-xs font-bold uppercase tracking-widest shadow-xl shadow-gray-900/20 hover:bg-gray-800 disabled:opacity-50 transition-all">
+                      {savingRates ? 'Saving...' : 'Save Rates'}
+                    </button>
+                  </div>
+                </form>
+              </section>
             </motion.div>
           )}
 

@@ -21,6 +21,7 @@ import PersonnelScreen from './screens/Personnel';
 import Tickets from './screens/Tickets';
 import Login from './screens/Login';
 import SettingsScreen from './screens/Settings';
+import Billing from './screens/Billing';
 
 // --- Components ---
 
@@ -45,11 +46,12 @@ const Sidebar = ({
   const role = user.userRole || 'user';
   const navItems = useMemo(() => {
     const allItems = [
-      { id: 'user-dashboard', label: t('sidebar.dashboard'), icon: LayoutDashboard, roles: ['user', 'staff', 'admin'] },
+      { id: 'user-dashboard', label: t('sidebar.dashboard'), icon: LayoutDashboard, roles: ['user'] },
       { id: 'technician-dashboard', label: t('sidebar.technician'), icon: Wrench, roles: ['staff', 'admin'] },
       { id: 'command-center', label: t('sidebar.commandCenter'), icon: BarChart3, roles: ['admin'] },
-      { id: 'inventory', label: t('sidebar.inventory'), icon: Package, roles: ['staff', 'admin'] },
+      { id: 'inventory', label: t('sidebar.inventory'), icon: Package, roles: ['admin'] },
       { id: 'personnel', label: t('sidebar.personnel'), icon: Users, roles: ['admin'] },
+      { id: 'billing', label: t('sidebar.billing'), icon: Zap, roles: ['admin'] },
       { id: 'tickets', label: t('sidebar.tickets'), icon: TicketIcon, roles: ['user', 'staff', 'admin'] },
       { id: 'settings', label: t('sidebar.settings'), icon: Settings, roles: ['admin'] },
     ];
@@ -253,7 +255,7 @@ const Header = ({
           </button>
           <div className="overflow-hidden whitespace-nowrap">
             <h1 className="text-lg md:text-xl font-extrabold tracking-tight text-on-surface-brand leading-none pr-2">
-              Primus Console
+              Resident soft
             </h1>
           </div>
         </div>
@@ -403,11 +405,23 @@ export default function App() {
 
   useEffect(() => {
     const savedUser = sessionStorage.getItem('primus_user');
-    if (savedUser) setCurrentUser(JSON.parse(savedUser));
+    if (savedUser) {
+      const parsedUser = JSON.parse(savedUser);
+      setCurrentUser(parsedUser);
+      if (parsedUser.userRole === 'admin') setCurrentScreen('command-center');
+      else if (parsedUser.userRole === 'staff') setCurrentScreen('technician-dashboard');
+      else setCurrentScreen('user-dashboard');
+    }
     setIsAuthChecking(false);
   }, []);
 
-  const handleLogin = (user: Personnel) => { setCurrentUser(user); sessionStorage.setItem('primus_user', JSON.stringify(user)); };
+  const handleLogin = (user: Personnel) => { 
+    setCurrentUser(user); 
+    sessionStorage.setItem('primus_user', JSON.stringify(user)); 
+    if (user.userRole === 'admin') setCurrentScreen('command-center');
+    else if (user.userRole === 'staff') setCurrentScreen('technician-dashboard');
+    else setCurrentScreen('user-dashboard');
+  };
   
   const handleUpdateUser = (updatedUser: Personnel) => { 
     setCurrentUser(updatedUser); 
@@ -452,11 +466,12 @@ export default function App() {
           <AnimatePresence mode="wait">
             <motion.div key={currentScreen} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }} className="p-4 md:p-8 pb-20">
               <div className="max-w-7xl mx-auto">
-                {currentScreen === 'user-dashboard' && <UserDashboard onSelectAsset={handleSelectAsset} onNavigate={handleNavigate} user={currentUser} setHeaderAction={setHeaderAction} />}
+                {currentScreen === 'user-dashboard' && (role === 'user' ? <UserDashboard onSelectAsset={handleSelectAsset} onNavigate={handleNavigate} user={currentUser} setHeaderAction={setHeaderAction} /> : <AccessDenied />)}
                 {currentScreen === 'technician-dashboard' && (role !== 'user' ? <TechnicianDashboard onSelectAsset={handleSelectAsset} setHeaderAction={setHeaderAction} user={currentUser} refreshKey={refreshKey} /> : <AccessDenied />)}
                 {currentScreen === 'command-center' && (role === 'admin' ? <CommandCenter onNavigate={handleNavigate} onSelectAsset={handleSelectAsset} setHeaderAction={setHeaderAction} /> : <AccessDenied />)}
                 {currentScreen === 'inventory' && <Inventory onSelectAsset={handleSelectAsset} setHeaderAction={setHeaderAction} initialFilter={inventoryInitialFilter} user={currentUser} />}
                 {currentScreen === 'personnel' && (role !== 'user' ? <PersonnelScreen setHeaderAction={setHeaderAction} onViewAssets={handleViewPersonnelAssets} user={currentUser} /> : <AccessDenied />)}
+                {currentScreen === 'billing' && (role !== 'user' ? <Billing setHeaderAction={setHeaderAction} user={currentUser} /> : <AccessDenied />)}
                 {currentScreen === 'tickets' && <Tickets setHeaderAction={setHeaderAction} onSelectAsset={handleSelectAsset} user={currentUser} refreshKey={refreshKey} />}
                 {currentScreen === 'settings' && (role === 'admin' ? <SettingsScreen user={currentUser} onUpdateUser={handleLogin} setHeaderAction={setHeaderAction} /> : <AccessDenied />)}
                 {currentScreen === 'asset-detail' && <AssetDetail id={selectedAssetId} onNavigate={handleNavigate} user={currentUser} setHeaderAction={setHeaderAction} />}

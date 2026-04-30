@@ -3,11 +3,12 @@ import { Translations } from './en';
 export const th: Translations = {
   // Sidebar
   'sidebar.dashboard': 'แดชบอร์ด',
-  'sidebar.technician': 'ช่างเทคนิค',
-  'sidebar.commandCenter': 'ศูนย์ควบคุม',
-  'sidebar.inventory': 'คลังสินค้า',
-  'sidebar.personnel': 'บุคลากร',
-  'sidebar.tickets': 'แจ้งปัญหา',
+  'sidebar.technician': 'ส่วนช่าง/แม่บ้าน',
+  'sidebar.commandCenter': 'แผงควบคุมหลัก',
+  'sidebar.inventory': 'ห้องพัก',
+  'sidebar.personnel': 'ผู้เช่า',
+  'sidebar.billing': 'บิล/แจ้งหนี้',
+  'sidebar.tickets': 'แจ้งซ่อม',
   'sidebar.settings': 'การตั้งค่า',
   'sidebar.signOut': 'ออกจากระบบ',
   'sidebar.mode': 'โหมด',

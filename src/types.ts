@@ -11,6 +11,8 @@ export interface Ticket {
   assigneeId?: string;
   priority: 'Low' | 'Medium' | 'High' | 'Urgent';
   status: 'Open' | 'In Progress' | 'Resolved' | 'Closed';
+  scheduledDate?: string;
+  scheduledSlot?: string;
   createdAt: string;
   resolvedAt?: string;
   rating?: number;
