@@ -1,0 +1,44 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-headline: "Inter", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-primary-brand: #3B82F6;
+  --color-primary-container-brand: #1F2937;
+  --color-on-primary-brand: #ffffff;
+  --color-secondary-brand: #6B7280;
+  --color-surface-brand: #F4F6F8;
+  --color-surface-container-low-brand: #111827;
+  --color-surface-container-high-brand: #F9FAFB;
+  --color-surface-container-lowest-brand: #ffffff;
+  --color-outline-brand: #E5E7EB;
+  --color-outline-variant-brand: #F3F4F6;
+  --color-tertiary-brand: #10B981;
+  --color-tertiary-container-brand: #ECFDF5;
+  --color-error-brand: #EF4444;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-surface-brand);
+    color: #1F2937;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: var(--font-sans);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-headline);
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  .ambient-shadow {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .ghost-border {
+    border: 1px solid var(--color-outline-brand);
+  }
+}

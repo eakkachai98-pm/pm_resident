@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Personnel {
+  id          String   @id @default(cuid())
+  name        String
+  username    String?  @unique
+  role        String
+  department  String
+  email       String   @unique
+  phone       String?
+  avatar      String?
+  password    String   @default("password123")
+  userRole    String   @default("user") // 'user', 'staff', 'admin'
+  joinedDate  DateTime @default(now())
+  
+  // Notification Preferences
+  notifyEmail   Boolean @default(true)
+  notifyInApp   Boolean @default(true)
+  notifySystem  Boolean @default(true)
+  
+  assets          Asset[]
+  tickets         Ticket[] @relation("Reporter")
+  assignedTickets Ticket[] @relation("Assignee")
+  activities      Activity[]
+  notifications Notification[]
+}
+
+model Notification {
+  id          String   @id @default(cuid())
+  userId      String   
+  recipient   Personnel @relation(fields: [userId], references: [id])
+  title       String
+  message     String
+  type        String   // 'ticket', 'asset', 'system'
+  priority    String   @default("Medium") // 'Low', 'Medium', 'High'
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  link        String?  // Deep link (e.g. '/asset/MBP-01')
+}
+
+model Asset {
+  id                  String   @id // Manual IDs like MBP-2023-084
+  name                String
+  type                String
+  spec                String?
+  status              String   @default("Active") // 'Active', 'In Maintenance', 'Retired'
+  serialNumber        String   @unique
+  purchaseDate        DateTime @default(now())
+  location            String?
+  department          String?
+  image               String?
+  
+  assignedPersonnelId String?
+  assignedTo          Personnel? @relation(fields: [assignedPersonnelId], references: [id])
+  
+  tickets             Ticket[]
+  activities          Activity[]
+}
+
+model Ticket {
+  id          String   @id @default(cuid())
+  subject     String
+  description String?
+  resolution  String?  // New field for resolution notes
+  priority    String   @default("Medium") // 'Low', 'Medium', 'High', 'Urgent'
+  status      String   @default("Open") // 'Open', 'In Progress', 'Resolved', 'Closed'
+  createdAt   DateTime @default(now())
+  resolvedAt  DateTime?
+  rating      Int?     // CSAT Score 1-5
+  feedback    String?  // User's optional feedback upon resolution
+  
+  assetId     String
+  asset       Asset    @relation(fields: [assetId], references: [id])
+  
+  reporterId  String
+  reporter    Personnel @relation("Reporter", fields: [reporterId], references: [id])
+  
+  assigneeId  String?
+  assignee    Personnel? @relation("Assignee", fields: [assigneeId], references: [id])
+}
+
+model Activity {
+  id          String   @id @default(cuid())
+  description String
+  user        String   
+  status      String   @default("Complete")
+  time        DateTime @default(now())
+  
+  assetId     String?
+  asset       Asset?   @relation(fields: [assetId], references: [id])
+  
+  personnelId String?
+  personnel   Personnel? @relation(fields: [personnelId], references: [id])
+}
+
+// --- Metadata Models for Settings ---
+
+model AssetCategory {
+  id    String @id @default(cuid())
+  name  String @unique
+}
+
+model Department {
+  id    String @id @default(cuid())
+  name  String @unique
+}
+
+model SystemSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+}
