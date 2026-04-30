@@ -1,5 +1,5 @@
 export type UserRole = 'user' | 'staff' | 'admin';
-export type Screen = 'user-dashboard' | 'technician-dashboard' | 'command-center' | 'asset-detail' | 'inventory' | 'personnel' | 'tickets' | 'settings';
+export type Screen = 'user-dashboard' | 'technician-dashboard' | 'command-center' | 'asset-detail' | 'inventory' | 'personnel' | 'tickets' | 'settings' | 'billing';
 
 export interface Ticket {
   id: string;
@@ -10,7 +10,7 @@ export interface Ticket {
   reporterId: string;
   assigneeId?: string;
   priority: 'Low' | 'Medium' | 'High' | 'Urgent';
-  status: 'Open' | 'In Progress' | 'Resolved' | 'Closed';
+  status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';
   scheduledDate?: string;
   scheduledSlot?: string;
   createdAt: string;

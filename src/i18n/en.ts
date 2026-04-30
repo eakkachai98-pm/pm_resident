@@ -72,7 +72,7 @@ export const en = {
   'tech.noPendingTasks': 'No pending tasks in pool.',
   'tech.resolveTicket': 'Resolve Ticket',
   'tech.resolveTicketDesc': 'Please provide a brief summary of how the issue was resolved.',
-  'tech.resolveTicketPlaceholder': 'e.g. Replaced faulty RAM, updated display drivers...',
+  'tech.resolveTicketPlaceholder': 'Please specify the issue and resolution (e.g. Replaced broken faucet, fixed AC leak...)',
   'tech.cancel': 'Cancel',
   'tech.completeRepair': 'Complete Repair',
   'tech.historyTitle': 'Completed Tasks History',

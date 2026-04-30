@@ -1,15 +1,21 @@
 import { useState, useEffect } from 'react';
-import { Wrench, Plus, Search, X, ChevronRight, Home, User, Clock, Loader2, CheckCircle, Droplets, Zap, Wind } from 'lucide-react';
+import { Wrench, Plus, Search, X, ChevronRight, Home, User, Clock, Loader2, CheckCircle, Droplets, Zap, Wind, Star } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useToast } from '../context/ToastContext';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function Maintenance({ 
   setHeaderAction, 
-  user 
+  user,
+  initialTicketId,
+  onSelectAsset,
+  refreshKey
 }: { 
   setHeaderAction: (a: any) => void, 
-  user: any
+  user: any,
+  initialTicketId?: string | null,
+  onSelectAsset?: (id: string) => void,
+  refreshKey?: number
 }) {
   const [tickets, setTickets] = useState<any[]>([]);
   const [rooms, setRooms] = useState<any[]>([]);
@@ -24,6 +30,8 @@ export default function Maintenance({
   const [category, setCategory] = useState('General');
   const [scheduledDate, setScheduledDate] = useState('');
   const [scheduledSlot, setScheduledSlot] = useState('Morning');
+  const [ratingValue, setRatingValue] = useState(0);
+  const [hoveredStar, setHoveredStar] = useState(0);
 
   const fetchData = async () => {
     try {
@@ -34,8 +42,18 @@ export default function Maintenance({
       const tData = await tRes.json();
       const rData = await rRes.json();
       
-      setTickets(user.userRole === 'user' ? tData.filter((t: any) => t.reporterId === user.id) : tData);
+      const filteredTickets = user.userRole === 'user' ? tData.filter((t: any) => t.reporterId === user.id) : tData;
+      setTickets(filteredTickets);
       setRooms(rData);
+
+      if (initialTicketId) {
+        const ticketToOpen = filteredTickets.find((t: any) => t.id === initialTicketId);
+        if (ticketToOpen) {
+          setSelectedTicket(ticketToOpen);
+          setRatingValue(0);
+          setHoveredStar(0);
+        }
+      }
     } catch (error) {
       console.error('Error fetching maintenance data:', error);
     } finally {
@@ -73,21 +91,33 @@ export default function Maintenance({
 
   const updateStatus = async (id: string, status: string) => {
     try {
-      const bodyPayload: any = { status };
-      if (status === 'IN_PROGRESS') {
-        bodyPayload.assigneeId = user.id;
-      }
       const res = await fetch(`/api/maintenance/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bodyPayload)
+        body: JSON.stringify({ status })
       });
-      if (!res.ok) throw new Error('Failed');
-      showToast(`Status updated to ${status}`);
-      setSelectedTicket(null);
+      if (!res.ok) throw new Error('Failed to update');
+      showToast('Status updated successfully', 'success');
       fetchData();
+      setSelectedTicket(null);
     } catch (err) {
-      showToast('Update failed', 'error');
+      showToast('Failed to update status', 'error');
+    }
+  };
+
+  const submitRating = async (ticketId: string, rating: number, feedback: string) => {
+    try {
+      const res = await fetch(`/api/maintenance/${ticketId}/rate`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rating, feedback })
+      });
+      if (!res.ok) throw new Error('Failed to rate');
+      showToast('Rating submitted successfully', 'success');
+      fetchData();
+      setSelectedTicket((prev: any) => ({ ...prev, rating, feedback }));
+    } catch (err) {
+      showToast('Failed to submit rating', 'error');
     }
   };
 
@@ -121,7 +151,7 @@ export default function Maintenance({
             <div 
               key={ticket.id} 
               className="p-6 md:p-8 hover:bg-[#F9FAFB]/50 transition-all group flex flex-col md:flex-row gap-6 items-start md:items-center cursor-pointer"
-              onClick={() => setSelectedTicket(ticket)}
+              onClick={() => { setSelectedTicket(ticket); setRatingValue(0); setHoveredStar(0); }}
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3 mb-2.5">
@@ -154,17 +184,17 @@ export default function Maintenance({
         {selectedTicket && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedTicket(null)} className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white w-full max-w-2xl rounded-2xl md:rounded-[2rem] shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
-              <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-[#F9FAFB]">
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white w-full max-w-2xl rounded-2xl md:rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+              <div className="p-6 md:p-8 border-b border-gray-100 flex justify-between items-center bg-[#F9FAFB] shrink-0">
                 <div>
                   <div className="flex items-center gap-3 mb-1">
                     <span className="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">{selectedTicket.id.substring(0,8)}</span>
                   </div>
                   <h2 className="text-xl font-extrabold text-[#111827]">{selectedTicket.title}</h2>
                 </div>
-                <button onClick={() => setSelectedTicket(null)} className="p-2 hover:bg-white rounded-full text-gray-400 shadow-sm"><X size={20} /></button>
+                <button onClick={() => setSelectedTicket(null)} className="p-2 hover:bg-white rounded-full text-gray-400 shadow-sm transition-colors"><X size={20} /></button>
               </div>
-              <div className="p-8 space-y-8">
+              <div className="p-6 md:p-8 space-y-8 overflow-y-auto custom-scrollbar">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                   <div className="space-y-1">
                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Status</span>
@@ -194,6 +224,57 @@ export default function Maintenance({
                   </div>
                 </div>
 
+                {selectedTicket.status === 'RESOLVED' && (selectedTicket.repairImage || selectedTicket.repairNotes) && (
+                  <div className="space-y-4 pt-4 border-t border-gray-100">
+                    <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Resolution Details</h4>
+                    {selectedTicket.repairImage && (
+                      <img src={selectedTicket.repairImage} alt="Repair Evidence" className="w-full max-h-[300px] object-cover rounded-xl border border-gray-200" />
+                    )}
+                    {selectedTicket.repairNotes && (
+                      <div className="bg-emerald-50 rounded-2xl p-4 text-sm text-emerald-800 font-medium whitespace-pre-wrap border border-emerald-100">
+                        {selectedTicket.repairNotes}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {selectedTicket.status === 'RESOLVED' && user.userRole === 'user' && !selectedTicket.rating && (
+                  <div className="pt-6 border-t border-gray-100 flex flex-col items-center">
+                    <h4 className="text-sm font-extrabold text-[#111827] mb-4">Rate this Repair</h4>
+                    <div className="flex justify-center gap-2 mb-6">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button 
+                          key={star} 
+                          onClick={() => setRatingValue(star)}
+                          onMouseEnter={() => setHoveredStar(star)}
+                          onMouseLeave={() => setHoveredStar(0)}
+                          className={`transition-all ${star <= (hoveredStar || ratingValue) ? 'text-amber-400 scale-110' : 'text-gray-200 hover:text-amber-200'}`}
+                        >
+                          <Star size={32} fill="currentColor" />
+                        </button>
+                      ))}
+                    </div>
+                    <button 
+                      onClick={() => submitRating(selectedTicket.id, ratingValue, '')} 
+                      disabled={ratingValue === 0}
+                      className="px-8 py-3 bg-primary-brand text-white text-xs font-bold uppercase tracking-widest rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-800 transition-colors shadow-sm"
+                    >
+                      Submit Rating
+                    </button>
+                  </div>
+                )}
+                
+                {selectedTicket.rating && (
+                  <div className="pt-6 border-t border-gray-100 flex flex-col items-center">
+                    <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Your Rating</h4>
+                    <div className="flex justify-center gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star key={star} size={20} className={star <= selectedTicket.rating ? "text-amber-400" : "text-gray-200"} fill="currentColor" />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {user.userRole !== 'user' && selectedTicket.status !== 'RESOLVED' && (
                   <div className="pt-6 border-t border-gray-100 flex gap-4">
                     {selectedTicket.status === 'OPEN' && (
@@ -212,9 +293,9 @@ export default function Maintenance({
         {showCreateModal && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowCreateModal(false)} className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white w-full max-w-xl rounded-2xl md:rounded-[2rem] shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
-              <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-[#F9FAFB]"><h2 className="text-xl font-extrabold text-[#111827]">Report Issue</h2><button onClick={() => setShowCreateModal(false)} className="p-2 hover:bg-white rounded-full text-gray-400 shadow-sm"><X size={20} /></button></div>
-              <form onSubmit={handleSubmit} className="p-8 space-y-6">
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white w-full max-w-xl rounded-2xl md:rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+              <div className="p-6 md:p-8 border-b border-gray-100 flex justify-between items-center bg-[#F9FAFB] shrink-0"><h2 className="text-xl font-extrabold text-[#111827]">Report Issue</h2><button type="button" onClick={() => setShowCreateModal(false)} className="p-2 hover:bg-white rounded-full text-gray-400 shadow-sm transition-colors"><X size={20} /></button></div>
+              <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-6 overflow-y-auto custom-scrollbar">
                 <div className="space-y-1.5"><label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Issue Title</label><input required className="w-full bg-[#F4F6F8] border-none rounded-xl py-4 px-6 text-sm font-medium focus:ring-2 focus:ring-primary-brand/20 transition-all" placeholder="e.g. Water leaking in bathroom" value={title} onChange={(e) => setTitle(e.target.value)} /></div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

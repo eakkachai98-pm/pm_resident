@@ -1,60 +1,64 @@
-# Database Schema (Proposed)
+# Database Schema
 
-โครงสร้างฐานข้อมูลเบื้องต้นสำหรับระบบหอพัก (Resident soft) ควรประกอบด้วยตารางหลักดังนี้:
+โครงสร้างฐานข้อมูลสำหรับระบบหอพัก (Resident soft) ประกอบด้วยตารางหลักดังนี้:
 
 ## 1. `User` (ผู้ใช้งาน)
 เก็บข้อมูลผู้ใช้งานทุกคน ทั้ง Admin, Staff และ Resident
-- `id`: UUID
-- `role`: Enum ('ADMIN', 'STAFF', 'RESIDENT')
+- `id`: String (CUID)
+- `role`: String ('ADMIN', 'STAFF', 'RESIDENT')
 - `name`: String
 - `email`: String (สำหรับ Login)
-- `phone`: String
-- `passwordHash`: String
+- `phone`: String? (Nullable)
+- `password`: String
+- `createdAt`: DateTime
 
 ## 2. `Room` (ห้องพัก)
-- `id`: UUID
+- `id`: String (CUID)
 - `roomNumber`: String (เช่น '101', '102')
 - `floor`: Int
-- `roomType`: String (เช่น 'Standard', 'VIP')
-- `pricePerMonth`: Float
-- `status`: Enum ('AVAILABLE', 'OCCUPIED', 'MAINTENANCE')
+- `roomType`: String (เช่น 'Standard', 'Commercial')
+- `price`: Float
+- `status`: String ('AVAILABLE', 'OCCUPIED', 'MAINTENANCE')
 
 ## 3. `Lease` (สัญญาเช่า)
 เชื่อมความสัมพันธ์ระหว่าง User(Resident) และ Room
-- `id`: UUID
-- `roomId`: UUID (FK)
-- `tenantId`: UUID (FK)
+- `id`: String (CUID)
+- `roomId`: String (FK -> Room)
+- `tenantId`: String (FK -> User)
 - `startDate`: DateTime
-- `endDate`: DateTime
-- `depositAmount`: Float
+- `endDate`: DateTime? (Nullable)
 - `isActive`: Boolean
 
 ## 4. `MeterReading` (การอ่านมิเตอร์น้ำ/ไฟ)
-- `id`: UUID
-- `roomId`: UUID (FK)
+- `id`: String (CUID)
+- `roomId`: String (FK -> Room)
 - `billingMonth`: String (เช่น '2024-10')
 - `waterMeter`: Float
 - `electricMeter`: Float
 - `createdAt`: DateTime
 
 ## 5. `Invoice` (ใบแจ้งหนี้)
-- `id`: UUID
-- `leaseId`: UUID (FK)
+- `id`: String (CUID)
+- `leaseId`: String (FK -> Lease)
 - `billingMonth`: String
 - `roomRent`: Float
 - `waterCharge`: Float
 - `electricCharge`: Float
-- `otherCharges`: Float
 - `totalAmount`: Float
-- `status`: Enum ('UNPAID', 'PENDING_VERIFICATION', 'PAID')
-- `slipImageUrl`: String (รูปสลิปที่แนบมา)
+- `status`: String ('UNPAID', 'PENDING_VERIFICATION', 'PAID')
+- `slipImageUrl`: String? (Nullable)
+- `createdAt`: DateTime
 
 ## 6. `MaintenanceTicket` (รายการแจ้งซ่อม)
-- `id`: UUID
-- `roomId`: UUID (FK)
-- `reportedById`: UUID (FK -> User)
-- `assignedToId`: UUID (FK -> User/Staff) (Nullable)
+- `id`: String (CUID)
+- `roomId`: String (FK -> Room)
+- `reporterId`: String (FK -> User)
+- `assigneeId`: String? (FK -> User/Staff) (Nullable)
 - `title`: String
-- `description`: Text
-- `status`: Enum ('OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED')
+- `description`: String? (Nullable)
+- `category`: String ('Water', 'Electric', 'AirCon', 'General')
+- `status`: String ('OPEN', 'IN_PROGRESS', 'RESOLVED')
 - `createdAt`: DateTime
+- `resolvedAt`: DateTime? (Nullable)
+- `scheduledDate`: String? (Nullable)
+- `scheduledSlot`: String? (Nullable)

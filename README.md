@@ -18,10 +18,12 @@
    ```
 
 2. **Database Setup**
-   - ตรวจสอบว่า PostgreSQL เปิดทำงานอยู่และตั้งค่า `DATABASE_URL` ใน `.env` เรียบร้อยแล้ว
-   - รันคำสั่งสร้างฐานข้อมูล:
+   - ตรวจสอบว่า PostgreSQL เปิดทำงานอยู่
+   - สร้างฐานข้อมูลชื่อ `db_resident` และตั้งค่า `DATABASE_URL` ใน `.env` (ตัวอย่าง: `postgresql://user:pass@localhost:5433/db_resident?schema=public`)
+   - รันคำสั่งซิงค์โครงสร้างฐานข้อมูลและจำลองข้อมูลเริ่มต้น:
      ```bash
-     npx prisma migrate dev
+     npx prisma db push
+     npx prisma generate
      npx tsx prisma/seed.js
      ```
 
@@ -42,3 +44,14 @@
 - **Frontend:** React 19, TypeScript, Tailwind v4
 - **Backend:** Node.js Express พร้อม Prisma ORM
 - **Database:** PostgreSQL
+
+## 📝 Recent Updates (อัปเดตล่าสุด)
+- **UI/UX Improvements:**
+  - แก้ไขปัญหา Header ซ้อนทับ Navbar (Z-index issue)
+  - ปรับโครงสร้าง Pop-up Modal ทั้งหมดให้เป็นมาตรฐาน (รองรับ Scrollable Body แบบไม่ทะลุกรอบ)
+  - เพิ่มระบบแสดงข้อมูลแจ้งซ่อมแบบ Modal บนหน้า Dashboard แทนการ Link ไปหน้าอื่น
+- **Maintenance & Feedback:**
+  - เพิ่มระบบปิดงานซ่อม (Resolve Ticket) พร้อมแนบรูปภาพซ่อมเสร็จและโน้ตจากช่าง
+  - ช่างไม่สามารถกดปิดงานซ้ำได้หากสถานะเป็น RESOLVED หรือ CLOSED ไปแล้ว
+  - เพิ่มระบบ Rating 5 ดาว ให้ลูกบ้านสามารถให้คะแนนความพึงพอใจและ Feedback แก่ช่างได้เมื่อซ่อมเสร็จ
+  - ปรับปรุง Pop-up ดูรายละเอียดแจ้งซ่อมในฝั่งช่าง (Technician) ให้แสดงข้อมูลครบถ้วนเหมือนฝั่งลูกบ้าน (โชว์รูปภาพซ่อมเสร็จ, โน้ตช่าง, และคะแนน Rating)

@@ -134,7 +134,7 @@ const Sidebar = ({
 
   return (
     <>
-      <aside className={`hidden md:flex fixed left-0 top-0 bottom-0 z-30`}>
+      <aside className={`hidden md:flex fixed left-0 top-0 bottom-0 z-50`}>
         {renderSidebarContent(isDesktopOpen, false)}
       </aside>
       <AnimatePresence>
@@ -393,6 +393,7 @@ export default function App() {
   const [isAuthChecking, setIsAuthChecking] = useState(true);
   const [currentScreen, setCurrentScreen] = useState<Screen>('user-dashboard');
   const [selectedAssetId, setSelectedAssetId] = useState<string | null>(null);
+  const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
   const [inventoryInitialFilter, setInventoryInitialFilter] = useState<string>('');
   const [headerAction, setHeaderAction] = useState<{ label: string, onClick: () => void } | undefined>(undefined);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -435,8 +436,9 @@ export default function App() {
     }
   };
 
-  const handleNavigate = (screen: Screen) => { setCurrentScreen(screen); setSelectedAssetId(null); if (screen !== 'inventory') setInventoryInitialFilter(''); };
+  const handleNavigate = (screen: Screen) => { setCurrentScreen(screen); setSelectedAssetId(null); setSelectedTicketId(null); if (screen !== 'inventory') setInventoryInitialFilter(''); };
   const handleSelectAsset = (id: string) => { setSelectedAssetId(id); setCurrentScreen('asset-detail'); };
+  const handleViewTicket = (id: string) => { setSelectedTicketId(id); setCurrentScreen('tickets'); };
   const handleViewPersonnelAssets = (personName: string) => { setInventoryInitialFilter(personName); setCurrentScreen('inventory'); };
 
   if (isAuthChecking) return <div className="h-screen flex items-center justify-center bg-[#F4F6F8]"><Loader2 className="animate-spin text-primary-brand" size={40} /></div>;
@@ -466,13 +468,13 @@ export default function App() {
           <AnimatePresence mode="wait">
             <motion.div key={currentScreen} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }} className="p-4 md:p-8 pb-20">
               <div className="max-w-7xl mx-auto">
-                {currentScreen === 'user-dashboard' && (role === 'user' ? <UserDashboard onSelectAsset={handleSelectAsset} onNavigate={handleNavigate} user={currentUser} setHeaderAction={setHeaderAction} /> : <AccessDenied />)}
+                {currentScreen === 'user-dashboard' && (role === 'user' ? <UserDashboard onViewTicket={handleViewTicket} onNavigate={handleNavigate} user={currentUser} setHeaderAction={setHeaderAction} /> : <AccessDenied />)}
                 {currentScreen === 'technician-dashboard' && (role !== 'user' ? <TechnicianDashboard onSelectAsset={handleSelectAsset} setHeaderAction={setHeaderAction} user={currentUser} refreshKey={refreshKey} /> : <AccessDenied />)}
-                {currentScreen === 'command-center' && (role === 'admin' ? <CommandCenter onNavigate={handleNavigate} onSelectAsset={handleSelectAsset} setHeaderAction={setHeaderAction} /> : <AccessDenied />)}
-                {currentScreen === 'inventory' && <Inventory onSelectAsset={handleSelectAsset} setHeaderAction={setHeaderAction} initialFilter={inventoryInitialFilter} user={currentUser} />}
-                {currentScreen === 'personnel' && (role !== 'user' ? <PersonnelScreen setHeaderAction={setHeaderAction} onViewAssets={handleViewPersonnelAssets} user={currentUser} /> : <AccessDenied />)}
+                {currentScreen === 'command-center' && (role === 'admin' ? <CommandCenter onNavigate={handleNavigate} setHeaderAction={setHeaderAction} /> : <AccessDenied />)}
+                {currentScreen === 'inventory' && <Inventory setHeaderAction={setHeaderAction} user={currentUser} />}
+                {currentScreen === 'personnel' && (role !== 'user' ? <PersonnelScreen setHeaderAction={setHeaderAction} user={currentUser} /> : <AccessDenied />)}
                 {currentScreen === 'billing' && (role !== 'user' ? <Billing setHeaderAction={setHeaderAction} user={currentUser} /> : <AccessDenied />)}
-                {currentScreen === 'tickets' && <Tickets setHeaderAction={setHeaderAction} onSelectAsset={handleSelectAsset} user={currentUser} refreshKey={refreshKey} />}
+                {currentScreen === 'tickets' && <Tickets initialTicketId={selectedTicketId} setHeaderAction={setHeaderAction} onSelectAsset={handleSelectAsset} user={currentUser} refreshKey={refreshKey} />}
                 {currentScreen === 'settings' && (role === 'admin' ? <SettingsScreen user={currentUser} onUpdateUser={handleLogin} setHeaderAction={setHeaderAction} /> : <AccessDenied />)}
                 {currentScreen === 'asset-detail' && <AssetDetail id={selectedAssetId} onNavigate={handleNavigate} user={currentUser} setHeaderAction={setHeaderAction} />}
               </div>

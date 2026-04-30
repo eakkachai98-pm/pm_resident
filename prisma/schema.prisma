@@ -42,7 +42,6 @@ model Lease {
   id             String   @id @default(cuid())
   startDate      DateTime @default(now())
   endDate        DateTime?
-  depositAmount  Float    @default(0)
   isActive       Boolean  @default(true)
 
   // Relations
@@ -71,7 +70,6 @@ model Invoice {
   roomRent       Float
   waterCharge    Float
   electricCharge Float
-  otherCharges   Float    @default(0)
   totalAmount    Float
   status         String   @default("UNPAID") // 'UNPAID', 'PENDING_VERIFICATION', 'PAID'
   slipImageUrl   String?
@@ -103,4 +101,9 @@ model MaintenanceTicket {
 
   scheduledDate  String?
   scheduledSlot  String?
+  
+  repairNotes    String?
+  repairImage    String? // Store base64 or URL
+  rating         Int?
+  feedback       String?
 }

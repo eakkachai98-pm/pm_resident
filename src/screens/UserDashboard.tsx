@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Home, FileText, Wrench, AlertTriangle, CheckCircle, Zap, Droplets, Activity, TrendingUp, TrendingDown } from 'lucide-react';
-import { motion } from 'motion/react';
+import { Home, FileText, Wrench, AlertTriangle, CheckCircle, Zap, Droplets, Activity, TrendingUp, TrendingDown, Clock, Star, X, Wind } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useToast } from '../context/ToastContext';
 import SystemAnnouncements from '../components/SystemAnnouncements';
 import { useLanguage } from '../context/LanguageContext';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
 
-export default function UserDashboard({ onNavigate, user, setHeaderAction }: { onNavigate: (s: any) => void, user: any, setHeaderAction: (a: any) => void }) {
+export default function UserDashboard({ onViewTicket, onNavigate, user, setHeaderAction }: { onViewTicket?: (id: string) => void, onNavigate: (s: any) => void, user: any, setHeaderAction: (a: any) => void }) {
   const { t } = useLanguage();
   const [invoices, setInvoices] = useState<any[]>([]);
   const [tickets, setTickets] = useState<any[]>([]);
@@ -15,6 +15,46 @@ export default function UserDashboard({ onNavigate, user, setHeaderAction }: { o
   const [lastPolled, setLastPolled] = useState<Date>(new Date());
   const [loading, setLoading] = useState(true);
   const { showToast } = useToast();
+  
+  const [selectedTicket, setSelectedTicket] = useState<any | null>(null);
+  const [ratingValue, setRatingValue] = useState(0);
+  const [hoveredStar, setHoveredStar] = useState(0);
+
+  const submitRating = async (ticketId: string, rating: number, feedback: string) => {
+    try {
+      const res = await fetch(`/api/maintenance/${ticketId}/rate`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rating, feedback })
+      });
+      if (!res.ok) throw new Error('Failed to rate');
+      showToast('Rating submitted successfully', 'success');
+      
+      setTickets(prev => prev.map(t => t.id === ticketId ? { ...t, rating, feedback } : t));
+      setSelectedTicket((prev: any) => ({ ...prev, rating, feedback }));
+    } catch (err) {
+      showToast('Failed to submit rating', 'error');
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'OPEN': return 'bg-blue-500';
+      case 'IN_PROGRESS': return 'bg-amber-500';
+      case 'RESOLVED': return 'bg-emerald-500';
+      case 'CLOSED': return 'bg-gray-500';
+      default: return 'bg-gray-400';
+    }
+  };
+
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case 'Electric': return <Zap size={12} />;
+      case 'Water': return <Droplets size={12} />;
+      case 'AirCon': return <Wind size={12} />;
+      default: return <Wrench size={12} />;
+    }
+  };
 
   useEffect(() => {
     setHeaderAction(undefined);
@@ -221,7 +261,7 @@ export default function UserDashboard({ onNavigate, user, setHeaderAction }: { o
             <div className="p-6 space-y-5 flex-1 flex flex-col">
               <div className="flex-1 space-y-5">
                 {recentTickets.map((ticket) => (
-                  <div key={ticket.id} className="group cursor-pointer border-b border-gray-50 pb-4 last:border-0 last:pb-0">
+                  <div key={ticket.id} onClick={() => { setSelectedTicket(ticket); setRatingValue(0); setHoveredStar(0); }} className="group cursor-pointer border-b border-gray-50 pb-4 last:border-0 last:pb-0">
                     <div className="flex justify-between items-start mb-1">
                       <h4 className="text-sm font-bold text-on-surface-brand group-hover:text-primary-brand transition-colors truncate pr-2">{ticket.title}</h4>
                       <span className={`shrink-0 px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-tighter ${
@@ -336,6 +376,106 @@ export default function UserDashboard({ onNavigate, user, setHeaderAction }: { o
           </div>
         </div>
       </div>
+      
+      <AnimatePresence>
+        {selectedTicket && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedTicket(null)} className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white w-full max-w-2xl rounded-2xl md:rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+              <div className="p-6 md:p-8 border-b border-gray-100 flex justify-between items-center bg-[#F9FAFB] shrink-0">
+                <div>
+                  <div className="flex items-center gap-3 mb-1">
+                    <span className="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">{selectedTicket.id.substring(0,8)}</span>
+                  </div>
+                  <h2 className="text-xl font-extrabold text-[#111827]">{selectedTicket.title}</h2>
+                </div>
+                <button onClick={() => setSelectedTicket(null)} className="p-2 hover:bg-white rounded-full text-gray-400 shadow-sm transition-colors"><X size={20} /></button>
+              </div>
+              <div className="p-6 md:p-8 space-y-8 overflow-y-auto custom-scrollbar">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Status</span>
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full ${getStatusColor(selectedTicket.status)}`} />
+                      <span className="text-sm font-bold text-[#111827]">{selectedTicket.status.replace('_', ' ')}</span>
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Category</span>
+                    <div className="text-sm font-bold text-[#111827] flex items-center gap-1">{getCategoryIcon(selectedTicket.category)} {selectedTicket.category}</div>
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Room</span>
+                    <div className="text-sm font-bold text-primary-brand">Room {selectedTicket.room?.roomNumber || myRoom?.roomNumber || 'N/A'}</div>
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Reporter</span>
+                    <div className="text-sm font-bold text-[#111827]">{selectedTicket.reporter?.name || user.name}</div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Description</span>
+                  <div className="bg-[#F4F6F8] rounded-2xl p-6 text-sm text-[#111827] font-medium leading-relaxed whitespace-pre-wrap">
+                    {selectedTicket.description || 'No description provided.'}
+                  </div>
+                </div>
+
+                {selectedTicket.status === 'RESOLVED' && (selectedTicket.repairImage || selectedTicket.repairNotes) && (
+                  <div className="space-y-4 pt-4 border-t border-gray-100">
+                    <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Resolution Details</h4>
+                    {selectedTicket.repairImage && (
+                      <img src={selectedTicket.repairImage} alt="Repair Evidence" className="w-full max-h-[300px] object-cover rounded-xl border border-gray-200" />
+                    )}
+                    {selectedTicket.repairNotes && (
+                      <div className="bg-emerald-50 rounded-2xl p-4 text-sm text-emerald-800 font-medium whitespace-pre-wrap border border-emerald-100">
+                        {selectedTicket.repairNotes}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {selectedTicket.status === 'RESOLVED' && !selectedTicket.rating && (
+                  <div className="pt-6 border-t border-gray-100 flex flex-col items-center">
+                    <h4 className="text-sm font-extrabold text-[#111827] mb-4">Rate this Repair</h4>
+                    <div className="flex justify-center gap-2 mb-6">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button 
+                          key={star} 
+                          onClick={() => setRatingValue(star)}
+                          onMouseEnter={() => setHoveredStar(star)}
+                          onMouseLeave={() => setHoveredStar(0)}
+                          className={`transition-all ${star <= (hoveredStar || ratingValue) ? 'text-amber-400 scale-110' : 'text-gray-200 hover:text-amber-200'}`}
+                        >
+                          <Star size={32} fill="currentColor" />
+                        </button>
+                      ))}
+                    </div>
+                    <button 
+                      onClick={() => submitRating(selectedTicket.id, ratingValue, '')} 
+                      disabled={ratingValue === 0}
+                      className="px-8 py-3 bg-primary-brand text-white text-xs font-bold uppercase tracking-widest rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-800 transition-colors shadow-sm"
+                    >
+                      Submit Rating
+                    </button>
+                  </div>
+                )}
+                
+                {selectedTicket.rating && (
+                  <div className="pt-6 border-t border-gray-100 flex flex-col items-center">
+                    <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Your Rating</h4>
+                    <div className="flex justify-center gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star key={star} size={20} className={star <= selectedTicket.rating ? "text-amber-400" : "text-gray-200"} fill="currentColor" />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

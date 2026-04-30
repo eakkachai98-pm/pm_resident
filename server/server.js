@@ -15,7 +15,8 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // --- AUTH ---
 app.post('/api/login', async (req, res) => {
@@ -144,12 +145,18 @@ app.post('/api/maintenance', async (req, res) => {
 
 app.patch('/api/maintenance/:id', async (req, res) => {
   try {
-    const { status, assigneeId } = req.body;
-    const data = { status };
+    const { status, assigneeId, repairNotes, repairImage, rating, feedback } = req.body;
+    const data = {};
+    if (status) data.status = status;
     if (assigneeId !== undefined) data.assigneeId = assigneeId;
+    if (repairNotes !== undefined) data.repairNotes = repairNotes;
+    if (repairImage !== undefined) data.repairImage = repairImage;
+    if (rating !== undefined) data.rating = rating;
+    if (feedback !== undefined) data.feedback = feedback;
+    
     if (status === 'RESOLVED') {
       data.resolvedAt = new Date();
-    } else {
+    } else if (status) {
       data.resolvedAt = null;
     }
     const updated = await prisma.maintenanceTicket.update({
@@ -159,6 +166,19 @@ app.patch('/api/maintenance/:id', async (req, res) => {
     if (status === 'RESOLVED') {
       await prisma.room.update({ where: { id: updated.roomId }, data: { status: 'AVAILABLE' } });
     }
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.patch('/api/maintenance/:id/rate', async (req, res) => {
+  try {
+    const { rating, feedback } = req.body;
+    const updated = await prisma.maintenanceTicket.update({
+      where: { id: req.params.id },
+      data: { rating, feedback }
+    });
     res.json(updated);
   } catch (error) {
     res.status(500).json({ message: error.message });

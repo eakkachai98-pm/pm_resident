@@ -74,7 +74,7 @@ export const th: Translations = {
   'tech.noPendingTasks': 'ไม่มีงานค้างในระบบ',
   'tech.resolveTicket': 'ปิดตั๋วงาน',
   'tech.resolveTicketDesc': 'โปรดระบุสรุปสั้นๆ ว่าคุณแก้ไขปัญหานี้อย่างไร',
-  'tech.resolveTicketPlaceholder': 'เช่น เปลี่ยน RAM ใหม่, อัปเดตไดรเวอร์จอ...',
+  'tech.resolveTicketPlaceholder': 'โปรดระบุอาการเสีย และวิธีแก้ไข (เช่น เปลี่ยนก๊อกน้ำใหม่, ซ่อมแอร์ไม่เย็น...)',
   'tech.cancel': 'ยกเลิก',
   'tech.completeRepair': 'เสร็จสิ้นการซ่อม',
   'tech.historyTitle': 'ประวัติงานที่ทำเสร็จแล้ว',

@@ -105,7 +105,6 @@ async function main() {
         roomId: room201.id,
         tenantId: resident.id,
         startDate: new Date(),
-        depositAmount: 10000,
         isActive: true
       }
     });
