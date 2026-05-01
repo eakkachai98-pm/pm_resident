@@ -170,9 +170,48 @@ app.patch('/api/rooms/:id/status', async (req, res) => {
 app.get('/api/users', async (req, res) => {
   try {
     const users = await prisma.user.findMany({
-      include: { leases: true }
+      include: { leases: { include: { room: true } } }
     });
     res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post('/api/tenants', async (req, res) => {
+  try {
+    const { name, email, phone, roomId, startDate, nationality, identityNumber, preferredLanguage, emergencyContact, visaExpiryDate, tm30Reported } = req.body;
+    
+    const room = await prisma.room.findUnique({ where: { id: roomId } });
+    if (!room) return res.status(404).json({ message: 'Room not found' });
+    if (room.status !== 'AVAILABLE') return res.status(400).json({ message: 'Room is already occupied or in maintenance' });
+
+    let user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      user = await prisma.user.create({
+        data: { 
+          name, email, phone, role: 'RESIDENT', password: 'password123',
+          nationality: nationality || 'Thai',
+          identityNumber: identityNumber || null,
+          preferredLanguage: preferredLanguage || 'th',
+          emergencyContact: emergencyContact || null,
+          visaExpiryDate: visaExpiryDate ? new Date(visaExpiryDate) : null,
+          tm30Reported: tm30Reported || false
+        }
+      });
+    }
+
+    const lease = await prisma.lease.create({
+      data: {
+        roomId,
+        tenantId: user.id,
+        startDate: new Date(startDate || Date.now()),
+        isActive: true
+      }
+    });
+
+    await prisma.room.update({ where: { id: roomId }, data: { status: 'OCCUPIED' } });
+    res.status(201).json({ user, lease });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -18,6 +18,14 @@ model User {
   password    String   @default("password123")
   createdAt   DateTime @default(now())
 
+  // Additional Info for Tenant Management
+  nationality       String   @default("Thai") // 'Thai' or 'Foreigner'
+  identityNumber    String?  // ID Card or Passport Number
+  preferredLanguage String   @default("th") // 'th', 'en', 'zh'
+  emergencyContact  String?
+  visaExpiryDate    DateTime?
+  tm30Reported      Boolean  @default(false)
+
   // Relations
   leases              Lease[]
   maintenanceTickets  MaintenanceTicket[] @relation("Reporter")

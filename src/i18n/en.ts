@@ -21,6 +21,12 @@ export const en = {
 
   // Dashboard
   'dashboard.agencyOverview': 'Agency Overview',
+  'dashboard.residentTitle': 'Resident Dashboard',
+  'dashboard.iotFlow': 'Real-time IoT Flow',
+  'dashboard.myRequests': 'My Requests',
+  'dashboard.outstandingBills': 'Outstanding Bills',
+  'dashboard.electricityMonth': 'Electricity (This Month)',
+  'dashboard.waterMonth': 'Water (This Month)',
   'dashboard.welcomeBack': 'Welcome back,',
   'dashboard.myAssets': 'My Assigned Assets',
   'dashboard.viewAll': 'View All',

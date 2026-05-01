@@ -316,14 +316,23 @@ const Header = ({
         
         <div className="flex items-center gap-1 ml-2 pl-4 border-l border-gray-100">
           <button 
-            onClick={() => setLanguage(language === 'en' ? 'th' : 'en')}
+            onClick={() => {
+              if (language === 'en') setLanguage('th');
+              else if (language === 'th') setLanguage('zh-CN');
+              else if (language === 'zh-CN') setLanguage('zh-TW');
+              else setLanguage('en');
+            }}
             className="flex items-center justify-center gap-1.5 px-3 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-600 transition-colors mr-2"
-            title={language === 'en' ? 'Switch to Thai' : 'Switch to English'}
+            title="Switch Language"
           >
             {language === 'en' ? (
-              <><img src="https://flagcdn.com/w20/us.png" alt="US Flag" className="w-4 h-auto rounded-[2px]" /> EN</>
+              <><img src="https://flagcdn.com/w20/us.png" alt="EN" className="w-4 h-auto rounded-[2px]" /> EN</>
+            ) : language === 'th' ? (
+              <><img src="https://flagcdn.com/w20/th.png" alt="TH" className="w-4 h-auto rounded-[2px]" /> TH</>
+            ) : language === 'zh-CN' ? (
+              <><img src="https://flagcdn.com/w20/cn.png" alt="CN" className="w-4 h-auto rounded-[2px]" /> 简</>
             ) : (
-              <><img src="https://flagcdn.com/w20/th.png" alt="Thai Flag" className="w-4 h-auto rounded-[2px]" /> TH</>
+              <><img src="https://flagcdn.com/w20/tw.png" alt="TW" className="w-4 h-auto rounded-[2px]" /> 繁</>
             )}
           </button>
           
@@ -401,6 +410,7 @@ export default function App() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isAnnouncementModalOpen, setIsAnnouncementModalOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const { setLanguage } = useLanguage();
 
   const triggerRefresh = () => setRefreshKey(prev => prev + 1);
 
@@ -419,6 +429,12 @@ export default function App() {
   const handleLogin = (user: Personnel) => { 
     setCurrentUser(user); 
     sessionStorage.setItem('primus_user', JSON.stringify(user)); 
+    
+    // Auto switch language based on user's preference
+    if (user.preferredLanguage) {
+      setLanguage(user.preferredLanguage as any);
+    }
+    
     if (user.userRole === 'admin') setCurrentScreen('command-center');
     else if (user.userRole === 'staff') setCurrentScreen('technician-dashboard');
     else setCurrentScreen('user-dashboard');

@@ -22,7 +22,13 @@ export const th: Translations = {
   'header.noMatches': 'ไม่พบข้อมูลที่ค้นหา',
 
   // Dashboard
-  'dashboard.agencyOverview': 'ภาพรวมระบบ',
+  'dashboard.agencyOverview': 'ภาพรวมโครงการ',
+  'dashboard.residentTitle': 'หน้าหลักผู้เช่า',
+  'dashboard.iotFlow': 'สถานะน้ำไฟแบบเรียลไทม์',
+  'dashboard.myRequests': 'ประวัติการแจ้งซ่อมของฉัน',
+  'dashboard.outstandingBills': 'ยอดค้างชำระ',
+  'dashboard.electricityMonth': 'ค่าไฟ (เดือนนี้)',
+  'dashboard.waterMonth': 'ค่าน้ำ (เดือนนี้)',
   'dashboard.welcomeBack': 'ยินดีต้อนรับกลับมา,',
   'dashboard.myAssets': 'อุปกรณ์ของฉัน',
   'dashboard.viewAll': 'ดูทั้งหมด',

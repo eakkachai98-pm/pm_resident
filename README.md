@@ -4,10 +4,11 @@
 
 ## 🌟 ฟีเจอร์หลัก (Core Features)
 - **Room Management:** ระบบจัดการห้องพัก สถานะห้องว่าง/มีผู้เช่า ข้อมูลเฟอร์นิเจอร์
-- **Tenant Management:** ระบบจัดการข้อมูลผู้เช่าและสัญญาเช่า (Lease Agreement)
+- **Tenant Management & Onboarding:** ระบบจัดการข้อมูลผู้เช่าและสัญญาเช่า พร้อมรองรับชาวต่างชาติ (Passport, Visa, ตม.30)
 - **Billing & Metering:** ระบบจดค่าน้ำ-ค่าไฟ และคำนวณบิลรายเดือนอัตโนมัติ
 - **Payment Verification:** ระบบแจ้งชำระเงินและตรวจสอบสลิปโอนเงิน
 - **Maintenance (Ticketing):** ระบบแจ้งซ่อมสำหรับลูกบ้าน พร้อมระบบจัดการคิวงานของช่าง
+- **Multi-Language Support (i18n):** รองรับ 4 ภาษา (ไทย, อังกฤษ, จีนตัวย่อ, จีนตัวเต็ม) พร้อมเปลี่ยนภาษาอัตโนมัติ
 - **Notice Board:** ระบบประกาศข่าวสารจากส่วนกลางถึงลูกบ้าน
 
 ## 🚀 Quick Start
@@ -54,6 +55,11 @@
 - **Database:** PostgreSQL
 
 ## 📝 Recent Updates (อัปเดตล่าสุด)
+- **Tenant Onboarding & Multilingual System:**
+  - อัปเดต Database รองรับฟิลด์ใหม่: `nationality`, `identityNumber`, `visaExpiryDate`, `tm30Reported` (ช่วยติดตามสถานะ ตม.30 สำหรับชาวต่างชาติ)
+  - พัฒนาระบบเพิ่มผู้เช่าใหม่ (Dynamic Form) แยกฟอร์มสำหรับ คนไทย และ คนต่างชาติ
+  - เปิดตัวระบบหลายภาษา (i18n) เต็มรูปแบบ รองรับ `th`, `en`, `zh-CN` (จีนตัวย่อ), `zh-TW` (จีนตัวเต็ม) ในทุกหน้าจอ
+  - ระบบจะสลับภาษา UI อัตโนมัติตาม `preferredLanguage` ของผู้เช่าทันทีที่ล็อกอินเข้าสู่ระบบ
 - **UI/UX Improvements:**
   - แก้ไขปัญหา Header ซ้อนทับ Navbar (Z-index issue)
   - ปรับโครงสร้าง Pop-up Modal ทั้งหมดให้เป็นมาตรฐาน (รองรับ Scrollable Body แบบไม่ทะลุกรอบ)

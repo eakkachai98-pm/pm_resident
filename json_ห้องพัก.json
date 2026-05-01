@@ -1,0 +1,7371 @@
+{
+  "payload": [
+    {
+      "room_name": "R201",
+      "room_owner": "กฤต สีคราม",
+      "rent": "1300",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R201",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "15.078",
+            "datetime": "2024-10-01T06:36"
+          },
+          {
+            "value": "12.917",
+            "datetime": "2024-08-26T02:54"
+          },
+          {
+            "value": "11.117",
+            "datetime": "2024-07-26T07:23"
+          },
+          {
+            "value": "9.197",
+            "datetime": "2024-06-25T02:15"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R201",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "446.8",
+            "datetime": "2024-10-01T06:36"
+          },
+          {
+            "value": "385.5",
+            "datetime": "2024-08-26T02:54"
+          },
+          {
+            "value": "323.6",
+            "datetime": "2024-07-26T07:24"
+          },
+          {
+            "value": "266.9",
+            "datetime": "2024-06-25T02:15"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R202",
+      "room_owner": "ณัฐพล พรรณการ",
+      "rent": "1300",
+      "service_fee": "800",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R202",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "71.353",
+            "datetime": "2025-06-02T07:43"
+          },
+          {
+            "value": "67.821",
+            "datetime": "2025-04-25T07:47"
+          },
+          {
+            "value": "63.387",
+            "datetime": "2025-03-25T02:27"
+          },
+          {
+            "value": "58.464",
+            "datetime": "2025-02-25T07:12"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R202",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1390.1",
+            "datetime": "2025-06-02T07:44"
+          },
+          {
+            "value": "1261.9",
+            "datetime": "2025-04-25T07:47"
+          },
+          {
+            "value": "1150.6",
+            "datetime": "2025-03-25T02:27"
+          },
+          {
+            "value": "1072.8",
+            "datetime": "2025-02-25T07:12"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R203",
+      "room_owner": "ณัฐพล พรรณการ",
+      "rent": "1200",
+      "service_fee": "1100",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R203",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "102.497",
+            "datetime": "2025-12-01T06:33"
+          },
+          {
+            "value": "98.312",
+            "datetime": "2025-10-27T06:26"
+          },
+          {
+            "value": "95.296",
+            "datetime": "2025-09-29T06:13"
+          },
+          {
+            "value": "93.154",
+            "datetime": "2025-08-26T07:57"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R203",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "4057.1",
+            "datetime": "2025-12-01T06:33"
+          },
+          {
+            "value": "4000.8",
+            "datetime": "2025-10-27T06:26"
+          },
+          {
+            "value": "3921.1",
+            "datetime": "2025-09-25T08:01"
+          },
+          {
+            "value": "3839.0",
+            "datetime": "2025-08-25T07:38"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R204",
+      "room_owner": "อรรถพล ศรีกันหา",
+      "rent": "1200",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R204",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "758.183",
+            "datetime": "2026-04-25T03:20"
+          },
+          {
+            "value": "756.565",
+            "datetime": "2026-03-26T08:07"
+          },
+          {
+            "value": "754.840",
+            "datetime": "2026-02-26T10:01"
+          },
+          {
+            "value": "753.293",
+            "datetime": "2026-01-29T11:10"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R204",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "953.5",
+            "datetime": "2026-04-25T03:20"
+          },
+          {
+            "value": "840.8",
+            "datetime": "2026-03-26T08:08"
+          },
+          {
+            "value": "732.0",
+            "datetime": "2026-02-26T10:01"
+          },
+          {
+            "value": "655.6",
+            "datetime": "2026-01-29T11:11"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R205",
+      "room_owner": "จิราวรรณ ทิพรอด",
+      "rent": "1300",
+      "service_fee": "1400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R205",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "70.990",
+            "datetime": "2025-11-27T01:38"
+          },
+          {
+            "value": "68.436",
+            "datetime": "2025-10-27T06:27"
+          },
+          {
+            "value": "65.167",
+            "datetime": "2025-09-25T08:11"
+          },
+          {
+            "value": "62.188",
+            "datetime": "2025-08-26T01:14"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R205",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1410.0",
+            "datetime": "2025-11-27T01:38"
+          },
+          {
+            "value": "1346.8",
+            "datetime": "2025-10-27T06:27"
+          },
+          {
+            "value": "1249.2",
+            "datetime": "2025-09-25T08:11"
+          },
+          {
+            "value": "1169.8",
+            "datetime": "2025-08-26T01:14"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R206",
+      "room_owner": "จิราวรรณ ทิพรอด",
+      "rent": "1300",
+      "service_fee": "1000",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R206",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "69.405",
+            "datetime": "2025-11-27T01:39"
+          },
+          {
+            "value": "66.119",
+            "datetime": "2025-10-27T06:28"
+          },
+          {
+            "value": "62.346",
+            "datetime": "2025-09-25T08:12"
+          },
+          {
+            "value": "58.610",
+            "datetime": "2025-08-26T01:15"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R206",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1603.9",
+            "datetime": "2025-11-27T01:40"
+          },
+          {
+            "value": "1561.2",
+            "datetime": "2025-10-27T06:28"
+          },
+          {
+            "value": "1495.0",
+            "datetime": "2025-09-25T08:12"
+          },
+          {
+            "value": "1430.0",
+            "datetime": "2025-08-26T01:15"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R207",
+      "room_owner": "ปรีชา พานแก้ว",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R207",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "248.060",
+            "datetime": "2026-04-25T03:22"
+          },
+          {
+            "value": "241.173",
+            "datetime": "2026-03-26T08:09"
+          },
+          {
+            "value": "232.788",
+            "datetime": "2026-02-26T10:04"
+          },
+          {
+            "value": "225.215",
+            "datetime": "2026-01-29T11:13"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R207",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2411.7",
+            "datetime": "2026-04-25T03:22"
+          },
+          {
+            "value": "2329.4",
+            "datetime": "2026-03-26T08:10"
+          },
+          {
+            "value": "2268.3",
+            "datetime": "2026-02-26T10:05"
+          },
+          {
+            "value": "2219.0",
+            "datetime": "2026-01-29T11:13"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R208",
+      "room_owner": "จุฬาลักษณ์ ทรัพย์ประเสริฐ",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R208",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "139.728",
+            "datetime": "2026-04-25T03:24"
+          },
+          {
+            "value": "135.134",
+            "datetime": "2026-03-26T08:10"
+          },
+          {
+            "value": "130.139",
+            "datetime": "2026-02-26T10:06"
+          },
+          {
+            "value": "124.636",
+            "datetime": "2026-01-29T11:14"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R208",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2543.6",
+            "datetime": "2026-04-25T03:25"
+          },
+          {
+            "value": "2390.2",
+            "datetime": "2026-03-26T08:10"
+          },
+          {
+            "value": "2270.2",
+            "datetime": "2026-02-26T10:06"
+          },
+          {
+            "value": "2165.8",
+            "datetime": "2026-01-29T11:14"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R209",
+      "room_owner": "เพชรนิยม อังคณิต หอพัก",
+      "rent": "1200",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R209",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "181.082",
+            "datetime": "2026-04-25T03:26"
+          },
+          {
+            "value": "177.686",
+            "datetime": "2026-03-26T08:11"
+          },
+          {
+            "value": "171.894",
+            "datetime": "2026-02-26T10:07"
+          },
+          {
+            "value": "167.188",
+            "datetime": "2026-01-29T11:22"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R209",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "3769.1",
+            "datetime": "2026-04-25T03:26"
+          },
+          {
+            "value": "3587.9",
+            "datetime": "2026-03-26T08:12"
+          },
+          {
+            "value": "3422.8",
+            "datetime": "2026-02-26T10:07"
+          },
+          {
+            "value": "3286.7",
+            "datetime": "2026-01-29T11:22"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R210",
+      "room_owner": "ชัยรัตน์ ปานแย้ม",
+      "rent": "00",
+      "service_fee": "0",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R210",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "197.142",
+            "datetime": "2026-04-25T03:27"
+          },
+          {
+            "value": "190.582",
+            "datetime": "2026-03-26T08:12"
+          },
+          {
+            "value": "180.821",
+            "datetime": "2026-02-26T10:10"
+          },
+          {
+            "value": "173.855",
+            "datetime": "2026-01-29T11:23"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R210",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "5649.7",
+            "datetime": "2026-04-25T03:27"
+          },
+          {
+            "value": "5377.6",
+            "datetime": "2026-03-26T08:12"
+          },
+          {
+            "value": "5109.0",
+            "datetime": "2026-02-26T10:10"
+          },
+          {
+            "value": "4939.8",
+            "datetime": "2026-01-29T11:23"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R211",
+      "room_owner": "เอมอร นามพันธ์",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R211",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "103.846",
+            "datetime": "2026-04-25T03:31"
+          },
+          {
+            "value": "98.750",
+            "datetime": "2026-03-26T08:15"
+          },
+          {
+            "value": "94.160",
+            "datetime": "2026-02-26T10:12"
+          },
+          {
+            "value": "90.598",
+            "datetime": "2026-01-29T11:24"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R211",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2551.0",
+            "datetime": "2026-04-25T03:31"
+          },
+          {
+            "value": "2428.3",
+            "datetime": "2026-03-26T08:15"
+          },
+          {
+            "value": "2309.7",
+            "datetime": "2026-02-26T10:12"
+          },
+          {
+            "value": "2225.6",
+            "datetime": "2026-01-29T11:24"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R212",
+      "room_owner": "เอมอร นามพันธ์",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R212",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "1384.441",
+            "datetime": "2026-04-25T03:32"
+          },
+          {
+            "value": "1377.768",
+            "datetime": "2026-03-26T08:16"
+          },
+          {
+            "value": "1370.896",
+            "datetime": "2026-02-26T10:12"
+          },
+          {
+            "value": "1362.976",
+            "datetime": "2026-01-29T11:25"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R212",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2129.3",
+            "datetime": "2026-04-25T03:32"
+          },
+          {
+            "value": "2070.4",
+            "datetime": "2026-03-26T08:16"
+          },
+          {
+            "value": "2028.7",
+            "datetime": "2026-02-26T10:13"
+          },
+          {
+            "value": "1987.4",
+            "datetime": "2026-01-29T11:25"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R213",
+      "room_owner": "นุชนาท แสงจันทร์",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R213",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "1024.346",
+            "datetime": "2026-04-25T03:33"
+          },
+          {
+            "value": "1007.632",
+            "datetime": "2026-03-26T08:16"
+          },
+          {
+            "value": "995.366",
+            "datetime": "2026-02-26T10:13"
+          },
+          {
+            "value": "982.136",
+            "datetime": "2026-01-29T11:26"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R213",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2579.7",
+            "datetime": "2026-04-25T03:33"
+          },
+          {
+            "value": "2490.7",
+            "datetime": "2026-03-26T08:16"
+          },
+          {
+            "value": "2436.4",
+            "datetime": "2026-02-26T10:13"
+          },
+          {
+            "value": "2395.3",
+            "datetime": "2026-01-29T11:26"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R214",
+      "room_owner": "นุชนาท แสงจันทร์",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R214",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "115.043",
+            "datetime": "2026-04-25T03:36"
+          },
+          {
+            "value": "113.423",
+            "datetime": "2026-03-26T08:17"
+          },
+          {
+            "value": "112.573",
+            "datetime": "2026-02-26T10:14"
+          },
+          {
+            "value": "112.573",
+            "datetime": "2026-01-29T11:26"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R214",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2558.1",
+            "datetime": "2026-04-25T03:36"
+          },
+          {
+            "value": "2376.3",
+            "datetime": "2026-03-26T08:17"
+          },
+          {
+            "value": "2229.8",
+            "datetime": "2026-02-26T10:14"
+          },
+          {
+            "value": "2113.1",
+            "datetime": "2026-01-29T11:26"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R215",
+      "room_owner": "นิตยา อุตมะ",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R215",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "1886.511",
+            "datetime": "2026-04-25T03:38"
+          },
+          {
+            "value": "1876.925",
+            "datetime": "2026-03-26T08:18"
+          },
+          {
+            "value": "1866.950",
+            "datetime": "2026-02-26T10:15"
+          },
+          {
+            "value": "1856.305",
+            "datetime": "2026-01-29T11:27"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R215",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "4378.9",
+            "datetime": "2026-04-25T03:38"
+          },
+          {
+            "value": "4131.6",
+            "datetime": "2026-03-26T08:18"
+          },
+          {
+            "value": "3957.4",
+            "datetime": "2026-02-26T10:15"
+          },
+          {
+            "value": "3804.4",
+            "datetime": "2026-01-29T11:27"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R216",
+      "room_owner": "นิตยา อุตมะ",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R216",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "187.544",
+            "datetime": "2026-04-25T03:39"
+          },
+          {
+            "value": "181.687",
+            "datetime": "2026-03-26T08:20"
+          },
+          {
+            "value": "175.041",
+            "datetime": "2026-02-26T10:16"
+          },
+          {
+            "value": "167.537",
+            "datetime": "2026-01-29T11:28"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R216",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2768.7",
+            "datetime": "2026-04-25T03:39"
+          },
+          {
+            "value": "2712.2",
+            "datetime": "2026-03-26T08:20"
+          },
+          {
+            "value": "2552.3",
+            "datetime": "2026-02-26T10:16"
+          },
+          {
+            "value": "2385.5",
+            "datetime": "2026-01-29T11:29"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R217",
+      "room_owner": "เกษร น้อยจาก",
+      "rent": "1300",
+      "service_fee": "1650",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R217",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "120.345",
+            "datetime": "2026-04-28T07:56"
+          },
+          {
+            "value": "116.164",
+            "datetime": "2026-03-26T03:41"
+          },
+          {
+            "value": "120.092",
+            "datetime": "2026-04-25T03:41"
+          },
+          {
+            "value": "116.164",
+            "datetime": "2026-03-26T08:20"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R217",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "4357.4",
+            "datetime": "2026-04-28T07:57"
+          },
+          {
+            "value": "4093.60",
+            "datetime": "2026-03-26T03:41"
+          },
+          {
+            "value": "4350.2",
+            "datetime": "2026-04-25T03:41"
+          },
+          {
+            "value": "4093.6",
+            "datetime": "2026-03-26T08:20"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R218",
+      "room_owner": "เกษร น้อยจาก",
+      "rent": "1300",
+      "service_fee": "1650",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R218",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "150.567",
+            "datetime": "2026-04-28T07:59"
+          },
+          {
+            "value": "146.625",
+            "datetime": "2026-03-26T03:41"
+          },
+          {
+            "value": "150.359",
+            "datetime": "2026-04-25T03:41"
+          },
+          {
+            "value": "146.625",
+            "datetime": "2026-03-26T08:23"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R218",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "3398.9",
+            "datetime": "2026-04-28T08:00"
+          },
+          {
+            "value": "3205.8",
+            "datetime": "2026-03-26T03:41"
+          },
+          {
+            "value": "3392.8",
+            "datetime": "2026-04-25T03:41"
+          },
+          {
+            "value": "3205.8",
+            "datetime": "2026-03-26T08:23"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R219",
+      "room_owner": "มาลัย สุขอร่าม",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R219",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "196.541",
+            "datetime": "2026-04-25T03:45"
+          },
+          {
+            "value": "189.112",
+            "datetime": "2026-03-26T08:23"
+          },
+          {
+            "value": "180.921",
+            "datetime": "2026-02-26T10:18"
+          },
+          {
+            "value": "172.799",
+            "datetime": "2026-01-29T11:32"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R219",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2379.1",
+            "datetime": "2026-04-25T03:45"
+          },
+          {
+            "value": "2303.2",
+            "datetime": "2026-03-26T08:23"
+          },
+          {
+            "value": "2228.8",
+            "datetime": "2026-02-26T10:18"
+          },
+          {
+            "value": "2160.2",
+            "datetime": "2026-01-29T11:32"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R220",
+      "room_owner": "มาลัย สุขอร่าม",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R220",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "90.583",
+            "datetime": "2026-04-25T03:46"
+          },
+          {
+            "value": "88.059",
+            "datetime": "2026-03-26T08:24"
+          },
+          {
+            "value": "85.270",
+            "datetime": "2026-02-26T10:18"
+          },
+          {
+            "value": "82.292",
+            "datetime": "2026-01-29T11:33"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R220",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "4206.2",
+            "datetime": "2026-04-25T03:46"
+          },
+          {
+            "value": "3996.5",
+            "datetime": "2026-03-26T08:24"
+          },
+          {
+            "value": "3868.8",
+            "datetime": "2026-02-26T10:18"
+          },
+          {
+            "value": "3754.8",
+            "datetime": "2026-01-29T11:33"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R301",
+      "room_owner": "พงศกร แปนแก้ว",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R301",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "99.517",
+            "datetime": "2026-04-25T03:49"
+          },
+          {
+            "value": "96.761",
+            "datetime": "2026-03-26T08:36"
+          },
+          {
+            "value": "94.938",
+            "datetime": "2026-02-26T10:25"
+          },
+          {
+            "value": "91.198",
+            "datetime": "2026-01-29T11:40"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R301",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2383.7",
+            "datetime": "2026-04-25T03:49"
+          },
+          {
+            "value": "2255.6",
+            "datetime": "2026-03-26T08:36"
+          },
+          {
+            "value": "2203.5",
+            "datetime": "2026-02-26T10:26"
+          },
+          {
+            "value": "2135.0",
+            "datetime": "2026-01-29T11:40"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R302",
+      "room_owner": "ศิวพล โสดาศรี",
+      "rent": "650",
+      "service_fee": "100",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R302",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "125.427",
+            "datetime": "2026-04-25T03:50"
+          },
+          {
+            "value": "124.619",
+            "datetime": "2026-04-18T01:29"
+          },
+          {
+            "value": "123.910",
+            "datetime": "2025-07-29T01:29"
+          },
+          {
+            "value": "116.198",
+            "datetime": "2025-06-25T01:29"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R302",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "928.9",
+            "datetime": "2026-04-25T03:50"
+          },
+          {
+            "value": "891.20",
+            "datetime": "2026-04-18T07:34"
+          },
+          {
+            "value": "872.1",
+            "datetime": "2025-06-25T07:34"
+          },
+          {
+            "value": "817.1",
+            "datetime": "2025-05-26T07:29"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R303",
+      "room_owner": "ธนธรณ์ โต๊ะซำ",
+      "rent": "1200",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R303",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "187.380",
+            "datetime": "2026-04-25T03:51"
+          },
+          {
+            "value": "181.635",
+            "datetime": "2026-03-26T08:37"
+          },
+          {
+            "value": "175.910",
+            "datetime": "2026-02-26T10:27"
+          },
+          {
+            "value": "169.398",
+            "datetime": "2026-01-29T11:41"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R303",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1051.8",
+            "datetime": "2026-04-25T03:51"
+          },
+          {
+            "value": "1002.1",
+            "datetime": "2026-03-26T08:37"
+          },
+          {
+            "value": "953.9",
+            "datetime": "2026-02-26T10:27"
+          },
+          {
+            "value": "918.8",
+            "datetime": "2026-01-29T11:41"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R304",
+      "room_owner": "อนุรักษ จะนต หอพัก",
+      "rent": "1200",
+      "service_fee": "2300",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R304",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "17.779",
+            "datetime": "2024-07-26T07:48"
+          },
+          {
+            "value": "14.854",
+            "datetime": "2024-06-25T02:36"
+          },
+          {
+            "value": "10.474",
+            "datetime": "2024-05-25T03:05"
+          },
+          {
+            "value": "7.036",
+            "datetime": "2024-04-26T08:26"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R304",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "711.8",
+            "datetime": "2024-07-26T07:48"
+          },
+          {
+            "value": "606.0",
+            "datetime": "2024-06-25T02:36"
+          },
+          {
+            "value": "475.4",
+            "datetime": "2024-05-25T03:05"
+          },
+          {
+            "value": "364.5",
+            "datetime": "2024-04-26T08:27"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R305",
+      "room_owner": "ณรงฤทธิ์ จิบหนองแวง",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R305",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "1517.930",
+            "datetime": "2026-04-25T03:52"
+          },
+          {
+            "value": "1516.743",
+            "datetime": "2026-03-26T08:38"
+          },
+          {
+            "value": "1515.333",
+            "datetime": "2026-02-26T10:29"
+          },
+          {
+            "value": "1514.265",
+            "datetime": "2026-01-29T11:41"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R305",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2526.2",
+            "datetime": "2026-04-25T03:52"
+          },
+          {
+            "value": "2402.5",
+            "datetime": "2026-03-26T08:39"
+          },
+          {
+            "value": "2293.3",
+            "datetime": "2026-02-26T10:29"
+          },
+          {
+            "value": "2205.4",
+            "datetime": "2026-01-29T11:42"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R306",
+      "room_owner": "สุวิทย์ พูมน",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R306",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "166.082",
+            "datetime": "2026-04-25T03:52"
+          },
+          {
+            "value": "160.552",
+            "datetime": "2026-03-26T08:45"
+          },
+          {
+            "value": "157.665",
+            "datetime": "2026-02-26T10:30"
+          },
+          {
+            "value": "154.760",
+            "datetime": "2026-01-29T11:44"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R306",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1451.9",
+            "datetime": "2026-04-25T03:53"
+          },
+          {
+            "value": "1316.5",
+            "datetime": "2026-03-26T08:45"
+          },
+          {
+            "value": "1237.4",
+            "datetime": "2026-02-26T10:30"
+          },
+          {
+            "value": "1179.9",
+            "datetime": "2026-01-29T11:56"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R307",
+      "room_owner": "นิติพัฒน์ โชคธนนิตินันท์",
+      "rent": "650",
+      "service_fee": "100",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R307",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "197.343",
+            "datetime": "2026-04-25T03:53"
+          },
+          {
+            "value": "196.585",
+            "datetime": "2026-04-14T07:11"
+          },
+          {
+            "value": "196.043",
+            "datetime": "2025-10-27T07:11"
+          },
+          {
+            "value": "190.270",
+            "datetime": "2025-09-25T08:31"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R307",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "5205.1",
+            "datetime": "2026-04-25T03:53"
+          },
+          {
+            "value": "5176.5",
+            "datetime": "2026-04-14T07:12"
+          },
+          {
+            "value": "5174.1",
+            "datetime": "2025-10-27T07:12"
+          },
+          {
+            "value": "5067.6",
+            "datetime": "2025-09-25T08:32"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R308",
+      "room_owner": "วีระยุทธ พืชผักหวาน",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R308",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "329.946",
+            "datetime": "2026-04-25T03:53"
+          },
+          {
+            "value": "315.055",
+            "datetime": "2026-03-26T08:46"
+          },
+          {
+            "value": "296.775",
+            "datetime": "2026-02-26T10:31"
+          },
+          {
+            "value": "277.088",
+            "datetime": "2026-01-29T11:58"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R308",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2428.2",
+            "datetime": "2026-04-25T03:53"
+          },
+          {
+            "value": "2302.9",
+            "datetime": "2026-03-26T08:46"
+          },
+          {
+            "value": "2199.3",
+            "datetime": "2026-02-26T10:31"
+          },
+          {
+            "value": "2101.7",
+            "datetime": "2026-01-29T11:58"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R309",
+      "room_owner": "พรรณโสภา พันน้อย",
+      "rent": "600",
+      "service_fee": "100",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "WS-03-L-309",
+        "tag": "Count Forward",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "260.822",
+            "datetime": "2026-04-25T03:54"
+          },
+          {
+            "value": "260.041",
+            "datetime": "2026-04-18T07:42"
+          },
+          {
+            "value": "260.041",
+            "datetime": "2026-02-03T07:42"
+          },
+          {
+            "value": "253.917",
+            "datetime": "2025-12-27T11:59"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R309",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "5220.6",
+            "datetime": "2026-04-25T03:54"
+          },
+          {
+            "value": "5171.2",
+            "datetime": "2026-04-18T07:44"
+          },
+          {
+            "value": "5169.2",
+            "datetime": "2026-02-03T07:44"
+          },
+          {
+            "value": "5022.7",
+            "datetime": "2025-12-27T11:59"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R310",
+      "room_owner": "ประพันธ์ หมีไข่",
+      "rent": "2200",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R310",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "363.487",
+            "datetime": "2026-03-26T08:47"
+          },
+          {
+            "value": "355.517",
+            "datetime": "2026-02-26T10:32"
+          },
+          {
+            "value": "347.573",
+            "datetime": "2026-01-29T12:01"
+          },
+          {
+            "value": "338.270",
+            "datetime": "2025-12-27T04:50"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R310",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "8438.5",
+            "datetime": "2026-03-26T08:47"
+          },
+          {
+            "value": "8114.9",
+            "datetime": "2026-02-26T10:32"
+          },
+          {
+            "value": "7830.6",
+            "datetime": "2026-01-29T12:01"
+          },
+          {
+            "value": "7560.8",
+            "datetime": "2025-12-27T04:50"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R311",
+      "room_owner": "ขนิษฐา ไชยดี",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R311",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "349.454",
+            "datetime": "2026-04-25T03:55"
+          },
+          {
+            "value": "340.584",
+            "datetime": "2026-03-26T08:47"
+          },
+          {
+            "value": "333.564",
+            "datetime": "2026-02-26T10:33"
+          },
+          {
+            "value": "325.696",
+            "datetime": "2026-01-29T12:02"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R311",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2833.1",
+            "datetime": "2026-04-25T03:55"
+          },
+          {
+            "value": "2573.4",
+            "datetime": "2026-03-26T08:48"
+          },
+          {
+            "value": "2389.1",
+            "datetime": "2026-02-26T10:33"
+          },
+          {
+            "value": "2217.5",
+            "datetime": "2026-01-29T12:02"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R312",
+      "room_owner": "พลวิชญ์ ขวัญสุข",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R312",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "329.212",
+            "datetime": "2026-04-25T03:56"
+          },
+          {
+            "value": "326.626",
+            "datetime": "2026-03-26T08:49"
+          },
+          {
+            "value": "324.086",
+            "datetime": "2026-02-26T10:33"
+          },
+          {
+            "value": "319.792",
+            "datetime": "2026-01-29T12:03"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R312",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2706.2",
+            "datetime": "2026-04-25T03:56"
+          },
+          {
+            "value": "2603.3",
+            "datetime": "2026-03-26T08:49"
+          },
+          {
+            "value": "2515.1",
+            "datetime": "2026-02-26T10:33"
+          },
+          {
+            "value": "2428.2",
+            "datetime": "2026-01-29T12:03"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R313",
+      "room_owner": "ทรงพล แก้วดู",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R313",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "250.092",
+            "datetime": "2026-04-25T04:05"
+          },
+          {
+            "value": "242.628",
+            "datetime": "2026-03-26T08:50"
+          },
+          {
+            "value": "234.989",
+            "datetime": "2026-02-26T10:34"
+          },
+          {
+            "value": "228.083",
+            "datetime": "2026-01-29T12:03"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R313",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "3681.8",
+            "datetime": "2026-04-25T04:05"
+          },
+          {
+            "value": "3510.6",
+            "datetime": "2026-03-26T08:50"
+          },
+          {
+            "value": "3366.6",
+            "datetime": "2026-02-26T10:34"
+          },
+          {
+            "value": "3251.4",
+            "datetime": "2026-01-29T12:04"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R314",
+      "room_owner": "อัสมีรา เจ๊ะนิ",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R314",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "1912.805",
+            "datetime": "2026-04-25T04:06"
+          },
+          {
+            "value": "1904.418",
+            "datetime": "2026-03-26T08:54"
+          },
+          {
+            "value": "1897.033",
+            "datetime": "2026-02-26T10:34"
+          },
+          {
+            "value": "1889.669",
+            "datetime": "2026-01-29T12:05"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R314",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2968.8",
+            "datetime": "2026-04-25T04:06"
+          },
+          {
+            "value": "2805.7",
+            "datetime": "2026-03-26T08:54"
+          },
+          {
+            "value": "2700.1",
+            "datetime": "2026-02-26T10:35"
+          },
+          {
+            "value": "2608.2",
+            "datetime": "2026-01-29T12:05"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R315",
+      "room_owner": "จันทิมา ไชยเพส",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R315",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "131.305",
+            "datetime": "2026-04-25T04:06"
+          },
+          {
+            "value": "129.646",
+            "datetime": "2026-03-30T03:13"
+          },
+          {
+            "value": "129.225",
+            "datetime": "2026-02-19T03:13"
+          },
+          {
+            "value": "127.461",
+            "datetime": "2026-01-29T12:06"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R315",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2197.6",
+            "datetime": "2026-04-25T04:07"
+          },
+          {
+            "value": "2165.30",
+            "datetime": "2026-03-30T03:14"
+          },
+          {
+            "value": "2163.3",
+            "datetime": "2026-02-19T03:14"
+          },
+          {
+            "value": "2099.7",
+            "datetime": "2026-01-29T12:06"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R316",
+      "room_owner": "พรชัย กิมิพันธ์",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R316",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "110.203",
+            "datetime": "2026-04-25T04:07"
+          },
+          {
+            "value": "107.480",
+            "datetime": "2026-03-26T08:56"
+          },
+          {
+            "value": "102.778",
+            "datetime": "2026-02-26T10:35"
+          },
+          {
+            "value": "99.526",
+            "datetime": "2026-01-29T12:08"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R316",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "975.3",
+            "datetime": "2026-04-25T04:08"
+          },
+          {
+            "value": "926.8",
+            "datetime": "2026-03-26T08:56"
+          },
+          {
+            "value": "884.6",
+            "datetime": "2026-02-26T10:35"
+          },
+          {
+            "value": "860.2",
+            "datetime": "2026-01-29T12:08"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R317",
+      "room_owner": "ณัฐริณีย์ หลุ่มบุญเรือง",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R317",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "33.428",
+            "datetime": "2026-04-25T04:08"
+          },
+          {
+            "value": "32.205",
+            "datetime": "2026-03-26T08:57"
+          },
+          {
+            "value": "30.986",
+            "datetime": "2026-02-26T10:36"
+          },
+          {
+            "value": "29.726",
+            "datetime": "2026-01-29T12:09"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R317",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "497.8",
+            "datetime": "2026-04-25T04:08"
+          },
+          {
+            "value": "480.7",
+            "datetime": "2026-03-26T08:57"
+          },
+          {
+            "value": "466.2",
+            "datetime": "2026-02-26T10:36"
+          },
+          {
+            "value": "447.5",
+            "datetime": "2026-01-29T12:09"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R318",
+      "room_owner": "นัญรัตน์ คงสุข",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R318",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "54.478",
+            "datetime": "2026-04-25T04:09"
+          },
+          {
+            "value": "52.681",
+            "datetime": "2026-03-26T08:57"
+          },
+          {
+            "value": "50.992",
+            "datetime": "2026-02-26T10:36"
+          },
+          {
+            "value": "49.211",
+            "datetime": "2026-01-29T12:10"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R318",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1624.5",
+            "datetime": "2026-04-25T04:09"
+          },
+          {
+            "value": "1503.2",
+            "datetime": "2026-03-26T08:57"
+          },
+          {
+            "value": "1457.8",
+            "datetime": "2026-02-26T10:37"
+          },
+          {
+            "value": "1429.6",
+            "datetime": "2026-01-29T12:10"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R319",
+      "room_owner": "คมกล้า รัตนพรมรินทร์",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R319",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "164.928",
+            "datetime": "2026-04-25T04:10"
+          },
+          {
+            "value": "156.417",
+            "datetime": "2026-03-26T08:58"
+          },
+          {
+            "value": "148.383",
+            "datetime": "2026-02-26T10:37"
+          },
+          {
+            "value": "142.136",
+            "datetime": "2026-01-29T12:11"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R319",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "3389.7",
+            "datetime": "2026-04-25T04:10"
+          },
+          {
+            "value": "3200.4",
+            "datetime": "2026-03-26T08:58"
+          },
+          {
+            "value": "3050.5",
+            "datetime": "2026-02-26T10:37"
+          },
+          {
+            "value": "2964.2",
+            "datetime": "2026-01-29T12:11"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R320",
+      "room_owner": "ณัฐภูมิ ทองด้วง",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "WS-03-L-320",
+        "tag": "Count Forward",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "64.084",
+            "datetime": "2026-04-25T04:21"
+          },
+          {
+            "value": "62.403",
+            "datetime": "2026-03-26T08:59"
+          },
+          {
+            "value": "60.978",
+            "datetime": "2026-02-26T10:38"
+          },
+          {
+            "value": "59.902",
+            "datetime": "2026-01-29T12:12"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R320",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "4017.9",
+            "datetime": "2026-04-25T04:12"
+          },
+          {
+            "value": "3879.1",
+            "datetime": "2026-03-26T08:59"
+          },
+          {
+            "value": "3751.7",
+            "datetime": "2026-02-26T10:38"
+          },
+          {
+            "value": "3645.7",
+            "datetime": "2026-01-29T12:12"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R401",
+      "room_owner": "วิจิตรา อาจประจักร์",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R401",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "321.936",
+            "datetime": "2026-04-25T04:26"
+          },
+          {
+            "value": "311.436",
+            "datetime": "2026-03-26T09:24"
+          },
+          {
+            "value": "301.111",
+            "datetime": "2026-02-26T10:40"
+          },
+          {
+            "value": "290.917",
+            "datetime": "2026-01-29T12:13"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R401",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "4559.1",
+            "datetime": "2026-04-25T04:26"
+          },
+          {
+            "value": "4349.3",
+            "datetime": "2026-03-26T09:24"
+          },
+          {
+            "value": "4196.9",
+            "datetime": "2026-02-26T10:40"
+          },
+          {
+            "value": "4075.1",
+            "datetime": "2026-01-29T12:13"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R402",
+      "room_owner": "อนุทัศน์ โชติเนตร",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R402",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "111.598",
+            "datetime": "2026-04-25T04:27"
+          },
+          {
+            "value": "106.232",
+            "datetime": "2026-03-26T09:24"
+          },
+          {
+            "value": "103.845",
+            "datetime": "2026-02-26T10:44"
+          },
+          {
+            "value": "101.136",
+            "datetime": "2026-01-25T07:33"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R402",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1798.0",
+            "datetime": "2026-04-25T04:27"
+          },
+          {
+            "value": "1650.8",
+            "datetime": "2026-03-26T09:25"
+          },
+          {
+            "value": "1598.9",
+            "datetime": "2026-02-26T10:45"
+          },
+          {
+            "value": "1550.1",
+            "datetime": "2026-01-25T07:33"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R403",
+      "room_owner": "สุมนัสชนก เอื้อจิตร์",
+      "rent": "1200",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R403",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "136.469",
+            "datetime": "2026-04-25T04:28"
+          },
+          {
+            "value": "133.096",
+            "datetime": "2026-03-26T09:25"
+          },
+          {
+            "value": "129.821",
+            "datetime": "2026-02-26T10:46"
+          },
+          {
+            "value": "125.403",
+            "datetime": "2026-01-29T12:14"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R403",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "6432.5",
+            "datetime": "2026-04-25T04:28"
+          },
+          {
+            "value": "6185.3",
+            "datetime": "2026-03-26T09:25"
+          },
+          {
+            "value": "5960.9",
+            "datetime": "2026-02-26T10:46"
+          },
+          {
+            "value": "5747.1",
+            "datetime": "2026-01-29T12:14"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R404",
+      "room_owner": "รวิภาส ชูทรัพย์ หอพัก",
+      "rent": "1200",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R404",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "84.733",
+            "datetime": "2026-04-25T04:29"
+          },
+          {
+            "value": "81.859",
+            "datetime": "2026-03-26T09:26"
+          },
+          {
+            "value": "79.404",
+            "datetime": "2026-02-26T10:47"
+          },
+          {
+            "value": "77.208",
+            "datetime": "2026-01-29T12:18"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R404",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "3202.9",
+            "datetime": "2026-04-25T04:29"
+          },
+          {
+            "value": "3044.9",
+            "datetime": "2026-03-26T09:26"
+          },
+          {
+            "value": "2927.9",
+            "datetime": "2026-02-26T10:47"
+          },
+          {
+            "value": "2816.9",
+            "datetime": "2026-01-29T12:18"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R405",
+      "room_owner": "ธีรพงษ์ เทศนะ",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R405",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "101.229",
+            "datetime": "2026-04-25T04:32"
+          },
+          {
+            "value": "95.651",
+            "datetime": "2026-03-29T10:48"
+          },
+          {
+            "value": "94.819",
+            "datetime": "2026-02-26T10:48"
+          },
+          {
+            "value": "93.527",
+            "datetime": "2026-01-29T12:19"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R405",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "3576.5",
+            "datetime": "2026-04-25T04:32"
+          },
+          {
+            "value": "3515.30",
+            "datetime": "2026-03-29T10:48"
+          },
+          {
+            "value": "3487.8",
+            "datetime": "2026-02-26T10:48"
+          },
+          {
+            "value": "3344.4",
+            "datetime": "2026-01-29T12:19"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R406",
+      "room_owner": "Calven Coin",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R406",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "161.963",
+            "datetime": "2026-04-25T04:34"
+          },
+          {
+            "value": "159.036",
+            "datetime": "2026-03-26T09:27"
+          },
+          {
+            "value": "156.820",
+            "datetime": "2026-02-26T10:49"
+          },
+          {
+            "value": "154.919",
+            "datetime": "2026-01-29T12:20"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R406",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "3759.8",
+            "datetime": "2026-04-25T04:34"
+          },
+          {
+            "value": "3632.9",
+            "datetime": "2026-03-26T09:27"
+          },
+          {
+            "value": "3524.8",
+            "datetime": "2026-02-26T10:49"
+          },
+          {
+            "value": "3427.8",
+            "datetime": "2026-01-29T12:20"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R407",
+      "room_owner": "สุจินดา แรงกสิวิทย์",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R407",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "144.412",
+            "datetime": "2026-04-25T04:34"
+          },
+          {
+            "value": "138.462",
+            "datetime": "2026-03-26T09:27"
+          },
+          {
+            "value": "133.328",
+            "datetime": "2026-02-26T10:49"
+          },
+          {
+            "value": "129.327",
+            "datetime": "2026-01-29T12:21"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R407",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "3715.8",
+            "datetime": "2026-04-25T04:35"
+          },
+          {
+            "value": "3549.7",
+            "datetime": "2026-03-26T09:27"
+          },
+          {
+            "value": "3418.7",
+            "datetime": "2026-02-26T10:49"
+          },
+          {
+            "value": "3317.5",
+            "datetime": "2026-01-29T12:22"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R408",
+      "room_owner": "วดี ทรงราษี",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R408",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "128.022",
+            "datetime": "2026-02-04T02:22"
+          },
+          {
+            "value": "122.718",
+            "datetime": "2025-12-27T05:14"
+          },
+          {
+            "value": "119.326",
+            "datetime": "2025-11-27T04:15"
+          },
+          {
+            "value": "115.367",
+            "datetime": "2025-10-27T07:38"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R408",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1516.0",
+            "datetime": "2026-02-04T02:28"
+          },
+          {
+            "value": "1487.1",
+            "datetime": "2025-12-27T05:14"
+          },
+          {
+            "value": "1469.5",
+            "datetime": "2025-11-27T04:15"
+          },
+          {
+            "value": "1448.4",
+            "datetime": "2025-10-27T07:39"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R409",
+      "room_owner": "ปัณณวัฒน์ โพธิ์กระจ่าง",
+      "rent": "1200",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R409",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "116.710",
+            "datetime": "2026-04-25T04:36"
+          },
+          {
+            "value": "114.484",
+            "datetime": "2026-03-26T09:31"
+          },
+          {
+            "value": "112.476",
+            "datetime": "2026-03-01T01:34"
+          },
+          {
+            "value": "112.223",
+            "datetime": "2026-01-07T01:34"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R409",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1128.6",
+            "datetime": "2026-04-25T04:36"
+          },
+          {
+            "value": "1042.7",
+            "datetime": "2026-03-26T09:33"
+          },
+          {
+            "value": "968.6",
+            "datetime": "2026-03-01T01:34"
+          },
+          {
+            "value": "967.2",
+            "datetime": "2026-01-07T01:34"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R410",
+      "room_owner": "กาญจนา พลเสนา",
+      "rent": "2200",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R410",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "375.457",
+            "datetime": "2026-04-28T08:05"
+          },
+          {
+            "value": "365.70",
+            "datetime": "2026-04-25T04:39"
+          },
+          {
+            "value": "375.457",
+            "datetime": "2026-04-25T04:39"
+          },
+          {
+            "value": "375.457",
+            "datetime": "2026-03-26T09:37"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R410",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "8465.2",
+            "datetime": "2026-04-25T04:40"
+          },
+          {
+            "value": "8146.0",
+            "datetime": "2026-03-26T09:38"
+          },
+          {
+            "value": "7825.6",
+            "datetime": "2026-02-26T10:50"
+          },
+          {
+            "value": "7550.3",
+            "datetime": "2026-01-29T12:23"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R411",
+      "room_owner": "ธนกร บุตรเพียร",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R411",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "183.321",
+            "datetime": "2026-04-25T04:41"
+          },
+          {
+            "value": "173.789",
+            "datetime": "2026-03-26T09:38"
+          },
+          {
+            "value": "165.029",
+            "datetime": "2026-02-26T10:51"
+          },
+          {
+            "value": "157.152",
+            "datetime": "2026-01-29T12:24"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R411",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "3343.4",
+            "datetime": "2026-04-25T04:42"
+          },
+          {
+            "value": "3210.5",
+            "datetime": "2026-03-26T09:38"
+          },
+          {
+            "value": "3122.1",
+            "datetime": "2026-02-26T10:51"
+          },
+          {
+            "value": "3037.2",
+            "datetime": "2026-01-29T12:24"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R412",
+      "room_owner": "มณฑิรา บุษบก",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R412",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "125.918",
+            "datetime": "2026-04-25T04:42"
+          },
+          {
+            "value": "118.028",
+            "datetime": "2026-03-26T09:39"
+          },
+          {
+            "value": "111.830",
+            "datetime": "2026-02-26T10:51"
+          },
+          {
+            "value": "105.281",
+            "datetime": "2026-01-29T12:25"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R412",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2929.9",
+            "datetime": "2026-04-25T04:43"
+          },
+          {
+            "value": "2687.9",
+            "datetime": "2026-03-26T09:39"
+          },
+          {
+            "value": "2513.8",
+            "datetime": "2026-02-26T10:51"
+          },
+          {
+            "value": "2362.7",
+            "datetime": "2026-01-29T12:25"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R413",
+      "room_owner": "ณัฐติยา พันธ์เพ็ง หอพัก",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R413",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "85.883",
+            "datetime": "2026-04-25T04:43"
+          },
+          {
+            "value": "82.705",
+            "datetime": "2026-03-26T09:39"
+          },
+          {
+            "value": "80.004",
+            "datetime": "2026-02-26T10:52"
+          },
+          {
+            "value": "77.205",
+            "datetime": "2026-01-29T12:26"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R413",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1816.4",
+            "datetime": "2026-04-25T04:43"
+          },
+          {
+            "value": "1733.4",
+            "datetime": "2026-03-26T09:39"
+          },
+          {
+            "value": "1681.8",
+            "datetime": "2026-02-26T10:52"
+          },
+          {
+            "value": "1633.4",
+            "datetime": "2026-01-29T12:26"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R414",
+      "room_owner": "ปิยะนุช พรมประชุม",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R414",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "163.319",
+            "datetime": "2026-04-25T04:44"
+          },
+          {
+            "value": "157.412",
+            "datetime": "2026-03-26T09:40"
+          },
+          {
+            "value": "152.370",
+            "datetime": "2026-02-26T10:52"
+          },
+          {
+            "value": "147.573",
+            "datetime": "2026-01-29T12:27"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R414",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "5338.7",
+            "datetime": "2026-04-25T04:44"
+          },
+          {
+            "value": "5101.3",
+            "datetime": "2026-03-26T09:40"
+          },
+          {
+            "value": "4933.1",
+            "datetime": "2026-02-26T10:52"
+          },
+          {
+            "value": "4788.4",
+            "datetime": "2026-01-29T12:27"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R415",
+      "room_owner": "นวลละออง แสวงสิน",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R415",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "193.624",
+            "datetime": "2026-04-25T04:45"
+          },
+          {
+            "value": "187.113",
+            "datetime": "2026-03-26T09:41"
+          },
+          {
+            "value": "181.179",
+            "datetime": "2026-02-26T10:53"
+          },
+          {
+            "value": "176.492",
+            "datetime": "2026-01-29T12:28"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R415",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "3873.8",
+            "datetime": "2026-04-25T04:45"
+          },
+          {
+            "value": "3686.5",
+            "datetime": "2026-03-26T09:41"
+          },
+          {
+            "value": "3536.7",
+            "datetime": "2026-02-26T10:53"
+          },
+          {
+            "value": "3422.0",
+            "datetime": "2026-01-29T12:28"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R416",
+      "room_owner": "ธนากร อุตมะ",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R416",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "116.948",
+            "datetime": "2026-04-25T04:45"
+          },
+          {
+            "value": "114.396",
+            "datetime": "2026-03-26T09:42"
+          },
+          {
+            "value": "111.776",
+            "datetime": "2026-02-26T10:54"
+          },
+          {
+            "value": "109.301",
+            "datetime": "2026-01-25T05:26"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R416",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1477.3",
+            "datetime": "2026-04-25T04:45"
+          },
+          {
+            "value": "1396.5",
+            "datetime": "2026-03-26T09:42"
+          },
+          {
+            "value": "1323.9",
+            "datetime": "2026-02-26T10:54"
+          },
+          {
+            "value": "1243.9",
+            "datetime": "2026-01-25T05:26"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R417",
+      "room_owner": "หญิง ดวงแก้ว",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R417",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "132.139",
+            "datetime": "2026-04-25T04:46"
+          },
+          {
+            "value": "129.097",
+            "datetime": "2026-03-26T09:46"
+          },
+          {
+            "value": "125.350",
+            "datetime": "2026-02-26T10:55"
+          },
+          {
+            "value": "121.411",
+            "datetime": "2026-01-29T12:29"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R417",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1628.1",
+            "datetime": "2026-04-25T04:46"
+          },
+          {
+            "value": "1536.5",
+            "datetime": "2026-03-26T09:46"
+          },
+          {
+            "value": "1455.0",
+            "datetime": "2026-02-26T10:56"
+          },
+          {
+            "value": "1400.1",
+            "datetime": "2026-01-29T12:29"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R418",
+      "room_owner": "ณัฐพล ปิจดี",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R418",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "281.813",
+            "datetime": "2026-04-25T04:48"
+          },
+          {
+            "value": "271.594",
+            "datetime": "2026-03-26T09:47"
+          },
+          {
+            "value": "262.444",
+            "datetime": "2026-02-26T10:56"
+          },
+          {
+            "value": "252.933",
+            "datetime": "2026-01-29T12:30"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R418",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "4852.9",
+            "datetime": "2026-04-25T04:48"
+          },
+          {
+            "value": "4597.4",
+            "datetime": "2026-03-26T09:47"
+          },
+          {
+            "value": "4386.5",
+            "datetime": "2026-02-26T10:56"
+          },
+          {
+            "value": "4223.3",
+            "datetime": "2026-01-29T12:30"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R419",
+      "room_owner": "ภัทริดา กองบุญมา หอพัก",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R419",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "86.179",
+            "datetime": "2026-04-25T04:49"
+          },
+          {
+            "value": "83.699",
+            "datetime": "2026-03-26T09:51"
+          },
+          {
+            "value": "81.170",
+            "datetime": "2026-02-26T10:57"
+          },
+          {
+            "value": "78.639",
+            "datetime": "2026-01-29T12:31"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R419",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2625.1",
+            "datetime": "2026-04-25T04:49"
+          },
+          {
+            "value": "2481.2",
+            "datetime": "2026-03-26T09:51"
+          },
+          {
+            "value": "2381.0",
+            "datetime": "2026-02-26T10:58"
+          },
+          {
+            "value": "2286.6",
+            "datetime": "2026-01-29T12:31"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R420",
+      "room_owner": "ปรเมษฐ์ อินทร์แก้ว หอพัก",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R420",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "137.513",
+            "datetime": "2026-04-25T04:50"
+          },
+          {
+            "value": "134.029",
+            "datetime": "2026-03-26T09:53"
+          },
+          {
+            "value": "131.037",
+            "datetime": "2026-02-26T11:01"
+          },
+          {
+            "value": "128.609",
+            "datetime": "2026-01-29T12:32"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R420",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "5330.1",
+            "datetime": "2026-04-25T04:50"
+          },
+          {
+            "value": "5030.4",
+            "datetime": "2026-03-26T09:53"
+          },
+          {
+            "value": "4796.4",
+            "datetime": "2026-02-26T11:01"
+          },
+          {
+            "value": "4625.8",
+            "datetime": "2026-01-29T12:32"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R501",
+      "room_owner": "วชิรวิทย์ ศรีถา",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R501",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "237.967",
+            "datetime": "2026-04-25T04:58"
+          },
+          {
+            "value": "228.523",
+            "datetime": "2026-03-26T10:00"
+          },
+          {
+            "value": "220.018",
+            "datetime": "2026-02-26T11:06"
+          },
+          {
+            "value": "211.394",
+            "datetime": "2026-01-29T12:33"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R501",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "6374.4",
+            "datetime": "2026-04-25T04:58"
+          },
+          {
+            "value": "6077.8",
+            "datetime": "2026-03-26T10:01"
+          },
+          {
+            "value": "5855.1",
+            "datetime": "2026-02-26T11:06"
+          },
+          {
+            "value": "5682.7",
+            "datetime": "2026-01-29T12:33"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R502",
+      "room_owner": "จุราพร เกษาอาด",
+      "rent": "1300",
+      "service_fee": "800",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R502",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "287.553",
+            "datetime": "2026-04-25T04:58"
+          },
+          {
+            "value": "275.807",
+            "datetime": "2026-03-26T10:07"
+          },
+          {
+            "value": "266.783",
+            "datetime": "2026-02-26T11:07"
+          },
+          {
+            "value": "257.154",
+            "datetime": "2026-01-29T12:38"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R502",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "3774.5",
+            "datetime": "2026-04-25T04:58"
+          },
+          {
+            "value": "3553.6",
+            "datetime": "2026-03-26T10:07"
+          },
+          {
+            "value": "3353.6",
+            "datetime": "2026-02-26T11:07"
+          },
+          {
+            "value": "3215.4",
+            "datetime": "2026-01-29T12:38"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R503",
+      "room_owner": "ศาโรจน์ ปานแย้ม",
+      "rent": "1200",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R503",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "90.677",
+            "datetime": "2026-04-25T04:59"
+          },
+          {
+            "value": "87.974",
+            "datetime": "2026-03-26T10:07"
+          },
+          {
+            "value": "85.124",
+            "datetime": "2026-02-26T11:07"
+          },
+          {
+            "value": "82.457",
+            "datetime": "2026-01-29T12:39"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R503",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1411.7",
+            "datetime": "2026-04-25T04:59"
+          },
+          {
+            "value": "1370.3",
+            "datetime": "2026-03-26T10:07"
+          },
+          {
+            "value": "1337.0",
+            "datetime": "2026-02-26T11:08"
+          },
+          {
+            "value": "1310.2",
+            "datetime": "2026-01-29T12:39"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R504",
+      "room_owner": "ณัฐวุฒิ โพนามาศ",
+      "rent": "1200",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R504",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "95.132",
+            "datetime": "2026-04-25T05:00"
+          },
+          {
+            "value": "92.278",
+            "datetime": "2026-03-26T10:08"
+          },
+          {
+            "value": "90.079",
+            "datetime": "2026-02-26T11:08"
+          },
+          {
+            "value": "87.883",
+            "datetime": "2026-01-29T12:40"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R504",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1760.7",
+            "datetime": "2026-04-25T05:00"
+          },
+          {
+            "value": "1629.2",
+            "datetime": "2026-03-26T10:08"
+          },
+          {
+            "value": "1559.7",
+            "datetime": "2026-02-26T11:08"
+          },
+          {
+            "value": "1501.8",
+            "datetime": "2026-01-29T12:40"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R505",
+      "room_owner": "นัฐพงษ์ จุลโยธา",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R505",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "73.766",
+            "datetime": "2026-04-25T05:01"
+          },
+          {
+            "value": "71.639",
+            "datetime": "2026-03-26T10:09"
+          },
+          {
+            "value": "69.829",
+            "datetime": "2026-02-26T11:09"
+          },
+          {
+            "value": "68.059",
+            "datetime": "2026-01-29T12:41"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R505",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "3427.1",
+            "datetime": "2026-04-25T05:01"
+          },
+          {
+            "value": "3247.0",
+            "datetime": "2026-03-26T10:09"
+          },
+          {
+            "value": "3113.3",
+            "datetime": "2026-02-26T11:09"
+          },
+          {
+            "value": "2980.9",
+            "datetime": "2026-01-29T12:41"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R506",
+      "room_owner": "ทิพวรรณ สุขสำราญ หอพัก",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R506",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "205.204",
+            "datetime": "2026-04-25T05:02"
+          },
+          {
+            "value": "202.359",
+            "datetime": "2026-03-26T10:09"
+          },
+          {
+            "value": "198.647",
+            "datetime": "2026-02-26T11:09"
+          },
+          {
+            "value": "194.948",
+            "datetime": "2026-01-29T12:41"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R506",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2641.9",
+            "datetime": "2026-04-25T05:02"
+          },
+          {
+            "value": "2529.1",
+            "datetime": "2026-03-26T10:09"
+          },
+          {
+            "value": "2437.0",
+            "datetime": "2026-02-26T11:09"
+          },
+          {
+            "value": "2363.6",
+            "datetime": "2026-01-29T12:42"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R507",
+      "room_owner": "อัศนี สียา",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R507",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "219.399",
+            "datetime": "2026-04-25T05:04"
+          },
+          {
+            "value": "199.735",
+            "datetime": "2026-03-26T10:10"
+          },
+          {
+            "value": "193.798",
+            "datetime": "2026-02-26T11:10"
+          },
+          {
+            "value": "188.159",
+            "datetime": "2026-01-29T12:43"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R507",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "1237.5",
+            "datetime": "2026-04-25T05:04"
+          },
+          {
+            "value": "1163.1",
+            "datetime": "2026-03-26T10:10"
+          },
+          {
+            "value": "1121.2",
+            "datetime": "2026-02-26T11:10"
+          },
+          {
+            "value": "1081.7",
+            "datetime": "2026-01-29T12:43"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R508",
+      "room_owner": "อัศนี สียา",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R508",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "106.531",
+            "datetime": "2026-04-25T05:06"
+          },
+          {
+            "value": "103.965",
+            "datetime": "2026-03-26T10:11"
+          },
+          {
+            "value": "101.015",
+            "datetime": "2026-02-26T11:11"
+          },
+          {
+            "value": "98.026",
+            "datetime": "2026-01-29T12:43"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R508",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2229.2",
+            "datetime": "2026-04-25T05:06"
+          },
+          {
+            "value": "2183.6",
+            "datetime": "2026-03-26T10:11"
+          },
+          {
+            "value": "2136.5",
+            "datetime": "2026-02-26T11:11"
+          },
+          {
+            "value": "2088.9",
+            "datetime": "2026-01-29T12:44"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R509",
+      "room_owner": "ทรงวุฒิ แก้วดู",
+      "rent": "1200",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R509",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "74.093",
+            "datetime": "2026-04-25T05:06"
+          },
+          {
+            "value": "72.474",
+            "datetime": "2026-03-26T10:13"
+          },
+          {
+            "value": "70.686",
+            "datetime": "2026-02-26T11:11"
+          },
+          {
+            "value": "68.715",
+            "datetime": "2026-01-29T12:44"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R509",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1576.1",
+            "datetime": "2026-04-25T05:06"
+          },
+          {
+            "value": "1503.0",
+            "datetime": "2026-03-26T10:13"
+          },
+          {
+            "value": "1431.2",
+            "datetime": "2026-02-26T11:11"
+          },
+          {
+            "value": "1358.9",
+            "datetime": "2026-01-29T12:44"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R510",
+      "room_owner": "ธีรพงษ์ ปานทุ่ง",
+      "rent": "2200",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R510",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "229.634",
+            "datetime": "2026-04-25T05:07"
+          },
+          {
+            "value": "218.988",
+            "datetime": "2026-03-26T10:16"
+          },
+          {
+            "value": "211.331",
+            "datetime": "2026-02-26T11:12"
+          },
+          {
+            "value": "204.716",
+            "datetime": "2026-01-29T12:45"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R510",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "4277.1",
+            "datetime": "2026-04-25T05:08"
+          },
+          {
+            "value": "4009.0",
+            "datetime": "2026-03-26T10:16"
+          },
+          {
+            "value": "3844.5",
+            "datetime": "2026-02-26T11:12"
+          },
+          {
+            "value": "3731.4",
+            "datetime": "2026-01-29T12:45"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R511",
+      "room_owner": "ปัฐยาวัต อินสุข",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R511",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "329.098",
+            "datetime": "2026-04-25T05:09"
+          },
+          {
+            "value": "316.956",
+            "datetime": "2026-03-26T10:17"
+          },
+          {
+            "value": "305.130",
+            "datetime": "2026-02-26T11:13"
+          },
+          {
+            "value": "293.569",
+            "datetime": "2026-01-29T12:46"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R511",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "3767.9",
+            "datetime": "2026-04-25T05:09"
+          },
+          {
+            "value": "3567.6",
+            "datetime": "2026-03-26T10:18"
+          },
+          {
+            "value": "3413.0",
+            "datetime": "2026-02-26T11:13"
+          },
+          {
+            "value": "3267.9",
+            "datetime": "2026-01-29T12:46"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R512",
+      "room_owner": "ธนกมล ต้นเงิน",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R512",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "53.326",
+            "datetime": "2026-04-25T05:09"
+          },
+          {
+            "value": "51.919",
+            "datetime": "2026-03-30T07:53"
+          },
+          {
+            "value": "51.306",
+            "datetime": "2025-06-02T07:53"
+          },
+          {
+            "value": "46.695",
+            "datetime": "2025-04-25T09:45"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R512",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "919.8",
+            "datetime": "2026-04-25T05:09"
+          },
+          {
+            "value": "898.40",
+            "datetime": "2026-03-30T07:53"
+          },
+          {
+            "value": "895.8",
+            "datetime": "2025-06-02T07:53"
+          },
+          {
+            "value": "877.2",
+            "datetime": "2025-04-25T09:45"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R513",
+      "room_owner": "ชัยวัฒน์ มูลตรีศรี",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R513",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "62.625",
+            "datetime": "2026-04-25T05:11"
+          },
+          {
+            "value": "61.646",
+            "datetime": "2026-03-26T10:18"
+          },
+          {
+            "value": "59.298",
+            "datetime": "2026-02-26T11:13"
+          },
+          {
+            "value": "57.583",
+            "datetime": "2026-01-29T12:47"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R513",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1885.2",
+            "datetime": "2026-04-25T05:11"
+          },
+          {
+            "value": "1752.4",
+            "datetime": "2026-03-26T10:18"
+          },
+          {
+            "value": "1632.7",
+            "datetime": "2026-02-26T11:13"
+          },
+          {
+            "value": "1516.4",
+            "datetime": "2026-01-29T12:47"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R514",
+      "room_owner": "ไพมณี เวฬุวนารักษ์",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R514",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "95.626",
+            "datetime": "2026-04-25T05:12"
+          },
+          {
+            "value": "88.829",
+            "datetime": "2026-03-26T10:19"
+          },
+          {
+            "value": "82.729",
+            "datetime": "2026-02-26T11:14"
+          },
+          {
+            "value": "79.558",
+            "datetime": "2026-01-29T12:48"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R514",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1860.3",
+            "datetime": "2026-04-25T05:12"
+          },
+          {
+            "value": "1728.1",
+            "datetime": "2026-03-26T10:19"
+          },
+          {
+            "value": "1646.4",
+            "datetime": "2026-02-26T11:14"
+          },
+          {
+            "value": "1597.1",
+            "datetime": "2026-01-29T12:48"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R515",
+      "room_owner": "วงศกร เณรชู",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R515",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "65.011",
+            "datetime": "2026-04-25T05:15"
+          },
+          {
+            "value": "63.517",
+            "datetime": "2026-03-26T10:19"
+          },
+          {
+            "value": "62.072",
+            "datetime": "2026-02-26T11:15"
+          },
+          {
+            "value": "60.699",
+            "datetime": "2026-01-29T12:49"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R515",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1742.1",
+            "datetime": "2026-04-25T05:15"
+          },
+          {
+            "value": "1705.5",
+            "datetime": "2026-03-26T10:19"
+          },
+          {
+            "value": "1676.5",
+            "datetime": "2026-02-26T11:15"
+          },
+          {
+            "value": "1655.0",
+            "datetime": "2026-01-29T12:49"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R516",
+      "room_owner": "ธนกฤต นนท์กระโทก",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R516",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "112.792",
+            "datetime": "2026-04-25T05:16"
+          },
+          {
+            "value": "108.639",
+            "datetime": "2026-03-26T10:19"
+          },
+          {
+            "value": "104.556",
+            "datetime": "2026-02-26T11:16"
+          },
+          {
+            "value": "101.768",
+            "datetime": "2026-01-29T12:49"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R516",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2753.0",
+            "datetime": "2026-04-25T05:16"
+          },
+          {
+            "value": "2546.0",
+            "datetime": "2026-03-26T10:20"
+          },
+          {
+            "value": "2386.3",
+            "datetime": "2026-02-26T11:16"
+          },
+          {
+            "value": "2287.2",
+            "datetime": "2026-01-29T12:50"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R517",
+      "room_owner": "ธีระภัทร มีแก้ว",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R517",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "105.705",
+            "datetime": "2026-04-25T05:16"
+          },
+          {
+            "value": "100.891",
+            "datetime": "2026-03-26T10:20"
+          },
+          {
+            "value": "96.903",
+            "datetime": "2026-02-26T11:17"
+          },
+          {
+            "value": "93.196",
+            "datetime": "2026-01-29T12:50"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R517",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1757.5",
+            "datetime": "2026-04-25T05:17"
+          },
+          {
+            "value": "1603.0",
+            "datetime": "2026-03-26T10:20"
+          },
+          {
+            "value": "1486.6",
+            "datetime": "2026-02-26T11:17"
+          },
+          {
+            "value": "1384.2",
+            "datetime": "2026-01-29T12:50"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R518",
+      "room_owner": "สิทธิภัทร แช่มช้อย",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R518",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "89.072",
+            "datetime": "2026-04-25T05:17"
+          },
+          {
+            "value": "87.659",
+            "datetime": "2026-03-26T10:20"
+          },
+          {
+            "value": "85.457",
+            "datetime": "2026-02-26T11:17"
+          },
+          {
+            "value": "83.835",
+            "datetime": "2026-01-29T12:51"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R518",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "1646.6",
+            "datetime": "2026-04-25T05:18"
+          },
+          {
+            "value": "1620.5",
+            "datetime": "2026-03-26T10:20"
+          },
+          {
+            "value": "1591.6",
+            "datetime": "2026-02-26T11:17"
+          },
+          {
+            "value": "1570.6",
+            "datetime": "2026-01-29T12:51"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R519",
+      "room_owner": "นันทิตา ธรรมนู",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R519",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "144.641",
+            "datetime": "2026-04-25T05:18"
+          },
+          {
+            "value": "140.868",
+            "datetime": "2026-03-26T10:21"
+          },
+          {
+            "value": "135.857",
+            "datetime": "2026-02-26T11:18"
+          },
+          {
+            "value": "131.279",
+            "datetime": "2026-01-29T12:51"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R519",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "3296.5",
+            "datetime": "2026-04-25T05:18"
+          },
+          {
+            "value": "3139.1",
+            "datetime": "2026-03-26T10:21"
+          },
+          {
+            "value": "2986.9",
+            "datetime": "2026-02-26T11:18"
+          },
+          {
+            "value": "2871.3",
+            "datetime": "2026-01-29T12:52"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R520",
+      "room_owner": "จรรยา ประสิทธิ์เกษกัน",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R520",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "111.384",
+            "datetime": "2026-04-25T05:19"
+          },
+          {
+            "value": "106.501",
+            "datetime": "2026-03-26T10:21"
+          },
+          {
+            "value": "100.908",
+            "datetime": "2026-02-26T11:19"
+          },
+          {
+            "value": "95.977",
+            "datetime": "2026-01-29T12:52"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R520",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "6",
+        "history": [
+          {
+            "value": "2271.6",
+            "datetime": "2026-04-25T05:19"
+          },
+          {
+            "value": "2184.7",
+            "datetime": "2026-03-26T10:21"
+          },
+          {
+            "value": "2088.4",
+            "datetime": "2026-02-26T11:19"
+          },
+          {
+            "value": "2004.7",
+            "datetime": "2026-01-29T12:52"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R601",
+      "room_owner": "ปิยะพงษ์ เกตุประทุม",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R601",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "283.529",
+            "datetime": "2026-04-25T05:25"
+          },
+          {
+            "value": "271.559",
+            "datetime": "2026-03-26T10:26"
+          },
+          {
+            "value": "260.936",
+            "datetime": "2026-02-26T11:19"
+          },
+          {
+            "value": "249.224",
+            "datetime": "2026-01-29T12:56"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R601",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "6016.3",
+            "datetime": "2026-04-25T05:25"
+          },
+          {
+            "value": "5722.9",
+            "datetime": "2026-03-26T10:26"
+          },
+          {
+            "value": "5506.4",
+            "datetime": "2026-02-26T11:20"
+          },
+          {
+            "value": "5287.7",
+            "datetime": "2026-01-29T12:56"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R602",
+      "room_owner": "ขนิษฐา อินนันชัย",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R602",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "153.222",
+            "datetime": "2026-04-25T05:26"
+          },
+          {
+            "value": "148.524",
+            "datetime": "2026-03-26T10:26"
+          },
+          {
+            "value": "143.962",
+            "datetime": "2026-02-26T11:20"
+          },
+          {
+            "value": "139.557",
+            "datetime": "2026-01-29T12:56"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R602",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "1927.1",
+            "datetime": "2026-04-25T05:26"
+          },
+          {
+            "value": "1834.2",
+            "datetime": "2026-03-26T10:26"
+          },
+          {
+            "value": "1764.9",
+            "datetime": "2026-02-26T11:20"
+          },
+          {
+            "value": "1702.9",
+            "datetime": "2026-01-29T12:57"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R603",
+      "room_owner": "อิงนภา จางจา",
+      "rent": "2400",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R603",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "85.180",
+            "datetime": "2026-04-25T05:26"
+          },
+          {
+            "value": "82.446",
+            "datetime": "2026-03-26T10:26"
+          },
+          {
+            "value": "80.010",
+            "datetime": "2026-02-26T11:21"
+          },
+          {
+            "value": "78.440",
+            "datetime": "2026-01-29T12:57"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R603",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "1847.0",
+            "datetime": "2026-04-25T05:26"
+          },
+          {
+            "value": "1754.8",
+            "datetime": "2026-03-26T10:27"
+          },
+          {
+            "value": "1684.9",
+            "datetime": "2026-02-26T11:21"
+          },
+          {
+            "value": "1646.2",
+            "datetime": "2026-01-29T12:57"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R604",
+      "room_owner": "YANG CHENGGEN",
+      "rent": "2400",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R604",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "79.359",
+            "datetime": "2026-04-25T05:27"
+          },
+          {
+            "value": "74.601",
+            "datetime": "2026-03-26T10:27"
+          },
+          {
+            "value": "69.264",
+            "datetime": "2026-02-26T11:21"
+          },
+          {
+            "value": "69.264",
+            "datetime": "2026-01-29T12:59"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R604",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "2332.0",
+            "datetime": "2026-04-25T05:27"
+          },
+          {
+            "value": "2161.0",
+            "datetime": "2026-03-26T10:27"
+          },
+          {
+            "value": "2023.8",
+            "datetime": "2026-02-26T11:21"
+          },
+          {
+            "value": "1971.2",
+            "datetime": "2026-01-29T12:58"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R605",
+      "room_owner": "WANG ZHAOJUN",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R605",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "152.822",
+            "datetime": "2026-04-25T05:28"
+          },
+          {
+            "value": "147.978",
+            "datetime": "2026-03-26T10:28"
+          },
+          {
+            "value": "143.260",
+            "datetime": "2026-02-26T11:22"
+          },
+          {
+            "value": "139.418",
+            "datetime": "2026-01-29T12:59"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R605",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "2376.1",
+            "datetime": "2026-04-25T05:28"
+          },
+          {
+            "value": "2277.9",
+            "datetime": "2026-03-26T10:28"
+          },
+          {
+            "value": "2205.7",
+            "datetime": "2026-02-26T11:22"
+          },
+          {
+            "value": "2128.0",
+            "datetime": "2026-01-29T12:59"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R606",
+      "room_owner": "HU DINGCHANG",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R606",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "119.490",
+            "datetime": "2026-04-25T05:28"
+          },
+          {
+            "value": "117.650",
+            "datetime": "2026-03-26T10:28"
+          },
+          {
+            "value": "112.981",
+            "datetime": "2026-02-26T11:23"
+          },
+          {
+            "value": "107.335",
+            "datetime": "2026-01-29T13:00"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R606",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "4081.8",
+            "datetime": "2026-04-25T05:29"
+          },
+          {
+            "value": "3907.9",
+            "datetime": "2026-03-26T10:28"
+          },
+          {
+            "value": "3759.7",
+            "datetime": "2026-02-26T11:23"
+          },
+          {
+            "value": "3609.5",
+            "datetime": "2026-01-29T13:00"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R607",
+      "room_owner": "JIN HONGYU",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R607",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "54.586",
+            "datetime": "2026-04-25T05:29"
+          },
+          {
+            "value": "54.011",
+            "datetime": "2026-03-26T10:28"
+          },
+          {
+            "value": "53.028",
+            "datetime": "2026-02-26T11:24"
+          },
+          {
+            "value": "51.944",
+            "datetime": "2026-01-29T13:01"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R607",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "3904.4",
+            "datetime": "2026-04-25T05:29"
+          },
+          {
+            "value": "3807.9",
+            "datetime": "2026-03-26T10:29"
+          },
+          {
+            "value": "3682.7",
+            "datetime": "2026-02-26T11:24"
+          },
+          {
+            "value": "3548.1",
+            "datetime": "2026-01-29T13:02"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R608",
+      "room_owner": "REN LEIGANG",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R608",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "84.582",
+            "datetime": "2026-04-25T05:30"
+          },
+          {
+            "value": "83.001",
+            "datetime": "2026-03-26T10:29"
+          },
+          {
+            "value": "80.972",
+            "datetime": "2026-02-26T11:25"
+          },
+          {
+            "value": "79.639",
+            "datetime": "2026-01-29T13:02"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R608",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "2635.0",
+            "datetime": "2026-04-25T05:30"
+          },
+          {
+            "value": "2588.8",
+            "datetime": "2026-03-26T10:29"
+          },
+          {
+            "value": "2564.5",
+            "datetime": "2026-02-26T11:25"
+          },
+          {
+            "value": "2550.2",
+            "datetime": "2026-01-29T13:03"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R609",
+      "room_owner": "PENG JIAN",
+      "rent": "2400",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R609",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "58.823",
+            "datetime": "2026-04-25T05:30"
+          },
+          {
+            "value": "57.528",
+            "datetime": "2026-03-26T10:30"
+          },
+          {
+            "value": "56.649",
+            "datetime": "2026-02-26T11:25"
+          },
+          {
+            "value": "55.899",
+            "datetime": "2026-01-29T13:04"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R609",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "1891.1",
+            "datetime": "2026-04-25T05:30"
+          },
+          {
+            "value": "1850.5",
+            "datetime": "2026-03-26T10:30"
+          },
+          {
+            "value": "1818.8",
+            "datetime": "2026-02-26T11:26"
+          },
+          {
+            "value": "1789.3",
+            "datetime": "2026-01-29T13:04"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R610",
+      "room_owner": "YANG YINYONG",
+      "rent": "4400",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R610",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "76.452",
+            "datetime": "2026-04-25T05:31"
+          },
+          {
+            "value": "76.428",
+            "datetime": "2026-03-26T10:30"
+          },
+          {
+            "value": "73.142",
+            "datetime": "2026-02-26T11:26"
+          },
+          {
+            "value": "70.163",
+            "datetime": "2026-01-29T13:04"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R610",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "5226.8",
+            "datetime": "2026-04-25T05:31"
+          },
+          {
+            "value": "4867.2",
+            "datetime": "2026-03-26T10:30"
+          },
+          {
+            "value": "4564.6",
+            "datetime": "2026-02-26T11:26"
+          },
+          {
+            "value": "4271.6",
+            "datetime": "2026-01-29T13:05"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R611",
+      "room_owner": "LI SUJUAN",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R611",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "65.942",
+            "datetime": "2026-04-25T05:37"
+          },
+          {
+            "value": "64.665",
+            "datetime": "2026-03-26T10:31"
+          },
+          {
+            "value": "62.726",
+            "datetime": "2026-02-26T11:27"
+          },
+          {
+            "value": "61.190",
+            "datetime": "2026-01-29T13:05"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R611",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "2052.2",
+            "datetime": "2026-04-25T05:37"
+          },
+          {
+            "value": "1975.6",
+            "datetime": "2026-03-26T10:31"
+          },
+          {
+            "value": "1896.1",
+            "datetime": "2026-02-26T11:27"
+          },
+          {
+            "value": "1836.3",
+            "datetime": "2026-01-29T13:05"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R612",
+      "room_owner": "JING TIANTIAN",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R612",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "167.442",
+            "datetime": "2026-04-25T05:39"
+          },
+          {
+            "value": "163.376",
+            "datetime": "2026-03-26T10:31"
+          },
+          {
+            "value": "158.465",
+            "datetime": "2026-02-26T11:28"
+          },
+          {
+            "value": "155.199",
+            "datetime": "2026-01-29T13:06"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R612",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "3146.0",
+            "datetime": "2026-04-25T05:39"
+          },
+          {
+            "value": "3024.5",
+            "datetime": "2026-03-26T10:31"
+          },
+          {
+            "value": "2892.1",
+            "datetime": "2026-02-26T11:28"
+          },
+          {
+            "value": "2817.70",
+            "datetime": "2026-01-29T13:06"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R613",
+      "room_owner": "JIN XIAOPENG",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R613",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "195.903",
+            "datetime": "2026-04-25T05:39"
+          },
+          {
+            "value": "195.866",
+            "datetime": "2026-03-26T10:32"
+          },
+          {
+            "value": "187.418",
+            "datetime": "2026-02-26T11:28"
+          },
+          {
+            "value": "186.212",
+            "datetime": "2026-01-29T13:07"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R613",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "2254.2",
+            "datetime": "2026-04-25T05:39"
+          },
+          {
+            "value": "2083.4",
+            "datetime": "2026-03-26T10:32"
+          },
+          {
+            "value": "1957.4",
+            "datetime": "2026-02-26T11:28"
+          },
+          {
+            "value": "1928.7",
+            "datetime": "2026-01-29T13:07"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R614",
+      "room_owner": "WANG ZHONG",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R614",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "113.072",
+            "datetime": "2026-04-25T05:40"
+          },
+          {
+            "value": "110.634",
+            "datetime": "2026-03-26T10:32"
+          },
+          {
+            "value": "106.879",
+            "datetime": "2026-02-26T11:29"
+          },
+          {
+            "value": "104.405",
+            "datetime": "2026-01-29T13:08"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R614",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "1517.5",
+            "datetime": "2026-04-25T05:40"
+          },
+          {
+            "value": "1452.6",
+            "datetime": "2026-03-26T10:32"
+          },
+          {
+            "value": "1387.6",
+            "datetime": "2026-02-26T11:29"
+          },
+          {
+            "value": "1345.9",
+            "datetime": "2026-01-29T13:08"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R615",
+      "room_owner": "HU XING",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R615",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "169.126",
+            "datetime": "2026-04-25T05:40"
+          },
+          {
+            "value": "165.895",
+            "datetime": "2026-03-26T10:32"
+          },
+          {
+            "value": "158.917",
+            "datetime": "2026-02-26T11:30"
+          },
+          {
+            "value": "154.799",
+            "datetime": "2026-01-29T13:09"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R615",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "4023.1",
+            "datetime": "2026-04-25T05:41"
+          },
+          {
+            "value": "3855.4",
+            "datetime": "2026-03-26T10:33"
+          },
+          {
+            "value": "3709.2",
+            "datetime": "2026-02-26T11:30"
+          },
+          {
+            "value": "3554.0",
+            "datetime": "2026-01-29T13:09"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R616",
+      "room_owner": "วิภาดา หงษ์บุญเรือง",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R616",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "127.809",
+            "datetime": "2026-04-25T05:41"
+          },
+          {
+            "value": "127.179",
+            "datetime": "2026-03-26T10:33"
+          },
+          {
+            "value": "121.602",
+            "datetime": "2026-02-26T11:30"
+          },
+          {
+            "value": "115.593",
+            "datetime": "2026-01-29T13:10"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R616",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "2117.7",
+            "datetime": "2026-04-25T05:42"
+          },
+          {
+            "value": "2012.5",
+            "datetime": "2026-03-26T10:33"
+          },
+          {
+            "value": "1944.2",
+            "datetime": "2026-02-26T11:31"
+          },
+          {
+            "value": "1861.0",
+            "datetime": "2026-01-29T13:10"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R617",
+      "room_owner": "ดรุณรัตน์ เสนาชัย",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R617",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "211.490",
+            "datetime": "2026-04-25T05:43"
+          },
+          {
+            "value": "210.066",
+            "datetime": "2026-03-26T10:34"
+          },
+          {
+            "value": "208.837",
+            "datetime": "2026-03-12T13:10"
+          },
+          {
+            "value": "201.475",
+            "datetime": "2026-01-29T13:10"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R617",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "2089.4",
+            "datetime": "2026-04-25T05:43"
+          },
+          {
+            "value": "1977.7",
+            "datetime": "2026-03-26T10:35"
+          },
+          {
+            "value": "1893.6",
+            "datetime": "2026-03-12T13:11"
+          },
+          {
+            "value": "1799.2",
+            "datetime": "2026-01-29T13:11"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R618",
+      "room_owner": "พัชราพิชญ์ สระดินดำ",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R618",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "194.339",
+            "datetime": "2026-04-25T05:44"
+          },
+          {
+            "value": "190.891",
+            "datetime": "2026-03-26T10:35"
+          },
+          {
+            "value": "186.815",
+            "datetime": "2026-02-26T11:31"
+          },
+          {
+            "value": "183.426",
+            "datetime": "2026-01-29T13:12"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R618",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "2401.2",
+            "datetime": "2026-04-25T05:44"
+          },
+          {
+            "value": "2301.5",
+            "datetime": "2026-03-26T10:36"
+          },
+          {
+            "value": "2202.9",
+            "datetime": "2026-02-26T11:32"
+          },
+          {
+            "value": "2127.5",
+            "datetime": "2026-01-29T13:13"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R619",
+      "room_owner": "วิกร โคตรสาขา",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R619",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "48.251",
+            "datetime": "2026-04-25T05:45"
+          },
+          {
+            "value": "47.314",
+            "datetime": "2026-03-26T10:36"
+          },
+          {
+            "value": "43.458",
+            "datetime": "2026-02-26T11:33"
+          },
+          {
+            "value": "42.216",
+            "datetime": "2026-01-29T13:13"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R619",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "1728.5",
+            "datetime": "2026-04-25T05:45"
+          },
+          {
+            "value": "1671.9",
+            "datetime": "2026-03-26T10:36"
+          },
+          {
+            "value": "1557.2",
+            "datetime": "2026-02-26T11:33"
+          },
+          {
+            "value": "1489.2",
+            "datetime": "2026-01-29T13:13"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R620",
+      "room_owner": "สุวดี สมิตเมฆ",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R620",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "212.711",
+            "datetime": "2026-04-25T05:46"
+          },
+          {
+            "value": "205.732",
+            "datetime": "2026-03-26T10:37"
+          },
+          {
+            "value": "199.760",
+            "datetime": "2026-02-26T11:34"
+          },
+          {
+            "value": "193.210",
+            "datetime": "2026-01-29T13:14"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R620",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "5525.9",
+            "datetime": "2026-04-25T05:46"
+          },
+          {
+            "value": "5253.6",
+            "datetime": "2026-03-26T10:37"
+          },
+          {
+            "value": "5067.8",
+            "datetime": "2026-02-26T11:34"
+          },
+          {
+            "value": "4922.9",
+            "datetime": "2026-01-29T13:14"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R701",
+      "room_owner": "วราภรณ์ นาสีเคน",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R701",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "218.620",
+            "datetime": "2026-04-25T05:53"
+          },
+          {
+            "value": "209.875",
+            "datetime": "2026-03-26T10:37"
+          },
+          {
+            "value": "202.096",
+            "datetime": "2026-02-26T11:34"
+          },
+          {
+            "value": "194.986",
+            "datetime": "2026-01-29T13:15"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R701",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "4994.6",
+            "datetime": "2026-04-25T05:54"
+          },
+          {
+            "value": "4716.7",
+            "datetime": "2026-03-26T10:37"
+          },
+          {
+            "value": "4509.9",
+            "datetime": "2026-02-26T11:35"
+          },
+          {
+            "value": "4360.0",
+            "datetime": "2026-01-29T13:15"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R702",
+      "room_owner": "ศุภรัตน์ พันธารักษ์",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R702",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "113.725",
+            "datetime": "2026-04-25T05:54"
+          },
+          {
+            "value": "109.783",
+            "datetime": "2026-03-26T10:38"
+          },
+          {
+            "value": "105.397",
+            "datetime": "2026-02-26T11:35"
+          },
+          {
+            "value": "101.310",
+            "datetime": "2026-01-29T13:16"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R702",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "859.6",
+            "datetime": "2026-04-25T05:54"
+          },
+          {
+            "value": "821.8",
+            "datetime": "2026-03-26T10:38"
+          },
+          {
+            "value": "791.5",
+            "datetime": "2026-02-26T11:35"
+          },
+          {
+            "value": "761.1",
+            "datetime": "2026-01-29T13:16"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R703",
+      "room_owner": "ธนศักดิ์ สวัสดิรักษ์",
+      "rent": "2400",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R703",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "135.671",
+            "datetime": "2026-04-25T05:55"
+          },
+          {
+            "value": "133.861",
+            "datetime": "2026-03-26T10:39"
+          },
+          {
+            "value": "132.148",
+            "datetime": "2026-03-07T13:17"
+          },
+          {
+            "value": "131.875",
+            "datetime": "2026-01-29T13:17"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R703",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "1982.2",
+            "datetime": "2026-04-25T05:55"
+          },
+          {
+            "value": "1842.1",
+            "datetime": "2026-03-26T10:40"
+          },
+          {
+            "value": "1762.9",
+            "datetime": "2026-03-07T13:17"
+          },
+          {
+            "value": "1762.2",
+            "datetime": "2026-01-29T13:17"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R704",
+      "room_owner": "ณัฐนิต พ่อธานี",
+      "rent": "2400",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R704",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "86.596",
+            "datetime": "2026-04-25T05:56"
+          },
+          {
+            "value": "84.266",
+            "datetime": "2026-03-26T10:41"
+          },
+          {
+            "value": "81.478",
+            "datetime": "2026-02-26T11:36"
+          },
+          {
+            "value": "78.734",
+            "datetime": "2026-01-29T13:18"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R704",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "2289.8",
+            "datetime": "2026-04-25T05:56"
+          },
+          {
+            "value": "2204.1",
+            "datetime": "2026-03-26T10:41"
+          },
+          {
+            "value": "2125.7",
+            "datetime": "2026-02-26T11:36"
+          },
+          {
+            "value": "2050.0",
+            "datetime": "2026-01-29T13:18"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R705",
+      "room_owner": "TAK HAY ANDREW",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R705",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "40.474",
+            "datetime": "2026-04-25T05:56"
+          },
+          {
+            "value": "39.486",
+            "datetime": "2026-03-26T10:41"
+          },
+          {
+            "value": "37.989",
+            "datetime": "2026-02-26T11:40"
+          },
+          {
+            "value": "37.989",
+            "datetime": "2026-02-26T11:40"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R705",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "936.3",
+            "datetime": "2026-04-25T05:56"
+          },
+          {
+            "value": "863.4",
+            "datetime": "2026-03-26T10:41"
+          },
+          {
+            "value": "767.7",
+            "datetime": "2026-02-26T11:40"
+          },
+          {
+            "value": "767.7",
+            "datetime": "2026-02-26T11:40"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R706",
+      "room_owner": "ธนาวุฒิ กฤตเจริญนนท์",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R706",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "99.551",
+            "datetime": "2026-04-25T05:58"
+          },
+          {
+            "value": "97.202",
+            "datetime": "2026-03-26T10:42"
+          },
+          {
+            "value": "94.808",
+            "datetime": "2026-02-26T11:42"
+          },
+          {
+            "value": "92.279",
+            "datetime": "2026-01-29T13:23"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R706",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "2473.1",
+            "datetime": "2026-04-25T05:59"
+          },
+          {
+            "value": "2321.1",
+            "datetime": "2026-03-26T10:42"
+          },
+          {
+            "value": "2222.9",
+            "datetime": "2026-02-26T11:42"
+          },
+          {
+            "value": "2135.3",
+            "datetime": "2026-01-29T13:24"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R707",
+      "room_owner": "นนท์พัทธา โสพรม",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R707",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "87.135",
+            "datetime": "2026-04-25T06:00"
+          },
+          {
+            "value": "84.450",
+            "datetime": "2026-03-26T10:42"
+          },
+          {
+            "value": "82.073",
+            "datetime": "2026-02-26T11:43"
+          },
+          {
+            "value": "79.721",
+            "datetime": "2026-01-29T13:24"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R707",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "1481.1",
+            "datetime": "2026-04-25T06:00"
+          },
+          {
+            "value": "1394.0",
+            "datetime": "2026-03-26T10:42"
+          },
+          {
+            "value": "1330.8",
+            "datetime": "2026-02-26T11:43"
+          },
+          {
+            "value": "1272.9",
+            "datetime": "2026-01-29T13:24"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R708",
+      "room_owner": "ภาคภูมิ พ่วงศิริ",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R708",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "110.504",
+            "datetime": "2026-04-25T06:01"
+          },
+          {
+            "value": "108.490",
+            "datetime": "2026-03-26T10:42"
+          },
+          {
+            "value": "106.612",
+            "datetime": "2026-02-26T11:44"
+          },
+          {
+            "value": "104.369",
+            "datetime": "2026-01-29T13:25"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R708",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "1655.6",
+            "datetime": "2026-04-25T06:02"
+          },
+          {
+            "value": "1530.8",
+            "datetime": "2026-03-26T10:43"
+          },
+          {
+            "value": "1423.8",
+            "datetime": "2026-02-26T11:44"
+          },
+          {
+            "value": "1314.8",
+            "datetime": "2026-01-29T13:25"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R709",
+      "room_owner": "นัยนา กำจรฤทธิ์",
+      "rent": "2400",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R709",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "64.374",
+            "datetime": "2026-04-25T06:05"
+          },
+          {
+            "value": "63.148",
+            "datetime": "2026-03-26T10:43"
+          },
+          {
+            "value": "62.214",
+            "datetime": "2026-02-26T11:45"
+          },
+          {
+            "value": "60.520",
+            "datetime": "2026-01-29T13:26"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R709",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "1406.9",
+            "datetime": "2026-04-25T06:05"
+          },
+          {
+            "value": "1340.0",
+            "datetime": "2026-03-26T10:43"
+          },
+          {
+            "value": "1293.0",
+            "datetime": "2026-02-26T11:45"
+          },
+          {
+            "value": "1233.7",
+            "datetime": "2026-01-29T13:26"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R710",
+      "room_owner": "TAK HAY ANDREW",
+      "rent": "4400",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R710",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "101.136",
+            "datetime": "2026-04-25T06:06"
+          },
+          {
+            "value": "99.560",
+            "datetime": "2026-03-26T10:44"
+          },
+          {
+            "value": "97.775",
+            "datetime": "2026-02-26T11:46"
+          },
+          {
+            "value": "97.115",
+            "datetime": "2026-01-29T13:28"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R710",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "2808.2",
+            "datetime": "2026-04-25T06:06"
+          },
+          {
+            "value": "2696.7",
+            "datetime": "2026-03-26T10:44"
+          },
+          {
+            "value": "2550.2",
+            "datetime": "2026-02-26T11:46"
+          },
+          {
+            "value": "2506.6",
+            "datetime": "2026-01-29T13:28"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R711",
+      "room_owner": "ดารุณี ดวงแสง",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R711",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "113.293",
+            "datetime": "2026-04-25T06:07"
+          },
+          {
+            "value": "112.346",
+            "datetime": "2026-04-11T13:29"
+          },
+          {
+            "value": "108.105",
+            "datetime": "2026-01-29T13:29"
+          },
+          {
+            "value": "106.136",
+            "datetime": "2025-12-27T06:55"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R711",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "2314.4",
+            "datetime": "2026-04-25T06:07"
+          },
+          {
+            "value": "2278.40",
+            "datetime": "2026-04-11T13:30"
+          },
+          {
+            "value": "2166.0",
+            "datetime": "2026-01-29T13:30"
+          },
+          {
+            "value": "2134.2",
+            "datetime": "2025-12-27T06:55"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R712",
+      "room_owner": "ดารกา บูรณ์เจริญ",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R712",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "157.079",
+            "datetime": "2026-04-25T06:08"
+          },
+          {
+            "value": "152.818",
+            "datetime": "2026-03-26T10:44"
+          },
+          {
+            "value": "148.887",
+            "datetime": "2026-02-26T11:47"
+          },
+          {
+            "value": "143.967",
+            "datetime": "2026-01-29T13:30"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R712",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "2828.1",
+            "datetime": "2026-04-25T06:08"
+          },
+          {
+            "value": "2633.5",
+            "datetime": "2026-03-26T10:44"
+          },
+          {
+            "value": "2462.9",
+            "datetime": "2026-02-26T11:47"
+          },
+          {
+            "value": "2353.1",
+            "datetime": "2026-01-29T13:30"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R713",
+      "room_owner": "ธานี ล้อมไธสง",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R713",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "71.903",
+            "datetime": "2026-04-25T06:08"
+          },
+          {
+            "value": "69.287",
+            "datetime": "2026-03-26T10:45"
+          },
+          {
+            "value": "66.694",
+            "datetime": "2026-02-26T11:47"
+          },
+          {
+            "value": "62.642",
+            "datetime": "2026-01-29T13:31"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R713",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "3390.6",
+            "datetime": "2026-04-25T06:08"
+          },
+          {
+            "value": "3195.2",
+            "datetime": "2026-03-26T10:45"
+          },
+          {
+            "value": "3034.6",
+            "datetime": "2026-02-26T11:47"
+          },
+          {
+            "value": "2903.6",
+            "datetime": "2026-01-29T13:31"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R714",
+      "room_owner": "รัตนา หาแก่น",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R714",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "165.054",
+            "datetime": "2026-04-25T06:09"
+          },
+          {
+            "value": "158.723",
+            "datetime": "2026-03-26T10:46"
+          },
+          {
+            "value": "154.297",
+            "datetime": "2026-02-26T11:48"
+          },
+          {
+            "value": "149.926",
+            "datetime": "2026-01-29T13:32"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R714",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "2514.6",
+            "datetime": "2026-04-25T06:09"
+          },
+          {
+            "value": "2357.6",
+            "datetime": "2026-03-26T10:46"
+          },
+          {
+            "value": "2263.1",
+            "datetime": "2026-02-26T11:48"
+          },
+          {
+            "value": "2174.1",
+            "datetime": "2026-01-29T13:32"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R715",
+      "room_owner": "เกศรา ปานเนียม",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R715",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "95.570",
+            "datetime": "2026-04-25T06:10"
+          },
+          {
+            "value": "92.361",
+            "datetime": "2026-03-26T10:46"
+          },
+          {
+            "value": "89.360",
+            "datetime": "2026-02-26T11:49"
+          },
+          {
+            "value": "86.420",
+            "datetime": "2026-01-29T13:33"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R715",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "2302.0",
+            "datetime": "2026-04-25T06:10"
+          },
+          {
+            "value": "2179.0",
+            "datetime": "2026-03-26T10:46"
+          },
+          {
+            "value": "2070.4",
+            "datetime": "2026-02-26T11:49"
+          },
+          {
+            "value": "1990.6",
+            "datetime": "2026-01-29T13:33"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R716",
+      "room_owner": "มานพ จิตรเจริญ",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R716",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "141.698",
+            "datetime": "2026-04-25T06:10"
+          },
+          {
+            "value": "137.764",
+            "datetime": "2026-03-26T10:47"
+          },
+          {
+            "value": "133.941",
+            "datetime": "2026-02-26T11:49"
+          },
+          {
+            "value": "128.966",
+            "datetime": "2026-01-29T13:34"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R716",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "4841.7",
+            "datetime": "2026-04-25T06:10"
+          },
+          {
+            "value": "4617.6",
+            "datetime": "2026-03-26T10:47"
+          },
+          {
+            "value": "4439.3",
+            "datetime": "2026-02-26T11:49"
+          },
+          {
+            "value": "4311.9",
+            "datetime": "2026-01-29T13:34"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R717",
+      "room_owner": "มานิตา เคหะฐาน",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R717",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "299.989",
+            "datetime": "2026-04-25T06:12"
+          },
+          {
+            "value": "291.145",
+            "datetime": "2026-03-26T10:47"
+          },
+          {
+            "value": "279.040",
+            "datetime": "2026-02-26T11:50"
+          },
+          {
+            "value": "268.304",
+            "datetime": "2026-01-29T13:34"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R717",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "2760.3",
+            "datetime": "2026-04-25T06:12"
+          },
+          {
+            "value": "2615.7",
+            "datetime": "2026-03-26T10:47"
+          },
+          {
+            "value": "2464.8",
+            "datetime": "2026-02-26T11:50"
+          },
+          {
+            "value": "2346.7",
+            "datetime": "2026-01-29T13:35"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R718",
+      "room_owner": "ชานน ภูปรางค์",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R718",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "59.648",
+            "datetime": "2026-04-25T06:13"
+          },
+          {
+            "value": "58.902",
+            "datetime": "2026-03-26T10:48"
+          },
+          {
+            "value": "58.010",
+            "datetime": "2026-02-26T11:50"
+          },
+          {
+            "value": "56.903",
+            "datetime": "2026-01-29T13:35"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R718",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "1952.7",
+            "datetime": "2026-04-25T06:13"
+          },
+          {
+            "value": "1894.5",
+            "datetime": "2026-03-26T10:48"
+          },
+          {
+            "value": "1825.8",
+            "datetime": "2026-02-26T11:51"
+          },
+          {
+            "value": "1773.5",
+            "datetime": "2026-01-29T13:35"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R719",
+      "room_owner": "ศุภากร ศิละโคตร",
+      "rent": "1300",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R719",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "59.857",
+            "datetime": "2026-04-25T06:14"
+          },
+          {
+            "value": "59.294",
+            "datetime": "2026-04-19T02:11"
+          },
+          {
+            "value": "59.079",
+            "datetime": "2026-03-30T02:11"
+          },
+          {
+            "value": "58.971",
+            "datetime": "2026-02-26T11:51"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R719",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "1878.9",
+            "datetime": "2026-04-25T06:14"
+          },
+          {
+            "value": "1831.80",
+            "datetime": "2026-04-19T02:12"
+          },
+          {
+            "value": "1830.3",
+            "datetime": "2026-03-30T02:12"
+          },
+          {
+            "value": "1819.5",
+            "datetime": "2026-02-26T11:51"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R720",
+      "room_owner": "นิลมณี ยะนันท์",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "R720",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "117.911",
+            "datetime": "2026-04-25T06:15"
+          },
+          {
+            "value": "113.086",
+            "datetime": "2026-03-29T13:37"
+          },
+          {
+            "value": "109.342",
+            "datetime": "2026-01-29T13:37"
+          },
+          {
+            "value": "103.518",
+            "datetime": "2025-12-27T07:20"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "R720",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "2007.9",
+            "datetime": "2026-04-25T06:15"
+          },
+          {
+            "value": "1957.10",
+            "datetime": "2026-03-29T13:37"
+          },
+          {
+            "value": "1913.5",
+            "datetime": "2026-01-29T13:37"
+          },
+          {
+            "value": "1869.3",
+            "datetime": "2025-12-27T07:20"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "R222",
+      "room_owner": "asd",
+      "rent": "5000",
+      "service_fee": "0",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "ECN_DEVICE",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "ECN_DEVICE",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "9",
+        "history": [
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "ร้านอาหาร_1",
+      "room_owner": "นันทวรรณ อุทยานิล",
+      "rent": "",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "RS_Food1",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "664.460",
+            "datetime": "2026-04-25T06:16"
+          },
+          {
+            "value": "632.675",
+            "datetime": "2026-03-26T10:49"
+          },
+          {
+            "value": "604.511",
+            "datetime": "2026-02-26T11:52"
+          },
+          {
+            "value": "575.827",
+            "datetime": "2026-01-29T13:38"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "RS_Food1",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "3136.5",
+            "datetime": "2026-04-25T06:16"
+          },
+          {
+            "value": "2994.3",
+            "datetime": "2026-03-26T10:49"
+          },
+          {
+            "value": "2864.2",
+            "datetime": "2026-02-26T11:52"
+          },
+          {
+            "value": "2732.7",
+            "datetime": "2026-01-29T13:38"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "ร้านอาหาร_2",
+      "room_owner": "ธนศักดิ์ สวัสดิรักษ์",
+      "rent": "",
+      "service_fee": "200",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "RS_Food2",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "196.055",
+            "datetime": "2026-04-25T06:22"
+          },
+          {
+            "value": "190.350",
+            "datetime": "2026-03-26T10:49"
+          },
+          {
+            "value": "185.790",
+            "datetime": "2026-02-26T11:52"
+          },
+          {
+            "value": "179.433",
+            "datetime": "2026-01-29T13:38"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "RS_Food2",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "4324.4",
+            "datetime": "2026-04-25T06:22"
+          },
+          {
+            "value": "4030.1",
+            "datetime": "2026-03-26T10:49"
+          },
+          {
+            "value": "4030.1",
+            "datetime": "2026-03-26T10:49"
+          },
+          {
+            "value": "3686.9",
+            "datetime": "2026-02-26T11:53"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "ร้านอาหาร_3",
+      "room_owner": "YANG CHENGGEN",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "6",
+        "device": "RS_Food3",
+        "tag": "Counter",
+        "value": null,
+        "price_unit": "25",
+        "history": [
+          {
+            "value": "34.457",
+            "datetime": "2026-04-25T06:23"
+          },
+          {
+            "value": "32.926",
+            "datetime": "2026-03-26T10:50"
+          },
+          {
+            "value": "31.804",
+            "datetime": "2026-02-26T11:53"
+          },
+          {
+            "value": "31.794",
+            "datetime": "2026-01-29T13:39"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "6",
+        "device": "RS_Food3",
+        "tag": "kWHr",
+        "value": null,
+        "price_unit": "10",
+        "history": [
+          {
+            "value": "1055.7",
+            "datetime": "2026-04-25T06:23"
+          },
+          {
+            "value": "1013.8",
+            "datetime": "2026-03-26T10:50"
+          },
+          {
+            "value": "979.0",
+            "datetime": "2026-02-26T11:53"
+          },
+          {
+            "value": "965.1",
+            "datetime": "2026-01-29T13:39"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "ตู้กดน้ำ_103",
+      "room_owner": "",
+      "rent": "",
+      "service_fee": "",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "1",
+        "device": "1",
+        "tag": "Amp-L1",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "1",
+        "device": "1",
+        "tag": "Amp-L1",
+        "value": null,
+        "price_unit": "9",
+        "history": [
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "ห้องเครื่องซักผ้า_105",
+      "room_owner": "",
+      "rent": "0",
+      "service_fee": "0",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "1",
+        "device": "1",
+        "tag": "Amp-L1",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "1",
+        "device": "1",
+        "tag": "Amp-L1",
+        "value": null,
+        "price_unit": "9",
+        "history": [
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          }
+        ]
+      }
+    },
+    {
+      "room_name": "ทดสอบสร้างห้องพัก",
+      "room_owner": "",
+      "rent": "2600",
+      "service_fee": "400",
+      "water": {
+        "type": "ค่าน้ำ",
+        "port": "2",
+        "device": "Machine-OEE",
+        "tag": "Change",
+        "value": null,
+        "price_unit": "22",
+        "history": [
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          }
+        ]
+      },
+      "electricity": {
+        "type": "ค่าไฟ",
+        "port": "2",
+        "device": "Machine-OEE",
+        "tag": "Change",
+        "value": null,
+        "price_unit": "9",
+        "history": [
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          },
+          {
+            "value": "---",
+            "datetime": "--/--/ --:--"
+          }
+        ]
+      }
+    }
+  ],
+  "error": null
+}

@@ -10,6 +10,12 @@
 - `email`: String (สำหรับ Login)
 - `phone`: String? (Nullable)
 - `password`: String
+- `nationality`: String? (เช่น 'Thai', 'Foreigner')
+- `identityNumber`: String? (เลขบัตรประชาชน / Passport No.)
+- `preferredLanguage`: String? (เช่น 'th', 'en', 'zh-CN', 'zh-TW')
+- `emergencyContact`: String?
+- `visaExpiryDate`: DateTime? (สำหรับผู้เช่าต่างชาติ)
+- `tm30Reported`: Boolean? (สถานะการแจ้ง ตม.30)
 - `createdAt`: DateTime
 
 ## 2. `Room` (ห้องพัก)

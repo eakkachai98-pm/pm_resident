@@ -145,8 +145,8 @@ export default function UserDashboard({ onViewTicket, onNavigate, user, setHeade
   return (
     <div className="space-y-6 md:space-y-8 font-sans">
       <header className="flex flex-col gap-1 px-1">
-        <h2 className="text-xl md:text-2xl font-bold text-on-surface-brand tracking-tight">Resident Dashboard</h2>
-        <p className="text-xs md:text-sm text-secondary-brand">Welcome back, {user.name}.</p>
+        <h2 className="text-xl md:text-2xl font-bold text-on-surface-brand tracking-tight">{t('dashboard.residentTitle')}</h2>
+        <p className="text-xs md:text-sm text-secondary-brand">{t('dashboard.welcomeBack')} {user.name}.</p>
       </header>
 
       <SystemAnnouncements />
@@ -161,7 +161,7 @@ export default function UserDashboard({ onViewTicket, onNavigate, user, setHeade
           <div className="bg-white rounded-2xl md:rounded-[2rem] border border-gray-200/50 shadow-sm overflow-hidden flex flex-col relative">
             <div className="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-[#F9FAFB]">
               <h3 className="text-sm md:text-base font-bold text-on-surface-brand flex items-center gap-2">
-                <Activity size={18} className="text-emerald-500" /> Real-time IoT Flow
+                <Activity size={18} className="text-emerald-500" /> {t('dashboard.iotFlow')}
               </h3>
               <div className="flex items-center gap-3">
                 <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest hidden sm:block">Updated: {lastPolled.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
@@ -254,8 +254,8 @@ export default function UserDashboard({ onViewTicket, onNavigate, user, setHeade
           {/* Right: My Requests (4 cols) */}
           <div className="lg:col-span-4 bg-white rounded-2xl md:rounded-[2rem] border border-gray-200/50 shadow-sm flex flex-col h-full overflow-hidden">
             <div className="px-6 py-5 border-b border-gray-100 flex justify-between items-center">
-              <h3 className="text-sm md:text-base font-bold text-on-surface-brand">My Requests</h3>
-              <button onClick={() => onNavigate('tickets')} className="text-primary-brand text-xs font-bold hover:underline">View All</button>
+              <h3 className="text-sm md:text-base font-bold text-on-surface-brand">{t('dashboard.myRequests')}</h3>
+              <button onClick={() => onNavigate('tickets')} className="text-primary-brand text-xs font-bold hover:underline">{t('dashboard.viewAll')}</button>
             </div>
             
             <div className="p-6 space-y-5 flex-1 flex flex-col">
@@ -284,7 +284,7 @@ export default function UserDashboard({ onViewTicket, onNavigate, user, setHeade
               </div>
               
               <button onClick={() => onNavigate('tickets')} className="w-full mt-auto bg-[#F4F6F8] text-gray-500 py-3 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 shrink-0">
-                <AlertTriangle size={14} /> Report Issue
+                <AlertTriangle size={14} /> {t('dashboard.reportIssue')}
               </button>
             </div>
           </div>
@@ -297,7 +297,7 @@ export default function UserDashboard({ onViewTicket, onNavigate, user, setHeade
             <div className="bg-white rounded-2xl md:rounded-[2rem] border border-gray-200/50 shadow-sm overflow-hidden p-6 relative">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Electricity (This Month)</h3>
+                  <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{t('dashboard.electricityMonth')}</h3>
                   <div className="flex items-center gap-3">
                     <h2 className="text-3xl font-black text-[#111827]">{currentElectric} <span className="text-sm font-bold text-gray-400">Units</span></h2>
                   </div>
@@ -323,7 +323,7 @@ export default function UserDashboard({ onViewTicket, onNavigate, user, setHeade
             <div className="bg-white rounded-2xl md:rounded-[2rem] border border-gray-200/50 shadow-sm overflow-hidden p-6 relative">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Water (This Month)</h3>
+                  <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{t('dashboard.waterMonth')}</h3>
                   <div className="flex items-center gap-3">
                     <h2 className="text-3xl font-black text-[#111827]">{currentWater} <span className="text-sm font-bold text-gray-400">Units</span></h2>
                   </div>
@@ -350,7 +350,7 @@ export default function UserDashboard({ onViewTicket, onNavigate, user, setHeade
           <div className="bg-white rounded-2xl md:rounded-[2rem] border border-gray-200/50 shadow-sm overflow-hidden">
             <div className="px-6 py-5 border-b border-gray-100 flex justify-between items-center">
               <h3 className="text-sm md:text-base font-bold text-on-surface-brand flex items-center gap-2">
-                <FileText size={18} className="text-red-500" /> Outstanding Bills
+                <FileText size={18} className="text-red-500" /> {t('dashboard.outstandingBills')}
               </h3>
             </div>
             <div className="p-4 md:p-6 grid grid-cols-1 gap-4">
