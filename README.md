@@ -27,11 +27,19 @@
      npx tsx prisma/seed.js
      ```
 
-3. **Run App**
+3. **Environment Setup (Email Notification)**
+   - ตั้งค่าอีเมลสำหรับการส่งแจ้งเตือนใน `.env`:
+     ```env
+     SMTP_HOST=smtp.gmail.com
+     SMTP_PORT=587
+     SMTP_USER=your-email@gmail.com
+     SMTP_PASS=your-app-password
+     ```
+
+4. **Run App**
    ```bash
    npm run dev
    ```
-
 ## 🔐 ข้อมูลเข้าใช้งานระบบ (Demo Credentials)
 
 | บทบาท (Role) | อีเมล (Email) | รหัสผ่าน (Password) | สิทธิ์การเข้าถึง |
@@ -59,3 +67,7 @@
   - ปฏิทินลูกบ้านรับรู้วันทำงานและวัน block ของช่างแล้ว
   - Capacity ของแต่ละ slot ปรับเป็นแบบ dynamic: `จำนวนช่างที่ว่าง x 3 งานต่อช่าง`
   - หากมีช่างหลายคน การ block ของช่างคนหนึ่งจะไม่กระทบ availability ของอีกคนโดยตรง แต่ capacity รวมของ slot จะลดลงตามจำนวนช่างที่ยังว่าง
+- **Email Notification System:**
+  - ติดตั้งระบบส่งแจ้งเตือนผ่านอีเมล (Nodemailer) แทนที่ LINE Notify (ซึ่งยกเลิกให้บริการไปแล้ว)
+  - แจ้งเตือนแอดมิน/ช่างอัตโนมัติ เมื่อมีการแจ้งซ่อมใหม่
+  - แจ้งเตือนความคืบหน้าให้ลูกบ้านอัตโนมัติ เมื่อช่างอัปเดตสถานะงาน (พร้อมแนบโน้ตจากช่าง)

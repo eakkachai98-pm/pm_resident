@@ -53,4 +53,4 @@
   - ฝั่งลูกบ้านเลือกระบุวัน/เวลา (Slot) ในการแจ้งซ่อมได้ (เสร็จสมบูรณ์ในหน้า Tickets)
   - ฝั่งช่าง (Technician Dashboard) มีหน้าจอ Monthly Calendar เพื่อดูคิวงาน พร้อมระบบ Claim งานจาก Pool และแสดงงานของตัวเอง (แก้ไขปัญหาการดึงข้อมูลและระบบผูก ID ช่างเรียบร้อยแล้ว)
 - [ ] Payment Gateway Integration (QR PromptPay & Slip Upload)
-- [ ] Line Notify Integration (แจ้งเตือนบิลใหม่ และสถานะการซ่อมบำรุงให้ลูกบ้าน)
+- [x] **Email Notification Integration** (แทนที่ Line Notify เนื่องจาก LINE ยกเลิกบริการ): แจ้งเตือนสถานะการซ่อมบำรุงให้ลูกบ้าน และแจ้งงานซ่อมใหม่ให้ช่างผ่านอีเมล (Nodemailer) ดำเนินการเสร็จสิ้นแล้วใน Backend

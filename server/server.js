@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
+import { notifyTicketCreated, notifyTicketStatusUpdate } from './notifications.js';
 
 const app = express();
 const PORT = 5000;
@@ -242,9 +243,14 @@ app.post('/api/maintenance', async (req, res) => {
     }
 
     const newTicket = await prisma.maintenanceTicket.create({
-      data: { roomId, reporterId, title, description, category, scheduledDate, scheduledSlot }
+      data: { roomId, reporterId, title, description, category, scheduledDate, scheduledSlot },
+      include: { reporter: true, room: true }
     });
     await prisma.room.update({ where: { id: roomId }, data: { status: 'MAINTENANCE' } });
+    
+    // Trigger Email Notification asynchronously
+    notifyTicketCreated(newTicket, newTicket.reporter, newTicket.room).catch(console.error);
+
     res.status(201).json(newTicket);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -274,6 +280,12 @@ app.patch('/api/maintenance/:id', async (req, res) => {
     if (status === 'RESOLVED') {
       await prisma.room.update({ where: { id: updated.roomId }, data: { status: 'AVAILABLE' } });
     }
+    
+    // Trigger Email Notification
+    if (status) {
+      notifyTicketStatusUpdate(updated.id).catch(console.error);
+    }
+
     res.json(updated);
   } catch (error) {
     res.status(500).json({ message: error.message });
