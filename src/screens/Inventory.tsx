@@ -8,10 +8,12 @@ import { useLanguage } from '../context/LanguageContext';
 
 export default function Rooms({ 
   setHeaderAction, 
-  user 
+  user,
+  onSelectAsset
 }: { 
   setHeaderAction: (a: any) => void, 
-  user: Personnel
+  user: Personnel,
+  onSelectAsset: (id: string) => void
 }) {
   const [rooms, setRooms] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -139,6 +141,7 @@ export default function Rooms({
               {filteredRooms.filter(r => r.floor === floor).map(room => (
                 <motion.div 
                   key={room.id}
+                  onClick={() => onSelectAsset(room.id)}
                   whileHover={{ y: -4 }}
                   className={`relative p-4 rounded-2xl border-2 transition-all cursor-pointer shadow-sm
                     ${room.status === 'AVAILABLE' ? 'bg-emerald-50/50 border-emerald-100 hover:border-emerald-300' : 

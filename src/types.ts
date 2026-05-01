@@ -34,6 +34,12 @@ export interface Personnel {
   notifyEmail?: boolean;
   notifyInApp?: boolean;
   notifySystem?: boolean;
+  preferredLanguage?: string;
+  nationality?: string;
+  identityNumber?: string;
+  emergencyContact?: string;
+  visaExpiryDate?: string;
+  tm30Reported?: boolean;
 }
 
 export interface Notification {

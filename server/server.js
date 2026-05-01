@@ -154,6 +154,39 @@ app.get('/api/rooms', async (req, res) => {
   }
 });
 
+app.get('/api/rooms/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const room = await prisma.room.findUnique({
+      where: { id },
+      include: {
+        leases: {
+          where: { isActive: true },
+          include: { tenant: true }
+        }
+      }
+    });
+    if (!room) return res.status(404).json({ message: 'Room not found' });
+    res.json(room);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.get('/api/rooms/:id/tickets', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const tickets = await prisma.maintenanceTicket.findMany({
+      where: { roomId: id },
+      include: { reporter: true, assignee: true },
+      orderBy: { createdAt: 'desc' }
+    });
+    res.json(tickets);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.patch('/api/rooms/:id/status', async (req, res) => {
   try {
     const updated = await prisma.room.update({
@@ -232,6 +265,48 @@ app.get('/api/invoices', async (req, res) => {
   try {
     const invoices = await prisma.invoice.findMany({ include: { lease: { include: { room: true, tenant: true } } }});
     res.json(invoices);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// --- METERS (IoT Data) ---
+app.get('/api/meters/:roomId', async (req, res) => {
+  try {
+    const { roomId } = req.params;
+    const { admin } = req.query; // If admin=true, show all history
+    
+    // Find active lease to know since when to show data
+    const activeLease = await prisma.lease.findFirst({
+      where: { roomId, isActive: true },
+      orderBy: { startDate: 'desc' }
+    });
+
+    let history = [];
+    if (admin === 'true') {
+      // Admin sees everything
+      history = await prisma.meterReading.findMany({
+        where: { roomId },
+        orderBy: { billingMonth: 'asc' }
+      });
+    } else if (activeLease) {
+      // Get only meter readings since lease started (so new tenants don't see old history)
+      history = await prisma.meterReading.findMany({
+        where: {
+          roomId,
+          createdAt: { gte: activeLease.startDate }
+        },
+        orderBy: { billingMonth: 'asc' }
+      });
+    }
+
+    res.json({
+      realtime: {
+        electric: { currentPower: (Math.random() * 2 + 1).toFixed(2) }, // Mock real-time
+        water: { currentFlow: (Math.random() > 0.8 ? (Math.random() * 5).toFixed(1) : '0.0') } // Mock real-time
+      },
+      history
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

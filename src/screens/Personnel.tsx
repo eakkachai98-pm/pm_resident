@@ -41,16 +41,16 @@ export default function Tenants({
         body: JSON.stringify(formData)
       });
       if (response.ok) {
-        showToast('success', 'Tenant and Lease created successfully');
+        showToast('Tenant and Lease created successfully', 'success');
         setShowAddModal(false);
         fetchData();
         setFormData({ name: '', email: '', phone: '', roomId: '', startDate: new Date().toISOString().split('T')[0], nationality: 'Thai', identityNumber: '', preferredLanguage: 'th', emergencyContact: '', visaExpiryDate: '', tm30Reported: false });
       } else {
         const err = await response.json();
-        showToast('error', err.message || 'Failed to add tenant');
+        showToast(err.message || 'Failed to add tenant', 'error');
       }
     } catch (error) {
-      showToast('error', 'Network error');
+      showToast('Network error', 'error');
     } finally {
       setSubmitting(false);
     }

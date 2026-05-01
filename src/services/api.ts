@@ -66,6 +66,12 @@ export const api = {
     return response.json();
   },
 
+  async getRoomById(id: string): Promise<any> {
+    const response = await fetch(`${API_BASE}/rooms/${id}`);
+    if (!response.ok) throw new Error('Failed to fetch room');
+    return response.json();
+  },
+
   async createAsset(asset: any): Promise<Asset> {
     const response = await fetch(`${API_BASE}/assets`, {
       method: 'POST',
@@ -143,8 +149,8 @@ export const api = {
   },
 
   async getAssetTickets(id: string): Promise<Ticket[]> {
-    const response = await fetch(`${API_BASE}/assets/${id}/tickets`);
-    if (!response.ok) throw new Error('Failed to fetch asset tickets');
+    const response = await fetch(`${API_BASE}/rooms/${id}/tickets`);
+    if (!response.ok) throw new Error('Failed to fetch room tickets');
     return response.json();
   },
 

@@ -487,7 +487,7 @@ export default function App() {
                 {currentScreen === 'user-dashboard' && (role === 'user' ? <UserDashboard onViewTicket={handleViewTicket} onNavigate={handleNavigate} user={currentUser} setHeaderAction={setHeaderAction} /> : <AccessDenied />)}
                 {currentScreen === 'technician-dashboard' && (role !== 'user' ? <TechnicianDashboard onSelectAsset={handleSelectAsset} setHeaderAction={setHeaderAction} user={currentUser} refreshKey={refreshKey} /> : <AccessDenied />)}
                 {currentScreen === 'command-center' && (role === 'admin' ? <CommandCenter onNavigate={handleNavigate} setHeaderAction={setHeaderAction} /> : <AccessDenied />)}
-                {currentScreen === 'inventory' && <Inventory setHeaderAction={setHeaderAction} user={currentUser} />}
+                {currentScreen === 'inventory' && <Inventory setHeaderAction={setHeaderAction} user={currentUser} onSelectAsset={handleSelectAsset} />}
                 {currentScreen === 'personnel' && (role !== 'user' ? <PersonnelScreen setHeaderAction={setHeaderAction} user={currentUser} /> : <AccessDenied />)}
                 {currentScreen === 'billing' && (role !== 'user' ? <Billing setHeaderAction={setHeaderAction} user={currentUser} /> : <AccessDenied />)}
                 {currentScreen === 'tickets' && <Tickets initialTicketId={selectedTicketId} setHeaderAction={setHeaderAction} onSelectAsset={handleSelectAsset} user={currentUser} refreshKey={refreshKey} />}
