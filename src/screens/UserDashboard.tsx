@@ -210,7 +210,7 @@ export default function UserDashboard({ onViewTicket, onNavigate, user, setHeade
 
                   {/* Power Node */}
                   <foreignObject x="50" y="10" width="100" height="100">
-                    <div xmlns="http://www.w3.org/1999/xhtml" className="flex items-center justify-center w-full h-full">
+                    <div className="flex items-center justify-center w-full h-full">
                       <div className="w-[80px] h-[80px] rounded-full bg-white border border-amber-100 flex flex-col items-center justify-center shadow-lg relative">
                         <div className="absolute inset-1 rounded-full border border-amber-300/30" />
                         <Zap size={20} className="text-amber-500 mb-0.5" />
@@ -223,7 +223,7 @@ export default function UserDashboard({ onViewTicket, onNavigate, user, setHeade
 
                   {/* Water Node */}
                   <foreignObject x="250" y="10" width="100" height="100">
-                    <div xmlns="http://www.w3.org/1999/xhtml" className="flex items-center justify-center w-full h-full">
+                    <div className="flex items-center justify-center w-full h-full">
                       <div className="w-[80px] h-[80px] rounded-full bg-white border border-blue-100 flex flex-col items-center justify-center shadow-lg relative">
                         <div className="absolute inset-1 rounded-full border border-blue-300/30" />
                         <Droplets size={20} className="text-blue-500 mb-0.5" />
@@ -237,7 +237,7 @@ export default function UserDashboard({ onViewTicket, onNavigate, user, setHeade
                   {/* Room Node */}
                   <text x="200" y="180" textAnchor="middle" fontSize="11" fontWeight="800" fill="#9ca3af" className="uppercase tracking-widest">Room {myRoom?.roomNumber || '...'}</text>
                   <foreignObject x="155" y="190" width="90" height="90">
-                    <div xmlns="http://www.w3.org/1999/xhtml" className="flex items-center justify-center w-full h-full">
+                    <div className="flex items-center justify-center w-full h-full">
                       <div className="w-[80px] h-[80px] rounded-full bg-white border-2 border-emerald-100 flex flex-col items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.15)] relative">
                         <div className="absolute inset-1 rounded-full border border-emerald-300/50" />
                         <Home size={24} className="text-emerald-500 mb-1" />

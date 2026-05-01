@@ -4,16 +4,6 @@ const API_BASE = '/api';
 
 export const api = {
   // AUTH
-  async login(credentials: any): Promise<Personnel> {
-    const response = await fetch(`${API_BASE}/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(credentials)
-    });
-    if (!response.ok) throw new Error('Invalid credentials');
-    return response.json();
-  },
-
   async login(credentials: any): Promise<any> {
     const response = await fetch(`${API_BASE}/login`, {
       method: 'POST',
