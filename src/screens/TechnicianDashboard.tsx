@@ -2,9 +2,16 @@ import { useState, useEffect } from 'react';
 import { Wrench, AlertTriangle, CheckCircle, Search, QrCode, Play, Check, Package, FileText, ChevronDown, History, X, Home, ClipboardList, Calendar, Settings as SettingsIcon, Clock, Trash2, ChevronLeft, ChevronRight, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { api } from '../services/api';
-import { Asset, Ticket, Personnel } from '../types';
+import { Asset, Ticket, Personnel, TechnicianAvailability, TechnicianBlockedSlot } from '../types';
 import { useToast } from '../context/ToastContext';
 import { useLanguage } from '../context/LanguageContext';
+import { DEFAULT_WORKING_DAYS, getDayCodeFromDateString } from '../utils/technicianAvailability';
+
+const WEEKDAY_OPTIONS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const WORKDAY_SORT_INDEX = WEEKDAY_OPTIONS.reduce<Record<string, number>>((acc, day, index) => {
+  acc[day] = index;
+  return acc;
+}, {});
 
 export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, user, refreshKey }: { onSelectAsset: (id: string) => void, setHeaderAction: (a: any) => void, user: Personnel, refreshKey?: number }) {
   const { t } = useLanguage();
@@ -38,10 +45,12 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
   const [showResolveModal, setShowResolveModal] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [showScheduleSettings, setShowScheduleSettings] = useState(false);
-  const [workingDays, setWorkingDays] = useState<string[]>(['Mon', 'Tue', 'Wed', 'Thu', 'Fri']);
-  const [blockedSlots, setBlockedSlots] = useState<{id: string, date: string, type: string, reason: string}[]>([]);
+  const [workingDays, setWorkingDays] = useState<string[]>([...DEFAULT_WORKING_DAYS]);
+  const [blockedSlots, setBlockedSlots] = useState<TechnicianBlockedSlot[]>([]);
   const [isAddingBlock, setIsAddingBlock] = useState(false);
   const [newBlock, setNewBlock] = useState({ date: '', type: 'Full Day', reason: '' });
+  const [scheduleSaving, setScheduleSaving] = useState(false);
+  const [blockSaving, setBlockSaving] = useState(false);
   const [resolvingTicketId, setResolvingTicketId] = useState<string | null>(null);
   const [resolutionNotes, setResolutionNotes] = useState('');
   const [resolutionImage, setResolutionImage] = useState<string | null>(null);
@@ -93,12 +102,19 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
     setExpandedTasks(prev => prev.includes(id) ? prev.filter(tId => tId !== id) : [...prev, id]);
   };
 
+  const applyAvailabilityToState = (availabilityList: TechnicianAvailability[]) => {
+    const myAvailability = availabilityList.find((availability) => availability.staffId === user.id);
+    setWorkingDays(myAvailability ? [...myAvailability.workingDays] : [...DEFAULT_WORKING_DAYS]);
+    setBlockedSlots(myAvailability?.blockedSlots ?? []);
+  };
+
   const fetchData = async () => {
     try {
-      const [allTickets, assetsData, personnelData] = await Promise.all([
+      const [allTickets, assetsData, personnelData, availabilityList] = await Promise.all([
         api.getTickets(),
         api.getAssets(),
-        api.getPersonnel()
+        api.getPersonnel(),
+        api.getTechnicianAvailability()
       ]);
 
       const mappedTickets = allTickets.map((t: any) => {
@@ -135,6 +151,7 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
       setMyTasks(activeMyTasks);
       setUnassignedPool(openUnassigned);
       setCompletedTasks(myCompleted);
+      applyAvailabilityToState(availabilityList);
 
       setStats([
         { label: t('tech.activeTasks' as any), value: activeMyTasks.length.toString(), detail: 'In Progress', icon: Wrench, color: 'text-amber-500' },
@@ -157,6 +174,67 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
       console.error('Error fetching technician data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const toggleWorkingDay = (day: string) => {
+    setWorkingDays((prev) => {
+      const next = prev.includes(day)
+        ? prev.filter((currentDay) => currentDay !== day)
+        : [...prev, day];
+
+      return next.sort((a, b) => WORKDAY_SORT_INDEX[a] - WORKDAY_SORT_INDEX[b]);
+    });
+  };
+
+  const saveSchedule = async () => {
+    try {
+      setScheduleSaving(true);
+      await api.saveTechnicianAvailability(user.id, workingDays);
+      showToast('Availability schedule updated', 'success');
+      setShowScheduleSettings(false);
+      await fetchData();
+    } catch (error) {
+      showToast('Failed to save availability schedule', 'error');
+    } finally {
+      setScheduleSaving(false);
+    }
+  };
+
+  const addBlockedSlot = async () => {
+    if (!newBlock.date) {
+      return;
+    }
+
+    try {
+      setBlockSaving(true);
+      await api.createTechnicianBlockedSlot({
+        staffId: user.id,
+        date: newBlock.date,
+        type: newBlock.type as 'Full Day' | 'Morning' | 'Afternoon',
+        reason: newBlock.reason
+      });
+      setIsAddingBlock(false);
+      setNewBlock({ date: '', type: 'Full Day', reason: '' });
+      showToast('Blocked slot added', 'success');
+      await fetchData();
+    } catch (error: any) {
+      showToast(error?.message || 'Failed to add blocked slot', 'error');
+    } finally {
+      setBlockSaving(false);
+    }
+  };
+
+  const removeBlockedSlot = async (blockedSlotId: string) => {
+    try {
+      setBlockSaving(true);
+      await api.deleteTechnicianBlockedSlot(blockedSlotId);
+      showToast('Blocked slot removed', 'success');
+      await fetchData();
+    } catch (error) {
+      showToast('Failed to remove blocked slot', 'error');
+    } finally {
+      setBlockSaving(false);
     }
   };
 
@@ -380,12 +458,12 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
                     const today = new Date();
                     const isToday = date===today.getDate()&&currentMonth===today.getMonth()+1&&currentYear===today.getFullYear();
                     const dayIndex=(date+firstDayOfMonth-1)%7;
-                    const dayStr=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dayIndex];
-                    const isOff=!workingDays.includes(dayStr);
                     const isSelected=selectedDate===date;
                     const fullDateStr=`${currentMonthStr}-${date.toString().padStart(2,'0')}`;
-                    const mBlocked=blockedSlots.some(b=>{const[y,m,d]=b.date.split('-');return new Date(+y,+m-1,+d).getDate()===date&&(b.type==='Full Day'||b.type==='Morning');});
-                    const aBlocked=blockedSlots.some(b=>{const[y,m,d]=b.date.split('-');return new Date(+y,+m-1,+d).getDate()===date&&(b.type==='Full Day'||b.type==='Afternoon');});
+                    const dayStr = getDayCodeFromDateString(fullDateStr);
+                    const isOff=!workingDays.includes(dayStr);
+                    const mBlocked=blockedSlots.some((blockedSlot)=>blockedSlot.date===fullDateStr&&(blockedSlot.type==='Full Day'||blockedSlot.type==='Morning'));
+                    const aBlocked=blockedSlots.some((blockedSlot)=>blockedSlot.date===fullDateStr&&(blockedSlot.type==='Full Day'||blockedSlot.type==='Afternoon'));
                     const isMorningBlocked=isOff||mBlocked;
                     const isAfternoonBlocked=isOff||aBlocked;
                     const allBlocked=isMorningBlocked&&isAfternoonBlocked;
@@ -441,12 +519,11 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
                 <div className="flex-1 p-5 space-y-4 overflow-y-auto custom-scrollbar" style={{maxHeight:'380px'}}>
                   {(['Morning','Afternoon'] as const).map(slot=>{
                     const label = slot==='Morning'?'☀️ เช้า  09:00–12:00':'🌤 บ่าย  13:00–17:00';
-                    const dayIndex=(selectedDate+firstDayOfMonth-1)%7;
-                    const dayStr=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dayIndex];
-                    const isOff=!workingDays.includes(dayStr);
-                    const blocks=blockedSlots.filter(b=>{const[y,m,d]=b.date.split('-');return new Date(+y,+m-1,+d).getDate()===selectedDate&&(b.type==='Full Day'||b.type===slot);});
-                    const blocked=isOff||blocks.length>0;
                     const fullDateStr=`${currentMonthStr}-${selectedDate.toString().padStart(2,'0')}`;
+                    const dayStr = getDayCodeFromDateString(fullDateStr);
+                    const isOff=!workingDays.includes(dayStr);
+                    const blocks=blockedSlots.filter((blockedSlot)=>blockedSlot.date===fullDateStr&&(blockedSlot.type==='Full Day'||blockedSlot.type===slot));
+                    const blocked=isOff||blocks.length>0;
                     const slotMyTasks=myTasks.filter(t=>t.scheduledDate===fullDateStr&&t.scheduledSlot===slot);
                     const slotPool=unassignedPool.filter(t=>t.scheduledDate===fullDateStr&&t.scheduledSlot===slot);
 
@@ -569,12 +646,13 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
                 <div>
                   <h4 className="text-sm font-bold text-[#111827] mb-3">Working Days</h4>
                   <div className="flex flex-wrap gap-2">
-                    {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => {
+                    {WEEKDAY_OPTIONS.map((day) => {
                       const isActive = workingDays.includes(day);
                       return (
                       <button 
                         key={day} 
-                        onClick={() => setWorkingDays(prev => prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day])}
+                        type="button"
+                        onClick={() => toggleWorkingDay(day)}
                         className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${isActive ? 'bg-primary-brand text-white border-primary-brand shadow-md' : 'bg-white text-gray-400 border-gray-200 hover:bg-gray-50'}`}
                       >
                         {day}
@@ -614,7 +692,7 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
                             <p className="text-xs font-bold text-red-800">{block.date} <span className="text-[10px] bg-red-200 px-1.5 py-0.5 rounded ml-1">{block.type}</span></p>
                             <p className="text-[10px] text-red-600 font-medium mt-0.5">{block.reason || 'No reason provided'}</p>
                           </div>
-                          <button onClick={() => setBlockedSlots(prev => prev.filter(b => b.id !== block.id))} className="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-100 rounded-lg transition-colors"><Trash2 size={14} /></button>
+                          <button type="button" disabled={blockSaving} onClick={() => removeBlockedSlot(block.id)} className="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50"><Trash2 size={14} /></button>
                         </div>
                       ))}
                     </div>
@@ -645,22 +723,16 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
                         <input type="text" placeholder="e.g. Sick Leave, Buying parts" value={newBlock.reason} onChange={e => setNewBlock({...newBlock, reason: e.target.value})} className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs font-bold focus:ring-2 focus:ring-primary-brand/20 transition-all" />
                       </div>
                       <div className="flex gap-2 pt-2">
-                        <button onClick={() => { setIsAddingBlock(false); setNewBlock({ date: '', type: 'Full Day', reason: '' }); }} className="flex-1 py-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-gray-500 hover:bg-gray-50 transition-all">Cancel</button>
-                        <button onClick={() => { 
-                          if(newBlock.date) {
-                            setBlockedSlots([...blockedSlots, { ...newBlock, id: Date.now().toString() }]);
-                            setIsAddingBlock(false);
-                            setNewBlock({ date: '', type: 'Full Day', reason: '' });
-                          }
-                        }} className="flex-1 py-2 bg-red-500 text-white rounded-lg text-xs font-bold hover:bg-red-600 shadow-md shadow-red-500/20 transition-all disabled:opacity-50" disabled={!newBlock.date}>Block Slot</button>
+                        <button type="button" onClick={() => { setIsAddingBlock(false); setNewBlock({ date: '', type: 'Full Day', reason: '' }); }} className="flex-1 py-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-gray-500 hover:bg-gray-50 transition-all">Cancel</button>
+                        <button type="button" onClick={addBlockedSlot} className="flex-1 py-2 bg-red-500 text-white rounded-lg text-xs font-bold hover:bg-red-600 shadow-md shadow-red-500/20 transition-all disabled:opacity-50" disabled={!newBlock.date || blockSaving}>{blockSaving ? 'Saving...' : 'Block Slot'}</button>
                       </div>
                     </div>
                   )}
                 </div>
 
                 <div className="pt-4 border-t border-gray-100 mt-2">
-                  <button onClick={() => { setShowScheduleSettings(false); showToast('Availability schedule updated', 'success'); }} className="w-full py-4 rounded-2xl bg-[#111827] text-white text-xs font-bold uppercase tracking-widest shadow-xl shadow-gray-900/20 hover:scale-[1.02] active:scale-95 transition-all">
-                    Save Schedule
+                  <button type="button" disabled={scheduleSaving} onClick={saveSchedule} className="w-full py-4 rounded-2xl bg-[#111827] text-white text-xs font-bold uppercase tracking-widest shadow-xl shadow-gray-900/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-60 disabled:hover:scale-100">
+                    {scheduleSaving ? 'Saving...' : 'Save Schedule'}
                   </button>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import { Asset, Activity, Ticket, Personnel } from '../types';
+import { Asset, Activity, Ticket, Personnel, TechnicianAvailability, TechnicianBlockedSlot } from '../types';
 
 const API_BASE = '/api';
 
@@ -176,6 +176,53 @@ export const api = {
     });
     if (!response.ok) throw new Error('Failed to submit rating');
     return response.json();
+  },
+
+  async getTechnicianAvailability(): Promise<TechnicianAvailability[]> {
+    const response = await fetch(`${API_BASE}/technician/availability`);
+    if (!response.ok) throw new Error('Failed to fetch technician availability');
+    return response.json();
+  },
+
+  async saveTechnicianAvailability(staffId: string, workingDays: string[]): Promise<TechnicianAvailability> {
+    const response = await fetch(`${API_BASE}/technician/availability`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ staffId, workingDays })
+    });
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.message || 'Failed to save technician availability');
+    }
+    return response.json();
+  },
+
+  async createTechnicianBlockedSlot(data: {
+    staffId: string;
+    date: string;
+    type: 'Full Day' | 'Morning' | 'Afternoon';
+    reason?: string;
+  }): Promise<TechnicianBlockedSlot> {
+    const response = await fetch(`${API_BASE}/technician/blocked-slots`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.message || 'Failed to create blocked slot');
+    }
+    return response.json();
+  },
+
+  async deleteTechnicianBlockedSlot(id: string): Promise<void> {
+    const response = await fetch(`${API_BASE}/technician/blocked-slots/${id}`, {
+      method: 'DELETE'
+    });
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.message || 'Failed to delete blocked slot');
+    }
   },
 
   async getTasks(): Promise<any[]> {

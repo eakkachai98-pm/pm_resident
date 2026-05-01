@@ -3,6 +3,9 @@ import { Wrench, Plus, Search, X, ChevronLeft, ChevronRight, Home, User, Clock, 
 import { motion, AnimatePresence } from 'motion/react';
 import { useToast } from '../context/ToastContext';
 import { useLanguage } from '../context/LanguageContext';
+import { api } from '../services/api';
+import { TechnicianAvailability, TimeSlot } from '../types';
+import { SLOT_CAPACITY, getAvailableTechniciansForSlot, getDateAvailability, getSlotCapacity } from '../utils/technicianAvailability';
 
 export default function Maintenance({ 
   setHeaderAction, 
@@ -18,7 +21,9 @@ export default function Maintenance({
   refreshKey?: number
 }) {
   const [tickets, setTickets] = useState<any[]>([]);
+  const [allTickets, setAllTickets] = useState<any[]>([]);
   const [rooms, setRooms] = useState<any[]>([]);
+  const [technicianAvailability, setTechnicianAvailability] = useState<TechnicianAvailability[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState<any | null>(null);
@@ -33,19 +38,48 @@ export default function Maintenance({
   const [ratingValue, setRatingValue] = useState(0);
   const [hoveredStar, setHoveredStar] = useState(0);
   const [pickerDate, setPickerDate] = useState(new Date());
+  const hasAvailabilityData = technicianAvailability.length > 0;
+
+  const getSlotBookingCount = (dateString: string, slot: TimeSlot) =>
+    allTickets.filter((ticket: any) => ticket.scheduledDate === dateString && ticket.scheduledSlot === slot).length;
+
+  const getEffectiveSlotCapacity = (dateString: string, slot: TimeSlot) =>
+    hasAvailabilityData ? getSlotCapacity(technicianAvailability, dateString, slot) : SLOT_CAPACITY;
+
+  const getSlotIndicatorColor = (bookingCount: number, capacity: number) => {
+    if (capacity === 0) {
+      return 'bg-gray-300';
+    }
+
+    const remaining = Math.max(0, capacity - bookingCount);
+    const warningThreshold = Math.max(1, Math.ceil(capacity / 3));
+
+    if (remaining === 0) {
+      return 'bg-red-400';
+    }
+
+    if (remaining <= warningThreshold) {
+      return 'bg-amber-400';
+    }
+
+    return 'bg-emerald-400';
+  };
 
   const fetchData = async () => {
     try {
-      const [tRes, rRes] = await Promise.all([
+      const [tRes, rRes, availabilityData] = await Promise.all([
         fetch('/api/maintenance'),
-        fetch('/api/rooms')
+        fetch('/api/rooms'),
+        api.getTechnicianAvailability()
       ]);
       const tData = await tRes.json();
       const rData = await rRes.json();
       
+      setAllTickets(tData);
       const filteredTickets = user.userRole === 'user' ? tData.filter((t: any) => t.reporterId === user.id) : tData;
       setTickets(filteredTickets);
       setRooms(rData);
+      setTechnicianAvailability(availabilityData);
 
       if (initialTicketId) {
         const ticketToOpen = filteredTickets.find((t: any) => t.id === initialTicketId);
@@ -66,11 +100,54 @@ export default function Maintenance({
     setHeaderAction({ label: 'Report Issue', onClick: () => setShowCreateModal(true) });
     fetchData();
     return () => setHeaderAction(undefined);
-  }, [user.id]);
+  }, [user.id, refreshKey, initialTicketId]);
+
+  useEffect(() => {
+    if (!scheduledDate) {
+      return;
+    }
+
+    const currentSlotBookings = getSlotBookingCount(scheduledDate, scheduledSlot as TimeSlot);
+    const currentSlotHasCapacity = currentSlotBookings < getEffectiveSlotCapacity(scheduledDate, scheduledSlot as TimeSlot);
+    const currentSlotHasTechnician = !hasAvailabilityData
+      || getAvailableTechniciansForSlot(technicianAvailability, scheduledDate, scheduledSlot as TimeSlot).length > 0;
+
+    if (currentSlotHasCapacity && currentSlotHasTechnician) {
+      return;
+    }
+
+    const nextAvailableSlot = (['Morning', 'Afternoon'] as const).find((slot) => {
+      const slotBookings = getSlotBookingCount(scheduledDate, slot);
+      const slotHasCapacity = slotBookings < getEffectiveSlotCapacity(scheduledDate, slot);
+      const slotHasTechnician = !hasAvailabilityData
+        || getAvailableTechniciansForSlot(technicianAvailability, scheduledDate, slot).length > 0;
+
+      return slotHasCapacity && slotHasTechnician;
+    });
+
+    if (nextAvailableSlot) {
+      setScheduledSlot(nextAvailableSlot);
+    }
+  }, [allTickets, hasAvailabilityData, scheduledDate, scheduledSlot, technicianAvailability]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      if (!scheduledDate) {
+        throw new Error('Please select a preferred date before submitting.');
+      }
+
+      if (getSlotBookingCount(scheduledDate, scheduledSlot as TimeSlot) >= getEffectiveSlotCapacity(scheduledDate, scheduledSlot as TimeSlot)) {
+        throw new Error('This slot is already full. Please choose another time.');
+      }
+
+      if (
+        hasAvailabilityData
+        && getAvailableTechniciansForSlot(technicianAvailability, scheduledDate, scheduledSlot as TimeSlot).length === 0
+      ) {
+        throw new Error('No technician is available for the selected date and slot.');
+      }
+
       const res = await fetch('/api/maintenance', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -147,6 +224,9 @@ export default function Maintenance({
   const pickerDaysInMonth = new Date(pickerYear, pickerMonth, 0).getDate();
   const pickerFirstDay = new Date(pickerYear, pickerMonth - 1, 1).getDay();
   const pickerMonthStr = `${pickerYear}-${pickerMonth.toString().padStart(2, '0')}`;
+  const selectedDateAvailability = scheduledDate && hasAvailabilityData
+    ? getDateAvailability(technicianAvailability, scheduledDate)
+    : null;
 
   return (
     <div className="space-y-6 md:space-y-8 font-sans">
@@ -343,22 +423,26 @@ export default function Maintenance({
                         const isPast=cell<now;
                         const fds=`${pickerMonthStr}-${date.toString().padStart(2,'0')}`;
                         const isSel=scheduledDate===fds;
-                        const mc=tickets.filter((t:any)=>t.scheduledDate===fds&&t.scheduledSlot==='Morning').length;
-                        const ac=tickets.filter((t:any)=>t.scheduledDate===fds&&t.scheduledSlot==='Afternoon').length;
-                        const full=mc>=3&&ac>=3;
+                        const mc=getSlotBookingCount(fds, 'Morning');
+                        const ac=getSlotBookingCount(fds, 'Afternoon');
+                        const mcCapacity=getEffectiveSlotCapacity(fds, 'Morning');
+                        const acCapacity=getEffectiveSlotCapacity(fds, 'Afternoon');
+                        const dayAvailability = hasAvailabilityData ? getDateAvailability(technicianAvailability, fds) : null;
+                        const unavailableBySchedule = hasAvailabilityData && !dayAvailability?.isDateAvailable;
+                        const full=(mcCapacity === 0 || mc >= mcCapacity) && (acCapacity === 0 || ac >= acCapacity);
                         let cls='bg-white text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 cursor-pointer border border-transparent hover:border-emerald-200';
                         if(isSel) cls='bg-blue-500 text-white shadow-md shadow-blue-200';
-                        else if(isPast||full) cls='text-gray-300 cursor-not-allowed bg-transparent';
+                        else if(isPast||full||unavailableBySchedule) cls='text-gray-300 cursor-not-allowed bg-transparent';
                         else if(mc>=2||ac>=2) cls='bg-amber-50 text-amber-700 hover:bg-amber-100 cursor-pointer border border-amber-100';
                         return (
-                          <button key={date} type="button" disabled={isPast||full} onClick={()=>setScheduledDate(fds)}
+                          <button key={date} type="button" disabled={isPast||full||unavailableBySchedule} onClick={()=>setScheduledDate(fds)}
                             className={`h-9 rounded-lg text-xs font-bold transition-all flex flex-col items-center justify-center gap-0.5 ${cls}`}
                           >
                             <span>{date}</span>
-                            {!isPast&&!isSel&&(
+                            {!isPast&&!isSel&&!unavailableBySchedule&&(
                               <div className="flex gap-px">
-                                <span className={`w-1 h-1 rounded-full ${mc>=3?'bg-red-400':mc>=2?'bg-amber-400':'bg-emerald-400'}`}/>
-                                <span className={`w-1 h-1 rounded-full ${ac>=3?'bg-red-400':ac>=2?'bg-amber-400':'bg-emerald-400'}`}/>
+                                <span className={`w-1 h-1 rounded-full ${getSlotIndicatorColor(mc, mcCapacity)}`}/>
+                                <span className={`w-1 h-1 rounded-full ${getSlotIndicatorColor(ac, acCapacity)}`}/>
                               </div>
                             )}
                           </button>
@@ -366,7 +450,7 @@ export default function Maintenance({
                       })}
                     </div>
                     <div className="flex gap-5 mt-3 pt-3 border-t border-gray-200/60 justify-center">
-                      {[{c:'bg-emerald-400',l:'ว่าง'},{c:'bg-amber-400',l:'กำลังจอง'},{c:'bg-red-400',l:'เต็ม'}].map(({c,l})=>(
+                      {[{c:'bg-emerald-400',l:'ว่าง'},{c:'bg-amber-400',l:'กำลังจอง'},{c:'bg-red-400',l:'เต็ม'},{c:'bg-gray-300',l:'OFF'}].map(({c,l})=>(
                         <div key={l} className="flex items-center gap-1.5">
                           <span className={`w-2 h-2 rounded-full ${c}`}/>
                           <span className="text-[9px] text-gray-500 font-medium">{l}</span>
@@ -377,24 +461,36 @@ export default function Maintenance({
 
                   {/* Slot Selector */}
                   <div className="grid grid-cols-2 gap-3">
-                    {(['Morning','Afternoon'] as const).map(slot=>{
-                      const cnt=scheduledDate?tickets.filter((t:any)=>t.scheduledDate===scheduledDate&&t.scheduledSlot===slot).length:null;
-                      const avail=cnt!==null?Math.max(0,3-cnt):null;
-                      const isFull=avail===0;
-                      const isAct=scheduledSlot===slot;
+                    {(['Morning','Afternoon'] as const).map((slot) => {
+                      const cnt = scheduledDate ? getSlotBookingCount(scheduledDate, slot) : null;
+                      const capacity = scheduledDate ? getEffectiveSlotCapacity(scheduledDate, slot) : null;
+                      const avail = cnt !== null && capacity !== null ? Math.max(0, capacity - cnt) : null;
+                      const availableTechnicians = scheduledDate && hasAvailabilityData
+                        ? getAvailableTechniciansForSlot(technicianAvailability, scheduledDate, slot).length
+                        : null;
+                      const blockedBySchedule = scheduledDate ? hasAvailabilityData && availableTechnicians === 0 : false;
+                      const isFull = avail === 0 && capacity !== null && capacity > 0;
+                      const warningThreshold = capacity !== null ? Math.max(1, Math.ceil(capacity / 3)) : 1;
+                      const isAct = scheduledSlot === slot;
+                      const isDisabled = !scheduledDate || !!isFull || blockedBySchedule;
+
                       return (
-                        <button key={slot} type="button" disabled={!!isFull} onClick={()=>setScheduledSlot(slot)}
-                          className={`p-3 rounded-xl border-2 text-left transition-all ${isAct?'border-blue-500 bg-blue-50':isFull?'border-gray-100 bg-gray-50 opacity-50 cursor-not-allowed':'border-gray-200 bg-white hover:border-blue-300 hover:bg-blue-50/30'}`}
+                        <button
+                          key={slot}
+                          type="button"
+                          disabled={isDisabled}
+                          onClick={() => setScheduledSlot(slot)}
+                          className={`p-3 rounded-xl border-2 text-left transition-all ${isAct && !isDisabled ? 'border-blue-500 bg-blue-50' : isDisabled ? 'border-gray-100 bg-gray-50 opacity-50 cursor-not-allowed' : 'border-gray-200 bg-white hover:border-blue-300 hover:bg-blue-50/30'}`}
                         >
-                          <p className={`text-xs font-bold ${isAct?'text-blue-700':isFull?'text-gray-400':'text-gray-700'}`}>
-                            {slot==='Morning'?'☀️ เช้า 09:00–12:00':'🌤 บ่าย 13:00–17:00'}
+                          <p className={`text-xs font-bold ${isAct && !isDisabled ? 'text-blue-700' : isDisabled ? 'text-gray-400' : 'text-gray-700'}`}>
+                            {slot === 'Morning' ? '☀️ เช้า 09:00-12:00' : '🌤 บ่าย 13:00-17:00'}
                           </p>
-                          {avail!==null&&(
-                            <p className={`text-[10px] mt-1 font-bold ${isFull?'text-red-400':avail<=1?'text-amber-500':'text-emerald-500'}`}>
-                              {isFull?'เต็มแล้ว':`ว่างอีก ${avail} จาก 3 slot`}
+                          {avail !== null && (
+                            <p className={`text-[10px] mt-1 font-bold ${blockedBySchedule ? 'text-gray-400' : isFull ? 'text-red-400' : avail <= warningThreshold ? 'text-amber-500' : 'text-emerald-500'}`}>
+                              {blockedBySchedule ? 'No technician available' : isFull ? 'เต็มแล้ว' : `ว่างอีก ${avail} จาก ${capacity} slot`}
                             </p>
                           )}
-                          {avail===null&&<p className="text-[10px] mt-1 text-gray-400">เลือกวันก่อน</p>}
+                          {avail === null && <p className="text-[10px] mt-1 text-gray-400">เลือกวันก่อน</p>}
                         </button>
                       );
                     })}
@@ -402,7 +498,10 @@ export default function Maintenance({
                 </div>
 
                 <div className="space-y-1.5"><label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Description</label><textarea rows={4} className="w-full bg-[#F4F6F8] border-none rounded-xl py-4 px-6 text-sm font-medium resize-none" placeholder="Provide more details about the problem..." value={description} onChange={(e) => setDescription(e.target.value)} /></div>
-                <button type="submit" className="w-full bg-primary-brand text-white py-5 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl shadow-blue-500/20 hover:scale-[1.02] active:scale-95 transition-all mt-4">Submit Maintenance Request</button>
+                {scheduledDate && selectedDateAvailability && !selectedDateAvailability.isDateAvailable && (
+                  <p className="text-xs font-medium text-red-500">No technician is available on the selected date.</p>
+                )}
+                <button type="submit" disabled={!scheduledDate || (selectedDateAvailability ? !selectedDateAvailability.isDateAvailable : false)} className="w-full bg-primary-brand text-white py-5 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl shadow-blue-500/20 hover:scale-[1.02] active:scale-95 transition-all mt-4 disabled:opacity-50 disabled:hover:scale-100">Submit Maintenance Request</button>
               </form>
             </motion.div>
           </div>

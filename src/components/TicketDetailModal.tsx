@@ -46,10 +46,10 @@ export default function TicketDetailModal({ isOpen, onClose, ticket }: TicketDet
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Resolved':
-      case 'Closed':
+      case 'RESOLVED':
+      case 'CLOSED':
         return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-      case 'In Progress':
+      case 'IN_PROGRESS':
         return 'bg-blue-50 text-blue-700 border-blue-200';
       default:
         return 'bg-amber-50 text-amber-700 border-amber-200';
@@ -133,7 +133,7 @@ export default function TicketDetailModal({ isOpen, onClose, ticket }: TicketDet
                   </div>
                 </div>
               )}
-              {ticket.status === 'Resolved' && (
+              {ticket.status === 'RESOLVED' && (
                 <div className="bg-gradient-to-br from-[#F9FAFB] to-white border border-gray-100 rounded-xl p-5 shadow-sm mt-4">
                   <h3 className="text-sm font-bold text-gray-900 mb-3 text-center">
                     {hasRated ? 'Your Feedback' : 'How was your experience?'}

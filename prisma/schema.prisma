@@ -22,6 +22,8 @@ model User {
   leases              Lease[]
   maintenanceTickets  MaintenanceTicket[] @relation("Reporter")
   assignedTickets     MaintenanceTicket[] @relation("Assignee")
+  technicianAvailability TechnicianAvailability?
+  technicianBlockedSlots TechnicianBlockedSlot[]
 }
 
 model Room {
@@ -106,4 +108,23 @@ model MaintenanceTicket {
   repairImage    String? // Store base64 or URL
   rating         Int?
   feedback       String?
+}
+
+model TechnicianAvailability {
+  id           String   @id @default(cuid())
+  staffId      String   @unique
+  staff        User     @relation(fields: [staffId], references: [id])
+  workingDays  String   // JSON array: ["Mon","Tue","Wed","Thu","Fri"]
+  updatedAt    DateTime @updatedAt
+}
+
+model TechnicianBlockedSlot {
+  id       String @id @default(cuid())
+  staffId  String
+  staff    User   @relation(fields: [staffId], references: [id])
+  date     String // "YYYY-MM-DD"
+  type     String // "Full Day" | "Morning" | "Afternoon"
+  reason   String?
+
+  @@index([staffId, date])
 }

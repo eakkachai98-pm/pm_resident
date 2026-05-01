@@ -75,3 +75,22 @@ export interface Activity {
   status: 'Complete' | 'Warning' | 'Error' | 'Queued';
   time: string;
 }
+
+export type TimeSlot = 'Morning' | 'Afternoon';
+export type BlockedSlotType = 'Full Day' | TimeSlot;
+
+export interface TechnicianBlockedSlot {
+  id: string;
+  staffId: string;
+  date: string;
+  type: BlockedSlotType;
+  reason?: string | null;
+}
+
+export interface TechnicianAvailability {
+  staffId: string;
+  staffName: string;
+  workingDays: string[];
+  blockedSlots: TechnicianBlockedSlot[];
+  updatedAt?: string | null;
+}

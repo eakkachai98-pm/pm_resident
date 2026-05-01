@@ -13,6 +13,83 @@ const connectionString = `${process.env.DATABASE_URL}`;
 const pool = new pg.Pool({ connectionString });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
+const DEFAULT_WORKING_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+const SLOT_CAPACITY = 3;
+const WEEKDAY_CODES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+function parseWorkingDays(rawWorkingDays) {
+  if (Array.isArray(rawWorkingDays)) {
+    return [...new Set(rawWorkingDays.filter((day) => WEEKDAY_CODES.includes(day)))];
+  }
+
+  if (typeof rawWorkingDays === 'string') {
+    try {
+      return parseWorkingDays(JSON.parse(rawWorkingDays));
+    } catch (error) {
+      return [];
+    }
+  }
+
+  return [];
+}
+
+function normalizeWorkingDays(rawWorkingDays) {
+  if (rawWorkingDays === undefined || rawWorkingDays === null) {
+    return [...DEFAULT_WORKING_DAYS];
+  }
+
+  return parseWorkingDays(rawWorkingDays);
+}
+
+function getDayCodeFromDateString(dateString) {
+  const [year, month, day] = `${dateString}`.split('-').map(Number);
+  return WEEKDAY_CODES[new Date(year, month - 1, day).getDay()];
+}
+
+function doesBlockSlotMatch(blockType, slot) {
+  return blockType === 'Full Day' || blockType === slot;
+}
+
+function isTechnicianAvailableForSlot(technician, dateString, slot) {
+  const workingDays = normalizeWorkingDays(technician.workingDays);
+
+  if (!workingDays.includes(getDayCodeFromDateString(dateString))) {
+    return false;
+  }
+
+  return !technician.blockedSlots.some(
+    (blockedSlot) => blockedSlot.date === dateString && doesBlockSlotMatch(blockedSlot.type, slot)
+  );
+}
+
+async function getTechnicianAvailabilitySnapshot() {
+  const technicians = await prisma.user.findMany({
+    where: { role: 'STAFF' },
+    orderBy: { name: 'asc' },
+    include: {
+      technicianAvailability: true,
+      technicianBlockedSlots: {
+        orderBy: [{ date: 'asc' }, { type: 'asc' }]
+      }
+    }
+  });
+
+  return technicians.map((technician) => ({
+    staffId: technician.id,
+    staffName: technician.name,
+    workingDays: technician.technicianAvailability
+      ? normalizeWorkingDays(technician.technicianAvailability.workingDays)
+      : [...DEFAULT_WORKING_DAYS],
+    blockedSlots: technician.technicianBlockedSlots.map((blockedSlot) => ({
+      id: blockedSlot.id,
+      staffId: blockedSlot.staffId,
+      date: blockedSlot.date,
+      type: blockedSlot.type,
+      reason: blockedSlot.reason
+    })),
+    updatedAt: technician.technicianAvailability?.updatedAt ?? null
+  }));
+}
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
@@ -133,6 +210,37 @@ app.get('/api/maintenance', async (req, res) => {
 app.post('/api/maintenance', async (req, res) => {
   try {
     const { roomId, reporterId, title, description, category, scheduledDate, scheduledSlot } = req.body;
+
+    if (scheduledDate && !scheduledSlot) {
+      res.status(400).json({ message: 'Please select a time slot for the requested date.' });
+      return;
+    }
+
+    if (scheduledDate && scheduledSlot) {
+      const availabilitySnapshot = await getTechnicianAvailabilitySnapshot();
+      const techniciansAvailable = availabilitySnapshot.filter((technician) =>
+        isTechnicianAvailableForSlot(technician, scheduledDate, scheduledSlot)
+      );
+      const slotCapacity = techniciansAvailable.length * SLOT_CAPACITY;
+
+      if (availabilitySnapshot.length > 0 && techniciansAvailable.length === 0) {
+        res.status(400).json({ message: 'No technician is available for the selected date and slot.' });
+        return;
+      }
+
+      const existingBookings = await prisma.maintenanceTicket.count({
+        where: {
+          scheduledDate,
+          scheduledSlot
+        }
+      });
+
+      if (existingBookings >= (availabilitySnapshot.length > 0 ? slotCapacity : SLOT_CAPACITY)) {
+        res.status(400).json({ message: 'This slot is already full. Please choose another time.' });
+        return;
+      }
+    }
+
     const newTicket = await prisma.maintenanceTicket.create({
       data: { roomId, reporterId, title, description, category, scheduledDate, scheduledSlot }
     });
@@ -180,6 +288,134 @@ app.patch('/api/maintenance/:id/rate', async (req, res) => {
       data: { rating, feedback }
     });
     res.json(updated);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// --- TECHNICIAN AVAILABILITY ---
+app.get('/api/technician/availability', async (req, res) => {
+  try {
+    const availabilitySnapshot = await getTechnicianAvailabilitySnapshot();
+    res.json(availabilitySnapshot);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post('/api/technician/availability', async (req, res) => {
+  try {
+    const { staffId, workingDays } = req.body;
+
+    if (!staffId) {
+      res.status(400).json({ message: 'staffId is required.' });
+      return;
+    }
+
+    const technician = await prisma.user.findFirst({
+      where: {
+        id: staffId,
+        role: 'STAFF'
+      }
+    });
+
+    if (!technician) {
+      res.status(404).json({ message: 'Technician not found.' });
+      return;
+    }
+
+    const sanitizedWorkingDays = parseWorkingDays(workingDays);
+
+    const savedAvailability = await prisma.technicianAvailability.upsert({
+      where: { staffId },
+      update: {
+        workingDays: JSON.stringify(sanitizedWorkingDays)
+      },
+      create: {
+        staffId,
+        workingDays: JSON.stringify(sanitizedWorkingDays)
+      }
+    });
+
+    res.json({
+      staffId,
+      staffName: technician.name,
+      workingDays: normalizeWorkingDays(savedAvailability.workingDays),
+      blockedSlots: [],
+      updatedAt: savedAvailability.updatedAt
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post('/api/technician/blocked-slots', async (req, res) => {
+  try {
+    const { staffId, date, type, reason } = req.body;
+
+    if (!staffId || !date || !type) {
+      res.status(400).json({ message: 'staffId, date, and type are required.' });
+      return;
+    }
+
+    if (!['Full Day', 'Morning', 'Afternoon'].includes(type)) {
+      res.status(400).json({ message: 'Invalid blocked slot type.' });
+      return;
+    }
+
+    const technician = await prisma.user.findFirst({
+      where: {
+        id: staffId,
+        role: 'STAFF'
+      }
+    });
+
+    if (!technician) {
+      res.status(404).json({ message: 'Technician not found.' });
+      return;
+    }
+
+    const existingBlocks = await prisma.technicianBlockedSlot.findMany({
+      where: {
+        staffId,
+        date
+      }
+    });
+
+    const hasConflict = existingBlocks.some((blockedSlot) => {
+      if (blockedSlot.type === 'Full Day' || type === 'Full Day') {
+        return true;
+      }
+
+      return blockedSlot.type === type;
+    });
+
+    if (hasConflict) {
+      res.status(409).json({ message: 'This blocked slot already exists or overlaps with an existing block.' });
+      return;
+    }
+
+    const blockedSlot = await prisma.technicianBlockedSlot.create({
+      data: {
+        staffId,
+        date,
+        type,
+        reason: reason?.trim() || null
+      }
+    });
+
+    res.status(201).json(blockedSlot);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.delete('/api/technician/blocked-slots/:id', async (req, res) => {
+  try {
+    await prisma.technicianBlockedSlot.delete({
+      where: { id: req.params.id }
+    });
+    res.status(204).send();
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

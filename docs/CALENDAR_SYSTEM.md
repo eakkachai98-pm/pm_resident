@@ -23,7 +23,13 @@
 **Time Slots:**
 - **Morning** — 09:00–12:00
 - **Afternoon** — 13:00–17:00
-- **Capacity ต่อ Slot** — 3 งาน (hardcoded ปัจจุบัน)
+- **Capacity ต่อช่างต่อ Slot** — 3 งาน
+- **Capacity รวมของ Slot** — `จำนวนช่างที่ว่างใน slot x 3`
+
+**ตัวอย่าง Capacity แบบหลายช่าง:**
+- ช่างว่าง 1 คน → รับได้ 3 งาน
+- ช่างว่าง 2 คน → รับได้ 6 งาน
+- ถ้ามีช่าง 2 คน แต่ block ไป 1 คนในช่วงเช้า → ช่วงเช้าจะเหลือรับได้ 3 งาน
 
 ---
 
@@ -61,12 +67,14 @@
   - Working Days (เลือกวันที่ทำงาน)
   - Block Slot (ลา / ล็อควัน)
 
-### 2.2 ข้อจำกัดที่มีอยู่ (⚠️ Known Limitations)
+### 2.2 พฤติกรรมปัจจุบัน
 
-> **workingDays และ blockedSlots เก็บแค่ใน React State เท่านั้น!**
-> - เมื่อ refresh หน้าเว็บ → ข้อมูลหาย
-> - ฝั่งลูกบ้าน **ไม่รู้** ว่าช่างมีวันหยุดวันไหน
-> - ปุ่ม "Save Schedule" ยังไม่ได้ call API จริง
+- `workingDays` และ `blockedSlots` ถูกบันทึกลง Database แล้ว
+- เมื่อ refresh หน้าเว็บ ข้อมูล availability ของช่างจะยังอยู่
+- การ block ของช่างเป็น **รายคน** ไม่ได้ block ช่างคนอื่นตามไปด้วย
+- ถ้ามีหลายช่าง ระบบจะนับเฉพาะช่างที่ว่างจริงในแต่ละ slot เพื่อคำนวณ capacity รวม
+
+**หมายเหตุ:** Technician Dashboard ตอนนี้ยังแสดงงานในลักษณะ pool/claim เหมือนเดิม ยังไม่ได้ assign งานให้ช่างอัตโนมัติตั้งแต่ตอนลูกบ้านจอง
 
 ---
 
@@ -74,7 +82,7 @@
 
 **ไฟล์:** `src/screens/Tickets.tsx`
 
-### 3.1 ฟีเจอร์ที่มีอยู่ (Level 1 — ทำแล้ว)
+### 3.1 ฟีเจอร์ที่มีอยู่ (Level 2 — ใช้งานจริง)
 
 เมื่อลูกบ้านกด "Report Issue" จะเห็น Mini Calendar ใน Modal:
 
@@ -83,16 +91,18 @@
 
 | สี | ความหมาย | เงื่อนไข |
 |---|---|---|
-| 🟢 Green | ว่าง | booking < 2 |
-| 🟡 Amber | กำลังจอง | booking = 2 |
-| 🔴 Red | เต็ม | booking ≥ 3 |
+| 🟢 Green | ว่าง | ยังเหลือคิวมาก |
+| 🟡 Amber | กำลังจอง | คิวเริ่มใกล้เต็ม |
+| 🔴 Red | เต็ม | booking ≥ capacity ของ slot |
+| ⚪ Gray | OFF | ไม่มีช่างว่างใน slot นั้น |
 
 - **วันที่ผ่านมา** — Disabled อัตโนมัติ (ไม่สามารถเลือกได้)
-- **วันที่เต็ม (mc≥3 และ ac≥3)** — Disabled
+- **วันที่เต็มหรือไม่มีช่างว่างทั้งวัน** — Disabled
 - **Slot Selector Buttons** — หลังเลือกวัน จะเห็น:
-  - `ว่างอีก X จาก 3 slot` (เขียว)
+  - `ว่างอีก X จาก Y slot` โดย `Y = จำนวนช่างที่ว่าง x 3`
   - `กำลังจอง` (เหลือง)
   - `เต็มแล้ว` + Disabled (แดง)
+  - `No technician available` + Disabled (เทา)
 
 ### 3.2 แหล่งข้อมูล
 
@@ -101,70 +111,49 @@ tickets (จาก /api/maintenance)
     ↓
 นับจำนวน ticket ที่มี scheduledDate และ scheduledSlot ตรงกัน
     ↓
+โหลด availability ของช่างจาก /api/technician/availability
+    ↓
+คำนวณจำนวนช่างที่ว่างจริงในแต่ละวัน/slot
+    ↓
+คำนวณ capacity รวมของ slot = availableTechnicians x 3
+    ↓
 แสดงสถานะแต่ละวัน/slot
 ```
 
-**⚠️ ข้อจำกัด:** ปฏิทินนี้ **ไม่รับรู้** Off Day ของช่าง เพราะ `workingDays` และ `blockedSlots` ยังไม่ได้บันทึกลง Database
+**สิ่งที่ระบบตรวจตอนจองจริง:**
+- ต้องมีช่างว่างอย่างน้อย 1 คนใน slot ที่เลือก
+- จำนวน booking ใน slot ต้องน้อยกว่า capacity รวมของ slot
+- ถ้าไม่มีช่างว่างหรือ slot เต็ม ระบบ backend จะ reject การจองแม้ UI ยังไม่ทัน refresh
 
 ---
 
-## 4. แผน Level 2: Real Technician Availability (Future)
+## 4. Multi-Technician Behavior
 
-### 4.1 เป้าหมาย
+### 4.1 หลักการ
 
-ให้ปฏิทินฝั่งลูกบ้าน **เห็นวันที่ช่างว่างจริงๆ** รวมถึงวันหยุดและวันที่ block ไว้
+- การตั้ง availability และ block slot เป็นข้อมูล **รายช่าง**
+- การ block ของช่าง A จะไม่ทำให้ช่าง B ถูก block ไปด้วย
+- ระบบจะดูว่าใน slot นั้นมีช่างคนไหนว่างบ้าง แล้วค่อยรวม capacity ตามจำนวนคนที่ว่างจริง
 
-### 4.2 สิ่งที่ต้องทำ
+### 4.2 ตัวอย่าง
 
-#### ① เพิ่ม Prisma Schema
+```text
+ช่าง A ว่าง, ช่าง B ว่าง
+→ Capacity ของ Morning = 6 งาน
 
-```prisma
-model TechnicianAvailability {
-  id           String   @id @default(cuid())
-  staffId      String
-  staff        User     @relation(fields: [staffId], references: [id])
-  workingDays  String   // JSON array: ["Mon","Tue","Wed","Thu","Fri"]
-  updatedAt    DateTime @updatedAt
-}
+ช่าง A block Morning, ช่าง B ว่าง
+→ Capacity ของ Morning = 3 งาน
 
-model TechnicianBlockedSlot {
-  id       String @id @default(cuid())
-  staffId  String
-  staff    User   @relation(fields: [staffId], references: [id])
-  date     String // "YYYY-MM-DD"
-  type     String // "Full Day" | "Morning" | "Afternoon"
-  reason   String?
-}
+ช่าง A block Morning, ช่าง B block Morning
+→ Capacity ของ Morning = 0 งาน
+→ ลูกบ้านจะเห็น slot เป็น OFF / No technician available
 ```
 
-#### ② เพิ่ม API Endpoints (server/server.js)
+### 4.3 ข้อจำกัดที่ยังมีอยู่
 
-```
-GET  /api/technician/availability      → return workingDays + blockedSlots ของช่างทุกคน
-POST /api/technician/availability      → save workingDays
-POST /api/technician/blocked-slots     → add blocked slot
-DELETE /api/technician/blocked-slots/:id → remove blocked slot
-```
-
-#### ③ แก้ TechnicianDashboard.tsx
-
-- ปุ่ม "Save Schedule" ต้อง call `POST /api/technician/availability`
-- โหลด workingDays + blockedSlots จาก DB แทน useState default
-
-#### ④ แก้ Tickets.tsx (User Calendar)
-
-- เพิ่ม `GET /api/technician/availability` เพื่อดึงข้อมูลว่างของช่าง
-- Disable วันที่ไม่ใช่ Working Days
-- Disable Slot ที่ถูก Block
-
-### 4.3 UX ที่คาดหวังหลัง Level 2
-
-```
-User เห็นปฏิทิน:
-  วันจันทร์–ศุกร์   → 🟢 ว่าง / 🟡 กำลังจอง
-  วันเสาร์–อาทิตย์  → ⬜ OFF (ช่างไม่ทำงาน, disabled)
-  วันที่ช่าง block  → 🔴 ไม่ว่าง (ลาพัก, disabled)
-```
+- ตอนนี้งานยังถูกสร้างเป็น pool ของ slot นั้น ยังไม่ได้ lock ว่า booking นี้เป็นของช่างคนไหน
+- เพราะฉะนั้นถ้ามีช่าง 2 คน และเหลือช่างว่างจริง 1 คน ระบบจะยังยอมรับงานได้ตาม capacity ของช่างที่เหลือ แต่ตอนปฏิบัติงานจริงยังต้องให้ช่าง claim/จัดการคิวกันต่อ
+- ถ้าต้องการความละเอียดมากขึ้นในอนาคต สามารถเพิ่ม auto-assignment หรือ load balancing ต่อช่างได้
 
 ---
 
@@ -175,7 +164,8 @@ User เห็นปฏิทิน:
 | Technician Calendar (UI) | ✅ เสร็จแล้ว | TechnicianDashboard.tsx |
 | Light/Dark Theme Toggle | ✅ เสร็จแล้ว | TechnicianDashboard.tsx |
 | AM/PM Slot Bars | ✅ เสร็จแล้ว | TechnicianDashboard.tsx |
-| User Mini Booking Calendar | ✅ เสร็จแล้ว (Level 1) | Tickets.tsx |
+| User Mini Booking Calendar | ✅ เสร็จแล้ว (Level 2) | Tickets.tsx |
 | Slot Capacity Indicator | ✅ เสร็จแล้ว | Tickets.tsx |
-| Save Availability to DB | ❌ ยังไม่ทำ (Level 2) | ต้องสร้างใหม่ |
-| User เห็น Off Day ของช่าง | ❌ ยังไม่ทำ (Level 2) | ต้องสร้างใหม่ |
+| Save Availability to DB | ✅ เสร็จแล้ว | TechnicianDashboard.tsx / server.js |
+| User เห็น Off Day ของช่าง | ✅ เสร็จแล้ว | Tickets.tsx / server.js |
+| Dynamic Capacity ตามจำนวนช่างที่ว่าง | ✅ เสร็จแล้ว | Tickets.tsx / server.js |

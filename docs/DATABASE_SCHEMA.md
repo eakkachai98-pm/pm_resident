@@ -62,3 +62,23 @@
 - `resolvedAt`: DateTime? (Nullable)
 - `scheduledDate`: String? (Nullable)
 - `scheduledSlot`: String? (Nullable)
+
+## 7. `TechnicianAvailability` (วันทำงานของช่าง)
+เก็บวันทำงานหลักของช่างแต่ละคน เพื่อให้ระบบปฏิทินและระบบจองรู้ว่าช่างคนนั้นทำงานวันไหน
+- `id`: String (CUID)
+- `staffId`: String (FK -> User, unique)
+- `workingDays`: String (JSON array เช่น `["Mon","Tue","Wed","Thu","Fri"]`)
+- `updatedAt`: DateTime
+
+## 8. `TechnicianBlockedSlot` (ช่วงเวลาที่ช่าง block ไว้)
+เก็บวันลา, วันหยุด, หรือช่วงเวลาที่ช่างไม่พร้อมรับงานเป็นรายคน
+- `id`: String (CUID)
+- `staffId`: String (FK -> User)
+- `date`: String (`YYYY-MM-DD`)
+- `type`: String (`Full Day`, `Morning`, `Afternoon`)
+- `reason`: String? (Nullable)
+
+## หมายเหตุเรื่องการจองหลายช่าง
+- ความจุของ slot ไม่ได้ fix ที่ 3 งานทั้งระบบอีกต่อไป
+- ระบบจะคำนวณ `capacity รวมของ slot = จำนวนช่างที่ว่างใน slot x 3`
+- ถ้าช่างบางคน block slot ไว้ จะลด capacity เฉพาะใน slot นั้นตามจำนวนช่างที่เหลือ
