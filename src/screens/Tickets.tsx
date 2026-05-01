@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Wrench, Plus, Search, X, ChevronRight, Home, User, Clock, Loader2, CheckCircle, Droplets, Zap, Wind, Star } from 'lucide-react';
+import { Wrench, Plus, Search, X, ChevronLeft, ChevronRight, Home, User, Clock, Loader2, CheckCircle, Droplets, Zap, Wind, Star, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useToast } from '../context/ToastContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -32,6 +32,7 @@ export default function Maintenance({
   const [scheduledSlot, setScheduledSlot] = useState('Morning');
   const [ratingValue, setRatingValue] = useState(0);
   const [hoveredStar, setHoveredStar] = useState(0);
+  const [pickerDate, setPickerDate] = useState(new Date());
 
   const fetchData = async () => {
     try {
@@ -140,6 +141,12 @@ export default function Maintenance({
   };
 
   if (loading) return <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-primary-brand" size={32} /></div>;
+
+  const pickerYear = pickerDate.getFullYear();
+  const pickerMonth = pickerDate.getMonth() + 1;
+  const pickerDaysInMonth = new Date(pickerYear, pickerMonth, 0).getDate();
+  const pickerFirstDay = new Date(pickerYear, pickerMonth - 1, 1).getDay();
+  const pickerMonthStr = `${pickerYear}-${pickerMonth.toString().padStart(2, '0')}`;
 
   return (
     <div className="space-y-6 md:space-y-8 font-sans">
@@ -311,17 +318,86 @@ export default function Maintenance({
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Preferred Date</label>
-                    <input type="date" required className="w-full bg-[#F4F6F8] border-none rounded-xl py-4 px-6 text-sm font-bold text-primary-brand" value={scheduledDate} onChange={(e) => setScheduledDate(e.target.value)} />
+                <div className="space-y-3">
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-1.5">
+                    <Calendar size={11}/> เลือกวันและ Slot ที่สะดวก
+                  </label>
+
+                  {/* Mini Calendar */}
+                  <div className="bg-[#F4F6F8] rounded-2xl p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <button type="button" onClick={()=>setPickerDate(d=>new Date(d.getFullYear(),d.getMonth()-1,1))} className="p-1.5 hover:bg-white rounded-lg transition-colors text-gray-400 hover:text-gray-700"><ChevronLeft size={15}/></button>
+                      <span className="text-sm font-bold text-gray-700">{pickerDate.toLocaleString('th-TH',{month:'long',year:'numeric'})}</span>
+                      <button type="button" onClick={()=>setPickerDate(d=>new Date(d.getFullYear(),d.getMonth()+1,1))} className="p-1.5 hover:bg-white rounded-lg transition-colors text-gray-400 hover:text-gray-700"><ChevronRight size={15}/></button>
+                    </div>
+                    <div className="grid grid-cols-7 gap-1 mb-2">
+                      {['อา','จ','อ','พ','พฤ','ศ','ส'].map((d,i)=>(
+                        <div key={d} className={`text-center text-[9px] font-bold pb-1 ${i===0||i===6?'text-red-400':'text-gray-400'}`}>{d}</div>
+                      ))}
+                    </div>
+                    <div className="grid grid-cols-7 gap-1">
+                      {Array.from({length:pickerFirstDay}).map((_,i)=><div key={`e-${i}`}/>)}
+                      {Array.from({length:pickerDaysInMonth},(_,i)=>i+1).map(date=>{
+                        const now=new Date(); now.setHours(0,0,0,0);
+                        const cell=new Date(pickerYear,pickerMonth-1,date);
+                        const isPast=cell<now;
+                        const fds=`${pickerMonthStr}-${date.toString().padStart(2,'0')}`;
+                        const isSel=scheduledDate===fds;
+                        const mc=tickets.filter((t:any)=>t.scheduledDate===fds&&t.scheduledSlot==='Morning').length;
+                        const ac=tickets.filter((t:any)=>t.scheduledDate===fds&&t.scheduledSlot==='Afternoon').length;
+                        const full=mc>=3&&ac>=3;
+                        let cls='bg-white text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 cursor-pointer border border-transparent hover:border-emerald-200';
+                        if(isSel) cls='bg-blue-500 text-white shadow-md shadow-blue-200';
+                        else if(isPast||full) cls='text-gray-300 cursor-not-allowed bg-transparent';
+                        else if(mc>=2||ac>=2) cls='bg-amber-50 text-amber-700 hover:bg-amber-100 cursor-pointer border border-amber-100';
+                        return (
+                          <button key={date} type="button" disabled={isPast||full} onClick={()=>setScheduledDate(fds)}
+                            className={`h-9 rounded-lg text-xs font-bold transition-all flex flex-col items-center justify-center gap-0.5 ${cls}`}
+                          >
+                            <span>{date}</span>
+                            {!isPast&&!isSel&&(
+                              <div className="flex gap-px">
+                                <span className={`w-1 h-1 rounded-full ${mc>=3?'bg-red-400':mc>=2?'bg-amber-400':'bg-emerald-400'}`}/>
+                                <span className={`w-1 h-1 rounded-full ${ac>=3?'bg-red-400':ac>=2?'bg-amber-400':'bg-emerald-400'}`}/>
+                              </div>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <div className="flex gap-5 mt-3 pt-3 border-t border-gray-200/60 justify-center">
+                      {[{c:'bg-emerald-400',l:'ว่าง'},{c:'bg-amber-400',l:'กำลังจอง'},{c:'bg-red-400',l:'เต็ม'}].map(({c,l})=>(
+                        <div key={l} className="flex items-center gap-1.5">
+                          <span className={`w-2 h-2 rounded-full ${c}`}/>
+                          <span className="text-[9px] text-gray-500 font-medium">{l}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Time Slot</label>
-                    <select className="w-full bg-[#F4F6F8] border-none rounded-xl py-4 px-6 text-sm font-bold text-primary-brand" value={scheduledSlot} onChange={(e) => setScheduledSlot(e.target.value)}>
-                      <option value="Morning">Morning (09:00 - 12:00)</option>
-                      <option value="Afternoon">Afternoon (13:00 - 17:00)</option>
-                    </select>
+
+                  {/* Slot Selector */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {(['Morning','Afternoon'] as const).map(slot=>{
+                      const cnt=scheduledDate?tickets.filter((t:any)=>t.scheduledDate===scheduledDate&&t.scheduledSlot===slot).length:null;
+                      const avail=cnt!==null?Math.max(0,3-cnt):null;
+                      const isFull=avail===0;
+                      const isAct=scheduledSlot===slot;
+                      return (
+                        <button key={slot} type="button" disabled={!!isFull} onClick={()=>setScheduledSlot(slot)}
+                          className={`p-3 rounded-xl border-2 text-left transition-all ${isAct?'border-blue-500 bg-blue-50':isFull?'border-gray-100 bg-gray-50 opacity-50 cursor-not-allowed':'border-gray-200 bg-white hover:border-blue-300 hover:bg-blue-50/30'}`}
+                        >
+                          <p className={`text-xs font-bold ${isAct?'text-blue-700':isFull?'text-gray-400':'text-gray-700'}`}>
+                            {slot==='Morning'?'☀️ เช้า 09:00–12:00':'🌤 บ่าย 13:00–17:00'}
+                          </p>
+                          {avail!==null&&(
+                            <p className={`text-[10px] mt-1 font-bold ${isFull?'text-red-400':avail<=1?'text-amber-500':'text-emerald-500'}`}>
+                              {isFull?'เต็มแล้ว':`ว่างอีก ${avail} จาก 3 slot`}
+                            </p>
+                          )}
+                          {avail===null&&<p className="text-[10px] mt-1 text-gray-400">เลือกวันก่อน</p>}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 

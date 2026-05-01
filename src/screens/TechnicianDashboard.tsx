@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Wrench, AlertTriangle, CheckCircle, Search, QrCode, Play, Check, Package, FileText, ChevronDown, History, X, Home, ClipboardList, Calendar, Settings as SettingsIcon, Clock, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Wrench, AlertTriangle, CheckCircle, Search, QrCode, Play, Check, Package, FileText, ChevronDown, History, X, Home, ClipboardList, Calendar, Settings as SettingsIcon, Clock, Trash2, ChevronLeft, ChevronRight, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { api } from '../services/api';
 import { Asset, Ticket, Personnel } from '../types';
@@ -45,6 +45,7 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
   const [resolvingTicketId, setResolvingTicketId] = useState<string | null>(null);
   const [resolutionNotes, setResolutionNotes] = useState('');
   const [resolutionImage, setResolutionImage] = useState<string | null>(null);
+  const [calDark, setCalDark] = useState(true);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -314,240 +315,192 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         <div className="md:col-span-12 space-y-8">
-          
-          {/* Smart Calendar Section (NEW - Monthly Hybrid) */}
-          <section className="bg-white rounded-[2rem] border border-gray-200/50 shadow-sm overflow-hidden mb-8">
-            <div className="px-8 py-6 border-b border-gray-50 flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-emerald-50/30">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-emerald-100 text-emerald-600 rounded-xl"><Calendar size={20} /></div>
+          {/* ── Premium Calendar ── */}
+          <section className={`rounded-[2rem] overflow-hidden shadow-xl border mb-2 transition-all duration-500 ${calDark?'border-white/10':'border-gray-200/60 shadow-gray-200/60'}`} style={{background:calDark?'linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#0f2027 100%)':'#ffffff'}}>
+            {/* Header */}
+            <div className="px-8 py-6 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-2xl" style={{background:'rgba(52,211,153,0.15)',border:'1px solid rgba(52,211,153,0.25)'}}>
+                  <Calendar size={22} className="text-emerald-400" />
+                </div>
                 <div>
-                  <h2 className="text-lg font-bold text-[#111827]">Monthly Booking Schedule</h2>
-                  <div className="flex items-center gap-3 mt-1">
-                    <button onClick={prevMonth} className="p-1 hover:bg-emerald-200/50 rounded-md transition-colors"><ChevronLeft size={14} className="text-emerald-700" /></button>
-                    <p className="text-xs text-gray-500 font-medium min-w-[100px] text-center">{monthName} {currentYear}</p>
-                    <button onClick={nextMonth} className="p-1 hover:bg-emerald-200/50 rounded-md transition-colors"><ChevronRight size={14} className="text-emerald-700" /></button>
-                  </div>
+                  <h2 className="text-lg font-extrabold tracking-tight transition-colors" style={{color:calDark?'#ffffff':'#111827'}}>Monthly Schedule</h2>
+                  <p className="text-xs font-medium mt-0.5 transition-colors" style={{color:calDark?'#94a3b8':'#6b7280'}}>ตารางงานประจำเดือน</p>
                 </div>
               </div>
-              <button onClick={() => setShowScheduleSettings(true)} className="px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-all text-xs font-bold flex items-center gap-2 shadow-sm whitespace-nowrap">
-                <SettingsIcon size={14} /> Set Availability
-              </button>
+              <div className="flex items-center gap-3">
+                <button onClick={()=>setCalDark(d=>!d)} title={calDark?'Switch to Light':'Switch to Dark'} className="p-2.5 rounded-xl transition-all duration-300 hover:scale-105" style={{background:calDark?'rgba(255,255,255,0.08)':'#f3f4f6',border:calDark?'1px solid rgba(255,255,255,0.15)':'1px solid #e5e7eb'}}>
+                  {calDark ? <Sun size={15} color="#fcd34d"/> : <Moon size={15} color="#6366f1"/>}
+                </button>
+                <div className="flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-300" style={{background:calDark?'rgba(255,255,255,0.07)':'#f3f4f6',border:calDark?'1px solid rgba(255,255,255,0.1)':'1px solid #e5e7eb'}}>
+                  <button onClick={prevMonth} className="p-1.5 rounded-lg transition-colors" style={{color:calDark?'#94a3b8':'#6b7280'}}><ChevronLeft size={16}/></button>
+                  <span className="text-sm font-bold min-w-[110px] text-center transition-colors" style={{color:calDark?'#ffffff':'#111827'}}>{monthName} {currentYear}</span>
+                  <button onClick={nextMonth} className="p-1.5 rounded-lg transition-colors" style={{color:calDark?'#94a3b8':'#6b7280'}}><ChevronRight size={16}/></button>
+                </div>
+                <button onClick={() => setShowScheduleSettings(true)} className="px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all hover:scale-[1.02]" style={{background:calDark?'rgba(255,255,255,0.08)':'#f9fafb',border:calDark?'1px solid rgba(255,255,255,0.12)':'1px solid #e5e7eb',color:calDark?'#cbd5e1':'#374151'}}>
+                  <SettingsIcon size={14}/> Availability
+                </button>
+              </div>
             </div>
-            
-            <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
-              {/* Monthly Overview */}
-              <div className="flex-1 p-6 md:p-8">
-                <div className="grid grid-cols-7 gap-2 mb-4">
-                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
-                    <div key={d} className="text-center text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">{d}</div>
+
+            {/* Legend */}
+            <div className="px-8 pb-4 flex flex-wrap gap-4">
+            <div className="px-8 pb-4 flex flex-wrap gap-5">
+              <div className="flex items-center gap-2">
+                <div className="flex gap-0.5"><span className="w-4 h-1.5 rounded-sm bg-emerald-500"/><span className="w-4 h-1.5 rounded-sm bg-emerald-500"/></div>
+                <span className="text-[10px] font-medium transition-colors" style={{color:calDark?'#94a3b8':'#6b7280'}}>ว่าง (AM/PM)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="flex gap-0.5"><span className="w-4 h-1.5 rounded-sm bg-blue-500"/><span className="w-4 h-1.5 rounded-sm bg-emerald-500"/></div>
+                <span className="text-[10px] font-medium transition-colors" style={{color:calDark?'#94a3b8':'#6b7280'}}>งานของฉัน</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400"/>
+                <span className="text-[10px] font-medium transition-colors" style={{color:calDark?'#94a3b8':'#6b7280'}}>Pool รออยู่</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="flex gap-0.5"><span className="w-4 h-1.5 rounded-sm" style={{background:'#4b5563'}}/><span className="w-4 h-1.5 rounded-sm" style={{background:'#4b5563'}}/></div>
+                <span className="text-[10px] font-medium transition-colors" style={{color:calDark?'#94a3b8':'#6b7280'}}>วันหยุด/ล็อค</span>
+              </div>
+            </div>
+            </div>
+
+            {/* Body */}
+            <div className="flex flex-col lg:flex-row transition-all duration-300" style={{borderTop:calDark?'1px solid rgba(255,255,255,0.06)':'1px solid #f3f4f6'}}>
+              {/* Grid */}
+              <div className="flex-1 p-6">
+                <div className="grid grid-cols-7 gap-1.5 mb-3">
+                  {['อา','จ','อ','พ','พฤ','ศ','ส'].map((d,i)=>(
+                    <div key={d} className="text-center text-[10px] font-bold uppercase tracking-wider pb-1 transition-colors" style={{color:i===0||i===6?(calDark?'#f87171':'#dc2626'):(calDark?'#64748b':'#9ca3af')}}>{d}</div>
                   ))}
                 </div>
-                <div className="grid grid-cols-7 gap-2 md:gap-3">
-                  {/* Empty slots before first day */}
-                  {Array.from({length: firstDayOfMonth}).map((_, i) => <div key={`empty-${i}`} className="h-12 md:h-16"></div>)}
-                  
-                  {Array.from({length: daysInMonth}, (_, i) => i + 1).map(date => {
-                    const dayIndex = (date + firstDayOfMonth - 1) % 7; // 0=Sun, 1=Mon, ..., 6=Sat
-                    const dayStr = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dayIndex];
-                    const isOffDay = !workingDays.includes(dayStr);
-                    const isSelected = selectedDate === date;
-                    
-                    const morningBlocks = blockedSlots.filter(b => {
-                      const [y, m, d] = b.date.split('-');
-                      const dateObj = new Date(parseInt(y), parseInt(m)-1, parseInt(d));
-                      return dateObj.getDate() === date && (b.type === 'Full Day' || b.type === 'Morning');
-                    });
-                    const afternoonBlocks = blockedSlots.filter(b => {
-                      const [y, m, d] = b.date.split('-');
-                      const dateObj = new Date(parseInt(y), parseInt(m)-1, parseInt(d));
-                      return dateObj.getDate() === date && (b.type === 'Full Day' || b.type === 'Afternoon');
-                    });
-
-                    const isMorningBlocked = isOffDay || morningBlocks.length > 0;
-                    const isAfternoonBlocked = isOffDay || afternoonBlocks.length > 0;
-
-                    // Actual Data
-                    const fullDateStr = `${currentMonthStr}-${date.toString().padStart(2, '0')}`;
-                    
-                    const mUnassigned = unassignedPool.filter(t => t.scheduledDate === fullDateStr && t.scheduledSlot === 'Morning');
-                    const aUnassigned = unassignedPool.filter(t => t.scheduledDate === fullDateStr && t.scheduledSlot === 'Afternoon');
-                    const mMyTasks = myTasks.filter(t => t.scheduledDate === fullDateStr && t.scheduledSlot === 'Morning');
-                    const aMyTasks = myTasks.filter(t => t.scheduledDate === fullDateStr && t.scheduledSlot === 'Afternoon');
-
-                    const hasMorningMyTask = mMyTasks.some(t => t.status !== 'RESOLVED') && !isMorningBlocked;
-                    const hasAfternoonMyTask = aMyTasks.some(t => t.status !== 'RESOLVED') && !isAfternoonBlocked;
-                    const hasMorningCompletedTask = mMyTasks.some(t => t.status === 'RESOLVED') && !isMorningBlocked;
-                    const hasAfternoonCompletedTask = aMyTasks.some(t => t.status === 'RESOLVED') && !isAfternoonBlocked;
-                    const hasMorningUnassigned = mUnassigned.length > 0 && !isMorningBlocked;
-                    const hasAfternoonUnassigned = aUnassigned.length > 0 && !isAfternoonBlocked;
-
+                        <div className="grid grid-cols-7 gap-1.5">
+                  {Array.from({length: firstDayOfMonth}).map((_,i)=><div key={`e-${i}`}/>)}
+                   {Array.from({length: daysInMonth},(_,i)=>i+1).map(date=>{
+                    const today = new Date();
+                    const isToday = date===today.getDate()&&currentMonth===today.getMonth()+1&&currentYear===today.getFullYear();
+                    const dayIndex=(date+firstDayOfMonth-1)%7;
+                    const dayStr=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dayIndex];
+                    const isOff=!workingDays.includes(dayStr);
+                    const isSelected=selectedDate===date;
+                    const fullDateStr=`${currentMonthStr}-${date.toString().padStart(2,'0')}`;
+                    const mBlocked=blockedSlots.some(b=>{const[y,m,d]=b.date.split('-');return new Date(+y,+m-1,+d).getDate()===date&&(b.type==='Full Day'||b.type==='Morning');});
+                    const aBlocked=blockedSlots.some(b=>{const[y,m,d]=b.date.split('-');return new Date(+y,+m-1,+d).getDate()===date&&(b.type==='Full Day'||b.type==='Afternoon');});
+                    const isMorningBlocked=isOff||mBlocked;
+                    const isAfternoonBlocked=isOff||aBlocked;
+                    const allBlocked=isMorningBlocked&&isAfternoonBlocked;
+                    // Per-slot task counts
+                    const mTaskCount=myTasks.filter(t=>t.scheduledDate===fullDateStr&&t.scheduledSlot==='Morning'&&t.status!=='RESOLVED').length;
+                    const aTaskCount=myTasks.filter(t=>t.scheduledDate===fullDateStr&&t.scheduledSlot==='Afternoon'&&t.status!=='RESOLVED').length;
+                    const mPoolCount=unassignedPool.filter(t=>t.scheduledDate===fullDateStr&&t.scheduledSlot==='Morning').length;
+                    const aPoolCount=unassignedPool.filter(t=>t.scheduledDate===fullDateStr&&t.scheduledSlot==='Afternoon').length;
+                    const hasPool=(mPoolCount+aPoolCount)>0;
+                    const isWeekend=dayIndex===0||dayIndex===6;
+                    const isFullyAvailable=!allBlocked&&mTaskCount===0&&aTaskCount===0;
+                    // Slot bar colors: green=free, blue=my task, amber=pool, gray=blocked
+                    const mBar=isMorningBlocked?'#374151':mTaskCount>0?'#3b82f6':mPoolCount>0?'#f59e0b':'#10b981';
+                    const aBar=isAfternoonBlocked?'#374151':aTaskCount>0?'#3b82f6':aPoolCount>0?'#f59e0b':'#10b981';
+                    let bg=calDark?'rgba(255,255,255,0.04)':'#f9fafb', border=calDark?'rgba(255,255,255,0.07)':'#e5e7eb', textColor=isWeekend?(calDark?'#f87171':'#dc2626'):(calDark?'#94a3b8':'#374151');
+                    if(isSelected){bg='#3b82f6';border='#60a5fa';textColor='#fff';}
+                    else if(allBlocked){bg=calDark?'rgba(255,255,255,0.02)':'#f3f4f6';border=calDark?'rgba(255,255,255,0.04)':'#e9ecef';textColor=calDark?'#334155':'#d1d5db';}
+                    else if(isToday){bg='rgba(99,102,241,0.2)';border='#6366f1';textColor='#a5b4fc';}
+                    else if(isFullyAvailable){bg=calDark?'rgba(16,185,129,0.07)':'rgba(16,185,129,0.05)';border=calDark?'rgba(16,185,129,0.22)':'rgba(16,185,129,0.3)';}
                     return (
-                      <button 
-                        key={date} 
-                        onClick={() => setSelectedDate(date)} 
-                        className={`h-12 md:h-16 rounded-xl border flex flex-col items-center justify-center relative transition-all 
-                          ${isSelected ? 'bg-[#111827] text-white border-[#111827] shadow-md shadow-gray-900/20 hover:scale-[1.02]' 
-                            : (isMorningBlocked && isAfternoonBlocked) ? 'bg-gray-50 border-transparent text-gray-400 border-dashed' 
-                            : 'bg-white border-gray-100 text-gray-700 hover:border-primary-brand/30 hover:bg-blue-50/30'}`}
+                      <motion.button key={date} onClick={()=>setSelectedDate(date)}
+                        whileHover={{scale:allBlocked?1:1.05}} whileTap={{scale:0.97}}
+                        className="relative h-12 md:h-14 rounded-xl flex flex-col items-center justify-center transition-all duration-150"
+                        style={{background:bg,border:`1px solid ${border}`}}
                       >
-                        <span className={`text-sm md:text-base font-bold ${isSelected ? 'text-white' : ''}`}>{date}</span>
-                        <div className="flex gap-1 mt-1">
-                          {hasMorningCompletedTask && <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-emerald-500'}`} title="Morning Completed"></span>}
-                          {hasMorningMyTask && <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-blue-500'}`} title="My Morning Task"></span>}
-                          {hasMorningUnassigned && !hasMorningMyTask && !hasMorningCompletedTask && <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-amber-500'}`} title="Unassigned Morning"></span>}
-                          
-                          {hasAfternoonCompletedTask && <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-emerald-500'}`} title="Afternoon Completed"></span>}
-                          {hasAfternoonMyTask && <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-blue-500'}`} title="My Afternoon Task"></span>}
-                          {hasAfternoonUnassigned && !hasAfternoonMyTask && !hasAfternoonCompletedTask && <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-amber-500'}`} title="Unassigned Afternoon"></span>}
-                          
-                          {(isMorningBlocked && isAfternoonBlocked) && !hasMorningMyTask && !hasAfternoonMyTask && !hasMorningCompletedTask && !hasAfternoonCompletedTask && !hasMorningUnassigned && !hasAfternoonUnassigned && <span className={`text-[8px] font-bold uppercase mt-1 ${isSelected ? 'text-gray-300' : 'text-gray-400'}`}>OFF</span>}
-                          {((isMorningBlocked && !isAfternoonBlocked) || (!isMorningBlocked && isAfternoonBlocked)) && <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-red-400'}`} title="Partially Blocked"></span>}
-                        </div>
-                      </button>
+                        {isToday&&!isSelected&&<span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-indigo-400"/>}
+                        {hasPool&&!isSelected&&<span className="absolute top-1 left-1 w-1.5 h-1.5 rounded-full bg-amber-400"/>}
+                        <span className="text-sm font-bold" style={{color:textColor}}>{date}</span>
+                        {!allBlocked ? (
+                          <div className="flex gap-0.5 mt-1">
+                            <span className="w-3.5 h-1 rounded-sm transition-colors" style={{background:isSelected?'rgba(255,255,255,0.5)':mBar}} title="Morning"/>
+                            <span className="w-3.5 h-1 rounded-sm transition-colors" style={{background:isSelected?'rgba(255,255,255,0.5)':aBar}} title="Afternoon"/>
+                          </div>
+                        ) : (
+                          <span className="text-[7px] font-bold mt-0.5" style={{color:isSelected?'#fff':calDark?'#334155':'#d1d5db'}}>OFF</span>
+                        )}
+                      </motion.button>
                     );
                   })}
                 </div>
               </div>
 
-              {/* Daily Detail Pane */}
-              <div className="w-full lg:w-[350px] bg-gray-50/50 p-6 md:p-8 flex flex-col">
-                 <h3 className="text-sm font-extrabold text-[#111827] mb-6 flex items-center gap-2"><Calendar size={16}/> Details for {monthName} {selectedDate}</h3>
-                 
-                 <div className="space-y-4 flex-1">
-                    {/* Morning Slot Detail */}
-                    <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-3 min-h-[140px]">
-                      <span className="text-[10px] font-bold text-gray-400 uppercase flex items-center gap-1"><Clock size={12} /> 09:00 - 12:00</span>
-                      {(() => {
-                        const dayIndex = (selectedDate + firstDayOfMonth - 1) % 7;
-                        const dayStr = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dayIndex];
-                        const isOffDay = !workingDays.includes(dayStr);
-                        const mBlocks = blockedSlots.filter(b => {
-                          const [y, m, d] = b.date.split('-');
-                          const dateObj = new Date(parseInt(y), parseInt(m)-1, parseInt(d));
-                          return dateObj.getDate() === selectedDate && (b.type === 'Full Day' || b.type === 'Morning');
-                        });
-                        const blocked = isOffDay || mBlocks.length > 0;
+              {/* Daily Detail */}
+              <div className="w-full lg:w-[340px] flex flex-col transition-all duration-300" style={{borderLeft:calDark?'1px solid rgba(255,255,255,0.06)':'1px solid #f3f4f6'}}>
+                <div className="px-6 py-4 flex items-center gap-3" style={{borderBottom:calDark?'1px solid rgba(255,255,255,0.06)':'1px solid #f3f4f6',background:calDark?'transparent':'#fafafa'}}>
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center text-sm font-extrabold transition-colors" style={{background:calDark?'rgba(52,211,153,0.12)':'rgba(16,185,129,0.1)',color:calDark?'#34d399':'#059669'}}>{selectedDate}</div>
+                  <div>
+                    <p className="text-sm font-bold transition-colors" style={{color:calDark?'#ffffff':'#111827'}}>{monthName} {selectedDate}</p>
+                    <p className="text-[10px] font-medium transition-colors" style={{color:calDark?'#475569':'#9ca3af'}}>รายละเอียดงานวันนี้</p>
+                  </div>
+                </div>
 
-                        const fullDateStr = `${currentMonthStr}-${selectedDate.toString().padStart(2, '0')}`;
-                        const mMyTasks = myTasks.filter(t => t.scheduledDate === fullDateStr && t.scheduledSlot === 'Morning');
-                        const mUnassigned = unassignedPool.filter(t => t.scheduledDate === fullDateStr && t.scheduledSlot === 'Morning');
+                <div className="flex-1 p-5 space-y-4 overflow-y-auto custom-scrollbar" style={{maxHeight:'380px'}}>
+                  {(['Morning','Afternoon'] as const).map(slot=>{
+                    const label = slot==='Morning'?'☀️ เช้า  09:00–12:00':'🌤 บ่าย  13:00–17:00';
+                    const dayIndex=(selectedDate+firstDayOfMonth-1)%7;
+                    const dayStr=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dayIndex];
+                    const isOff=!workingDays.includes(dayStr);
+                    const blocks=blockedSlots.filter(b=>{const[y,m,d]=b.date.split('-');return new Date(+y,+m-1,+d).getDate()===selectedDate&&(b.type==='Full Day'||b.type===slot);});
+                    const blocked=isOff||blocks.length>0;
+                    const fullDateStr=`${currentMonthStr}-${selectedDate.toString().padStart(2,'0')}`;
+                    const slotMyTasks=myTasks.filter(t=>t.scheduledDate===fullDateStr&&t.scheduledSlot===slot);
+                    const slotPool=unassignedPool.filter(t=>t.scheduledDate===fullDateStr&&t.scheduledSlot===slot);
 
-                        if (blocked) {
-                          return (
-                            <div className="flex-1 flex flex-col items-center justify-center p-3 bg-red-50/50 rounded-xl border border-red-100 border-dashed">
-                               <span className="text-xs font-bold text-red-400 uppercase">Blocked</span>
-                               {mBlocks[0]?.reason && <span className="text-[10px] font-medium text-red-300 mt-1 text-center">{mBlocks[0].reason}</span>}
-                             </div>
-                          );
-                        }
-
-                        if (mMyTasks.length > 0) {
-                          return (
-                            <div className="flex flex-col gap-2">
-                              {mMyTasks.map(t => (
-                                <div key={t.id} onClick={() => setSelectedTaskDetail(t)} className={`p-3 border rounded-xl cursor-pointer hover:ring-2 transition-all ${t.status === 'RESOLVED' ? 'bg-green-50 border-green-100 hover:ring-green-200' : 'bg-blue-50 border-blue-100 hover:ring-blue-200'}`}>
-                                  <div className="flex justify-between items-start mb-1">
-                                    <p className={`text-xs font-bold flex items-center gap-1 ${t.status === 'RESOLVED' ? 'text-green-800' : 'text-blue-800'}`}><Home size={12}/> {t.room?.roomNumber ? `Room ${t.room.roomNumber}` : 'Room'}</p>
-                                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase ${t.status === 'RESOLVED' ? 'bg-green-200 text-green-800' : 'bg-blue-200 text-blue-800'}`}>{t.status === 'RESOLVED' ? 'Done' : 'My Task'}</span>
-                                  </div>
-                                  <p className={`text-[10px] font-medium line-clamp-2 mt-1 ${t.status === 'RESOLVED' ? 'text-green-600' : 'text-blue-600'}`}>{t.title}</p>
-                                </div>
-                              ))}
+                    return (
+                      <div key={slot} className="rounded-2xl overflow-hidden transition-all duration-300" style={{border:calDark?'1px solid rgba(255,255,255,0.08)':'1px solid #e5e7eb'}}>
+                        <div className="px-4 py-2.5 flex items-center justify-between" style={{background:calDark?'rgba(255,255,255,0.05)':'#f9fafb'}}>
+                          <span className="text-[11px] font-bold transition-colors" style={{color:calDark?'#cbd5e1':'#374151'}}>{label}</span>
+                          {blocked
+                            ? <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase" style={{background:'rgba(248,113,113,0.15)',color:'#f87171',border:'1px solid rgba(248,113,113,0.2)'}}>Blocked</span>
+                            : slotMyTasks.length>0
+                              ? <span className="px-2 py-0.5 rounded-full text-[9px] font-bold" style={{background:'rgba(59,130,246,0.15)',color:'#93c5fd',border:'1px solid rgba(59,130,246,0.2)'}}>{slotMyTasks.length} งาน</span>
+                              : slotPool.length>0
+                                ? <span className="px-2 py-0.5 rounded-full text-[9px] font-bold" style={{background:'rgba(245,158,11,0.15)',color:'#fcd34d',border:'1px solid rgba(245,158,11,0.2)'}}>{slotPool.length} pool</span>
+                                : <span className="px-2 py-0.5 rounded-full text-[9px] font-bold" style={{background:'rgba(16,185,129,0.12)',color:'#6ee7b7',border:'1px solid rgba(16,185,129,0.15)'}}>ว่าง</span>
+                          }
+                        </div>
+                        <div className="p-3 space-y-2 min-h-[70px]">
+                          {blocked ? (
+                            <div className="flex items-center justify-center h-10">
+                              <span className="text-[11px] transition-colors" style={{color:calDark?'#475569':'#9ca3af'}}>{blocks[0]?.reason||'วันหยุด / ล็อคไว้'}</span>
                             </div>
-                          );
-                        }
-
-                        if (mUnassigned.length > 0) {
-                          return (
-                            <div className="flex flex-col gap-2">
-                              {mUnassigned.map(t => (
-                                <div key={t.id} onClick={() => setSelectedTaskDetail(t)} className="p-3 bg-amber-50 border border-amber-100 rounded-xl cursor-pointer hover:ring-2 hover:ring-amber-200 transition-all relative overflow-hidden">
-                                  <div className="absolute top-0 right-0 w-1.5 h-full bg-amber-400"></div>
-                                  <div className="flex justify-between items-start mb-1">
-                                    <p className="text-xs font-bold text-amber-800 flex items-center gap-1"><Home size={12}/> {t.room?.roomNumber ? `Room ${t.room.roomNumber}` : 'Room'}</p>
-                                  </div>
-                                  <p className="text-[10px] font-medium text-amber-600 line-clamp-2 mt-1">{t.title}</p>
-                                  <div className="mt-3 flex items-center justify-between">
-                                    <span className="px-2 py-1 bg-amber-200 text-amber-800 rounded text-[9px] font-extrabold uppercase shadow-sm">Pool</span>
-                                    <button onClick={(e) => { e.stopPropagation(); handleClaimTask(t.id); }} className="px-2 py-1 bg-white text-amber-700 text-[9px] font-bold rounded shadow-sm border border-amber-200 hover:bg-amber-100">Claim</button>
-                                  </div>
-                                </div>
-                              ))}
+                          ) : slotMyTasks.length>0 ? slotMyTasks.map(t=>(
+                            <div key={t.id} onClick={()=>setSelectedTaskDetail(t)}
+                              className="p-3 rounded-xl cursor-pointer transition-all hover:scale-[1.01]"
+                              style={{background:t.status==='RESOLVED'?'rgba(16,185,129,0.1)':'rgba(59,130,246,0.1)',border:t.status==='RESOLVED'?'1px solid rgba(16,185,129,0.2)':'1px solid rgba(59,130,246,0.2)'}}
+                            >
+                              <div className="flex justify-between items-center mb-1">
+                                <span className="text-[10px] font-bold flex items-center gap-1" style={{color:t.status==='RESOLVED'?'#6ee7b7':'#93c5fd'}}><Home size={10}/> ห้อง {t.room?.roomNumber||'–'}</span>
+                                <span className="text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded" style={{background:t.status==='RESOLVED'?'rgba(16,185,129,0.2)':'rgba(59,130,246,0.2)',color:t.status==='RESOLVED'?'#34d399':'#60a5fa'}}>{t.status==='RESOLVED'?'Done':'Active'}</span>
+                              </div>
+                              <p className="text-[10px] text-slate-400 line-clamp-1">{t.title}</p>
                             </div>
-                          );
-                        }
-                        
-                        return <div className="flex-1 flex items-center justify-center"><span className="text-xs font-bold text-gray-300">Available</span></div>;
-                      })()}
-                    </div>
-
-                    {/* Afternoon Slot Detail */}
-                    <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-3 min-h-[140px] max-h-[250px] overflow-y-auto custom-scrollbar">
-                      <span className="text-[10px] font-bold text-gray-400 uppercase flex items-center gap-1"><Clock size={12} /> 13:00 - 17:00</span>
-                      {(() => {
-                        const dayIndex = (selectedDate + firstDayOfMonth - 1) % 7;
-                        const dayStr = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dayIndex];
-                        const isOffDay = !workingDays.includes(dayStr);
-                        const aBlocks = blockedSlots.filter(b => {
-                          const [y, m, d] = b.date.split('-');
-                          const dateObj = new Date(parseInt(y), parseInt(m)-1, parseInt(d));
-                          return dateObj.getDate() === selectedDate && (b.type === 'Full Day' || b.type === 'Afternoon');
-                        });
-                        const blocked = isOffDay || aBlocks.length > 0;
-
-                        const fullDateStr = `${currentMonthStr}-${selectedDate.toString().padStart(2, '0')}`;
-                        const aMyTasks = myTasks.filter(t => t.scheduledDate === fullDateStr && t.scheduledSlot === 'Afternoon');
-                        const aUnassigned = unassignedPool.filter(t => t.scheduledDate === fullDateStr && t.scheduledSlot === 'Afternoon');
-
-                        if (blocked) {
-                          return (
-                            <div className="flex-1 flex flex-col items-center justify-center p-3 bg-red-50/50 rounded-xl border border-red-100 border-dashed">
-                               <span className="text-xs font-bold text-red-400 uppercase">Blocked</span>
-                               {aBlocks[0]?.reason && <span className="text-[10px] font-medium text-red-300 mt-1 text-center">{aBlocks[0].reason}</span>}
-                             </div>
-                          );
-                        }
-
-                        if (aMyTasks.length > 0) {
-                          return (
-                            <div className="flex flex-col gap-2">
-                              {aMyTasks.map(t => (
-                                <div key={t.id} onClick={() => setSelectedTaskDetail(t)} className={`p-3 border rounded-xl cursor-pointer hover:ring-2 transition-all ${t.status === 'RESOLVED' ? 'bg-green-50 border-green-100 hover:ring-green-200' : 'bg-blue-50 border-blue-100 hover:ring-blue-200'}`}>
-                                  <div className="flex justify-between items-start mb-1">
-                                    <p className={`text-xs font-bold flex items-center gap-1 ${t.status === 'RESOLVED' ? 'text-green-800' : 'text-blue-800'}`}><Home size={12}/> {t.room?.roomNumber ? `Room ${t.room.roomNumber}` : 'Room'}</p>
-                                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase ${t.status === 'RESOLVED' ? 'bg-green-200 text-green-800' : 'bg-blue-200 text-blue-800'}`}>{t.status === 'RESOLVED' ? 'Done' : 'My Task'}</span>
-                                  </div>
-                                  <p className={`text-[10px] font-medium line-clamp-2 mt-1 ${t.status === 'RESOLVED' ? 'text-green-600' : 'text-blue-600'}`}>{t.title}</p>
-                                </div>
-                              ))}
+                          )) : slotPool.length>0 ? slotPool.map(t=>(
+                            <div key={t.id} onClick={()=>setSelectedTaskDetail(t)}
+                              className="p-3 rounded-xl cursor-pointer transition-all hover:scale-[1.01] relative overflow-hidden"
+                              style={{background:'rgba(245,158,11,0.08)',border:'1px solid rgba(245,158,11,0.18)'}}
+                            >
+                              <div className="absolute left-0 top-0 w-1 h-full" style={{background:'#f59e0b'}}/>
+                              <div className="pl-2 flex justify-between items-center mb-1">
+                                <span className="text-[10px] font-bold text-amber-300 flex items-center gap-1"><Home size={10}/> ห้อง {t.room?.roomNumber||'–'}</span>
+                                <button onClick={e=>{e.stopPropagation();handleClaimTask(t.id);}} className="text-[8px] font-bold px-2 py-1 rounded-lg transition-colors hover:bg-amber-400/20" style={{color:'#fcd34d',border:'1px solid rgba(245,158,11,0.3)'}}>Claim</button>
+                              </div>
+                              <p className="pl-2 text-[10px] text-slate-400 line-clamp-1">{t.title}</p>
                             </div>
-                          );
-                        }
-
-                        if (aUnassigned.length > 0) {
-                          return (
-                            <div className="flex flex-col gap-2">
-                              {aUnassigned.map(t => (
-                                <div key={t.id} onClick={() => setSelectedTaskDetail(t)} className="p-3 bg-amber-50 border border-amber-100 rounded-xl cursor-pointer hover:ring-2 hover:ring-amber-200 transition-all relative overflow-hidden">
-                                  <div className="absolute top-0 right-0 w-1.5 h-full bg-amber-400"></div>
-                                  <div className="flex justify-between items-start mb-1">
-                                    <p className="text-xs font-bold text-amber-800 flex items-center gap-1"><Home size={12}/> {t.room?.roomNumber ? `Room ${t.room.roomNumber}` : 'Room'}</p>
-                                  </div>
-                                  <p className="text-[10px] font-medium text-amber-600 line-clamp-2 mt-1">{t.title}</p>
-                                  <div className="mt-3 flex items-center justify-between">
-                                    <span className="px-2 py-1 bg-amber-200 text-amber-800 rounded text-[9px] font-extrabold uppercase shadow-sm">Pool</span>
-                                    <button onClick={(e) => { e.stopPropagation(); handleClaimTask(t.id); }} className="px-2 py-1 bg-white text-amber-700 text-[9px] font-bold rounded shadow-sm border border-amber-200 hover:bg-amber-100">Claim</button>
-                                  </div>
-                                </div>
-                              ))}
+                          )) : (
+                            <div className="flex items-center justify-center h-10">
+                              <span className="text-[11px] transition-colors" style={{color:calDark?'#475569':'#9ca3af'}}>ว่าง — ไม่มีงาน</span>
                             </div>
-                          );
-                        }
-
-                        return <div className="flex-1 flex items-center justify-center"><span className="text-xs font-bold text-gray-300">Available</span></div>;
-                      })()}
-                    </div>
-                 </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </section>
