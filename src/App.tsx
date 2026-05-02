@@ -22,6 +22,7 @@ import Tickets from './screens/Tickets';
 import Login from './screens/Login';
 import SettingsScreen from './screens/Settings';
 import Billing from './screens/Billing';
+import ProfileScreen from './screens/Profile';
 
 // --- Components ---
 
@@ -53,6 +54,7 @@ const Sidebar = ({
       { id: 'personnel', label: t('sidebar.personnel'), icon: Users, roles: ['admin'] },
       { id: 'billing', label: t('sidebar.billing'), icon: Zap, roles: ['admin'] },
       { id: 'tickets', label: t('sidebar.tickets'), icon: TicketIcon, roles: ['user', 'staff', 'admin'] },
+      { id: 'profile', label: t('sidebar.profile'), icon: User, roles: ['user'] },
       { id: 'settings', label: t('sidebar.settings'), icon: Settings, roles: ['admin'] },
     ];
     return allItems.filter(item => item.roles.includes(role));
@@ -490,6 +492,7 @@ export default function App() {
                 {currentScreen === 'inventory' && <Inventory setHeaderAction={setHeaderAction} user={currentUser} onSelectAsset={handleSelectAsset} />}
                 {currentScreen === 'personnel' && (role !== 'user' ? <PersonnelScreen setHeaderAction={setHeaderAction} user={currentUser} /> : <AccessDenied />)}
                 {currentScreen === 'billing' && (role !== 'user' ? <Billing setHeaderAction={setHeaderAction} user={currentUser} /> : <AccessDenied />)}
+                {currentScreen === 'profile' && (role === 'user' ? <ProfileScreen user={currentUser} /> : <AccessDenied />)}
                 {currentScreen === 'tickets' && <Tickets initialTicketId={selectedTicketId} setHeaderAction={setHeaderAction} onSelectAsset={handleSelectAsset} user={currentUser} refreshKey={refreshKey} />}
                 {currentScreen === 'settings' && (role === 'admin' ? <SettingsScreen user={currentUser} onUpdateUser={handleLogin} setHeaderAction={setHeaderAction} /> : <AccessDenied />)}
                 {currentScreen === 'asset-detail' && <AssetDetail id={selectedAssetId} onNavigate={handleNavigate} user={currentUser} setHeaderAction={setHeaderAction} />}

@@ -7,6 +7,7 @@ export const en = {
   'sidebar.personnel': 'Tenants',
   'sidebar.billing': 'Billing',
   'sidebar.tickets': 'Maintenance',
+  'sidebar.profile': 'My Profile & Docs',
   'sidebar.settings': 'Settings',
   'sidebar.signOut': 'Sign Out',
   'sidebar.mode': 'Mode',
@@ -193,6 +194,27 @@ export const en = {
   'announcement.successClear': 'Announcement cleared',
   'announcement.errorClear': 'Failed to clear announcement',
   'announcement.prefix': 'Announcement:',
+
+  // Profile
+  'profile.title': 'My Profile & Documents',
+  'profile.subtitle': 'Your personal information and lease documents.',
+  'profile.tenant': 'Tenant',
+  'profile.room': 'Room',
+  'profile.email': 'Email',
+  'profile.phone': 'Phone',
+  'profile.nationality': 'Nationality',
+  'profile.idPassport': 'ID / Passport',
+  'profile.leaseInfo': 'Lease Information',
+  'profile.leaseStartDate': 'Lease Start Date',
+  'profile.status': 'Status',
+  'profile.active': 'Active',
+  'profile.myDocuments': 'My Documents',
+  'profile.files': 'Files',
+  'profile.download': 'Download',
+  'profile.noDocsTitle': 'No Documents Available',
+  'profile.noDocsDesc': 'There are currently no documents uploaded to your account. Your lease agreements and IDs will appear here.',
+  'profile.thaiCitizen': 'Thai Citizen',
+  'profile.foreignerCitizen': 'Foreigner Citizen',
 };
 
 export type Translations = typeof en;

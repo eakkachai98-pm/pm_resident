@@ -1,5 +1,5 @@
 export type UserRole = 'user' | 'staff' | 'admin';
-export type Screen = 'user-dashboard' | 'technician-dashboard' | 'command-center' | 'asset-detail' | 'inventory' | 'personnel' | 'tickets' | 'settings' | 'billing';
+export type Screen = 'user-dashboard' | 'technician-dashboard' | 'command-center' | 'asset-detail' | 'inventory' | 'personnel' | 'tickets' | 'settings' | 'billing' | 'profile';
 
 export interface Ticket {
   id: string;
