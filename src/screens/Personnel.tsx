@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Users, Mail, Phone, Home, Search, Plus, X, Edit, ShieldCheck, Loader2, FileText, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useToast } from '../context/ToastContext';
@@ -60,6 +60,15 @@ export default function Tenants({
   const [searchTerm, setSearchTerm] = useState('');
   const [filterFloor, setFilterFloor] = useState('All');
   const [selectedTenant, setSelectedTenant] = useState<any>(null);
+  const [documents, setDocuments] = useState<any[]>([]);
+  const [showTerminateModal, setShowTerminateModal] = useState(false);
+  const [terminateDate, setTerminateDate] = useState(new Date().toISOString().split('T')[0]);
+  const [finalWaterMeter, setFinalWaterMeter] = useState('');
+  const [finalElectricMeter, setFinalElectricMeter] = useState('');
+  const [uploadingDoc, setUploadingDoc] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editForm, setEditForm] = useState<any>({});
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [availableRooms, setAvailableRooms] = useState<any[]>([]);
@@ -73,15 +82,15 @@ export default function Tenants({
 
   const { showToast } = useToast();
 
-  // fetch available rooms when modal opens
+  // fetch available rooms when modal or edit opens
   useEffect(() => {
-    if (showAddModal) {
+    if (showAddModal || isEditing) {
       fetch('/api/rooms')
         .then(r => r.json())
         .then(data => setAvailableRooms(data.filter((r: any) => r.status === 'Active')))
         .catch(console.error);
     }
-  }, [showAddModal]);
+  }, [showAddModal, isEditing]);
 
   const fetchData = async () => {
     try {
@@ -93,6 +102,25 @@ export default function Tenants({
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (selectedTenant) {
+      fetch(`/api/tenants/${selectedTenant.id}/documents`)
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            setDocuments(data);
+          } else {
+            console.error('Expected array of documents, got:', data);
+            setDocuments([]);
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+          setDocuments([]);
+        });
+    }
+  }, [selectedTenant]);
 
   useEffect(() => {
     if (user.userRole !== 'user') {
@@ -138,6 +166,181 @@ export default function Tenants({
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const compressImage = (file: File): Promise<{ base64: string, size: number }> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 1200;
+          const MAX_HEIGHT = 1200;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+          
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.7); // 70% quality JPEG
+          const size = Math.round((dataUrl.length - 'data:image/jpeg;base64,'.length) * 3 / 4);
+          resolve({ base64: dataUrl, size });
+        };
+        img.onerror = (e) => reject(e);
+      };
+    });
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !selectedTenant) return;
+    setUploadingDoc(true);
+    
+    try {
+      let base64 = '';
+      let finalSize = file.size;
+      const isImage = file.type.startsWith('image/');
+      
+      if (isImage) {
+        // Compress image before upload
+        const compressed = await compressImage(file);
+        base64 = compressed.base64;
+        finalSize = compressed.size;
+      } else {
+        // For PDF, read as is
+        base64 = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (event) => resolve(event.target?.result as string);
+          reader.readAsDataURL(file);
+        });
+      }
+
+      const res = await fetch(`/api/tenants/${selectedTenant.id}/documents`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: file.name,
+          type: file.name.split('.').pop()?.toUpperCase() || 'FILE',
+          size: finalSize,
+          fileData: base64
+        })
+      });
+
+      if (res.ok) {
+        const newDoc = await res.json();
+        setDocuments([newDoc, ...documents]);
+        showToast('Document uploaded successfully', 'success');
+      } else {
+        showToast('Upload failed', 'error');
+      }
+    } catch {
+      showToast('Error uploading file', 'error');
+    } finally {
+      setUploadingDoc(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const handleDownloadDoc = async (id: string, name: string) => {
+    try {
+      const res = await fetch(`/api/documents/${id}/download`);
+      const data = await res.json();
+      const a = document.createElement('a');
+      a.href = data.fileData;
+      a.download = name;
+      a.click();
+    } catch {
+      showToast('Download failed', 'error');
+    }
+  };
+
+  const handleTerminateLease = async () => {
+    const activeLease = selectedTenant?.leases?.find((l:any)=>l.isActive);
+    if (!activeLease) return;
+    setSubmitting(true);
+    try {
+      const res = await fetch(`/api/leases/${activeLease.id}/terminate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          endDate: terminateDate,
+          finalWaterMeter: finalWaterMeter ? parseFloat(finalWaterMeter) : undefined,
+          finalElectricMeter: finalElectricMeter ? parseFloat(finalElectricMeter) : undefined
+        })
+      });
+      if (res.ok) {
+        showToast('Lease terminated successfully', 'success');
+        setShowTerminateModal(false);
+        setSelectedTenant(null);
+        fetchData();
+      } else {
+        const err = await res.json();
+        showToast(err.message || 'Termination failed', 'error');
+      }
+    } catch {
+      showToast('Network error', 'error');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleSaveEdit = async () => {
+    setSubmitting(true);
+    try {
+      const res = await fetch(`/api/tenants/${selectedTenant.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(editForm)
+      });
+      if (res.ok) {
+        showToast('Tenant profile updated successfully', 'success');
+        setIsEditing(false);
+        fetchData();
+        // Optimistically update selectedTenant to reflect UI
+        const updated = await res.json();
+        setSelectedTenant({ ...selectedTenant, ...updated });
+      } else {
+        const err = await res.json();
+        showToast(err.message || 'Update failed', 'error');
+      }
+    } catch {
+      showToast('Network error', 'error');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleEditClick = () => {
+    const activeLease = selectedTenant?.leases?.find((l:any)=>l.isActive);
+    setEditForm({
+      name: selectedTenant.name || '',
+      email: selectedTenant.email || '',
+      phone: selectedTenant.phone || '',
+      nationality: selectedTenant.nationality || 'Thai',
+      identityNumber: selectedTenant.identityNumber || '',
+      preferredLanguage: selectedTenant.preferredLanguage || 'th',
+      emergencyContact: selectedTenant.emergencyContact || '',
+      roomId: activeLease?.roomId || '',
+      startDate: activeLease ? new Date(activeLease.startDate).toISOString().split('T')[0] : ''
+    });
+    setIsEditing(true);
   };
 
   if (loading) return (
@@ -468,22 +671,38 @@ export default function Tenants({
               className="relative w-full max-w-md bg-white shadow-2xl h-full flex flex-col"
             >
               {/* Header */}
-              <div className="p-8 border-b border-gray-100 relative bg-gray-50/30">
-                <button onClick={() => setSelectedTenant(null)} className="absolute top-6 right-6 p-2 hover:bg-gray-200 bg-gray-100 text-gray-500 rounded-full transition">
-                  <X size={16} />
-                </button>
-                <div className="flex items-center gap-4">
-                  <div
-                    className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-extrabold flex-shrink-0"
-                    style={{ background: palette(selectedTenant.id).bg, color: palette(selectedTenant.id).color }}
-                  >
-                    {getInitial(selectedTenant.name)}
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-extrabold text-gray-900 leading-tight mb-1.5">{selectedTenant.name}</h2>
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-emerald-100 text-emerald-700">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Active Lease
+              <div className="p-8 border-b border-gray-100 bg-gray-50/30">
+                <div className="flex justify-between items-start gap-4">
+                  {/* Left: Avatar & Name */}
+                  <div className="flex items-start gap-4 flex-1 min-w-0">
+                    <div
+                      className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-extrabold flex-shrink-0 mt-1"
+                      style={{ background: palette(selectedTenant.id).bg, color: palette(selectedTenant.id).color }}
+                    >
+                      {getInitial(selectedTenant.name)}
                     </div>
+                    <div className="flex-1 min-w-0">
+                      {isEditing ? (
+                        <input type="text" className="w-full min-w-0 text-xl font-extrabold text-gray-900 border-b-2 border-indigo-300 focus:border-indigo-500 focus:outline-none bg-transparent mb-1" value={editForm.name} onChange={e => setEditForm({...editForm, name: e.target.value})} placeholder="Full Name" />
+                      ) : (
+                        <h2 className="text-xl font-extrabold text-gray-900 leading-tight mb-2 break-words">{selectedTenant.name}</h2>
+                      )}
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-emerald-100 text-emerald-700">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Active Lease
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right: Action Buttons */}
+                  <div className="flex items-start gap-2 flex-shrink-0 mt-1">
+                    {user.userRole === 'admin' && !isEditing && (
+                      <button onClick={handleEditClick} className="p-2 bg-white border border-gray-200 hover:border-indigo-300 hover:text-indigo-600 rounded-lg text-gray-500 transition shadow-sm" title="Edit Profile">
+                        <Edit size={14} />
+                      </button>
+                    )}
+                    <button onClick={() => { setSelectedTenant(null); setIsEditing(false); }} className="p-2 hover:bg-gray-200 bg-gray-100 text-gray-500 rounded-full transition ml-1">
+                      <X size={16} />
+                    </button>
                   </div>
                 </div>
               </div>
@@ -495,11 +714,30 @@ export default function Tenants({
                 <section>
                   <h3 className="text-[11px] font-extrabold text-gray-400 uppercase tracking-widest mb-4">Personal Information</h3>
                   <div className="grid grid-cols-2 gap-y-5 gap-x-4">
-                    <div><p className="text-xs font-bold text-gray-500 mb-1">Phone</p><p className="text-sm font-bold text-gray-900">{selectedTenant.phone || '—'}</p></div>
-                    <div><p className="text-xs font-bold text-gray-500 mb-1">Email</p><p className="text-sm font-bold text-gray-900 truncate" title={selectedTenant.email}>{selectedTenant.email}</p></div>
-                    <div><p className="text-xs font-bold text-gray-500 mb-1">Nationality</p><p className="text-sm font-bold text-gray-900">{selectedTenant.nationality === 'Foreigner' ? '🌍 Foreigner' : '🇹🇭 Thai'}</p></div>
-                    <div><p className="text-xs font-bold text-gray-500 mb-1">ID / Passport</p><p className="text-sm font-bold text-gray-900">{selectedTenant.identityNumber || '—'}</p></div>
-                    <div className="col-span-2"><p className="text-xs font-bold text-gray-500 mb-1">Emergency Contact</p><p className="text-sm font-bold text-gray-900">{selectedTenant.emergencyContact || '—'}</p></div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-500 mb-1">Phone</p>
+                      {isEditing ? <input type="text" className="w-full bg-white border border-gray-300 rounded px-2 py-1 text-sm font-bold" value={editForm.phone} onChange={e => setEditForm({...editForm, phone: e.target.value})} /> : <p className="text-sm font-bold text-gray-900">{selectedTenant.phone || '—'}</p>}
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-500 mb-1">Email</p>
+                      {isEditing ? <input type="email" className="w-full bg-white border border-gray-300 rounded px-2 py-1 text-sm font-bold" value={editForm.email} onChange={e => setEditForm({...editForm, email: e.target.value})} /> : <p className="text-sm font-bold text-gray-900 truncate" title={selectedTenant.email}>{selectedTenant.email}</p>}
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-500 mb-1">Nationality</p>
+                      {isEditing ? (
+                        <select className="w-full bg-white border border-gray-300 rounded px-2 py-1 text-sm font-bold" value={editForm.nationality} onChange={e => setEditForm({...editForm, nationality: e.target.value})}>
+                          <option value="Thai">Thai</option><option value="Foreigner">Foreigner</option>
+                        </select>
+                      ) : <p className="text-sm font-bold text-gray-900">{selectedTenant.nationality === 'Foreigner' ? '🌍 Foreigner' : '🇹🇭 Thai'}</p>}
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-500 mb-1">ID / Passport</p>
+                      {isEditing ? <input type="text" className="w-full bg-white border border-gray-300 rounded px-2 py-1 text-sm font-bold" value={editForm.identityNumber} onChange={e => setEditForm({...editForm, identityNumber: e.target.value})} /> : <p className="text-sm font-bold text-gray-900">{selectedTenant.identityNumber || '—'}</p>}
+                    </div>
+                    <div className="col-span-2">
+                      <p className="text-xs font-bold text-gray-500 mb-1">Emergency Contact</p>
+                      {isEditing ? <input type="text" className="w-full bg-white border border-gray-300 rounded px-2 py-1 text-sm font-bold" value={editForm.emergencyContact} onChange={e => setEditForm({...editForm, emergencyContact: e.target.value})} /> : <p className="text-sm font-bold text-gray-900">{selectedTenant.emergencyContact || '—'}</p>}
+                    </div>
                   </div>
                 </section>
 
@@ -513,12 +751,47 @@ export default function Tenants({
                         <>
                           <div className="flex justify-between items-center mb-4">
                             <span className="text-xs font-bold text-gray-500">Assigned Room</span>
-                            <span className="bg-indigo-600 text-white px-3 py-1 rounded-lg text-sm font-bold shadow-sm shadow-indigo-200">🚪 {l.room?.roomNumber || l.roomId}</span>
+                            {isEditing ? (
+                              <select className="bg-white border border-gray-300 rounded px-2 py-1 text-sm font-bold text-indigo-600" value={editForm.roomId} onChange={e => setEditForm({...editForm, roomId: e.target.value})}>
+                                <option value={l.roomId}>🚪 {l.room?.roomNumber || l.roomId} (Current)</option>
+                                {availableRooms.map(r => <option key={r.id} value={r.id}>🚪 {r.name}</option>)}
+                              </select>
+                            ) : (
+                              <span className="bg-indigo-600 text-white px-3 py-1 rounded-lg text-sm font-bold shadow-sm shadow-indigo-200">🚪 {l.room?.roomNumber || l.roomId}</span>
+                            )}
                           </div>
-                          <div className="flex justify-between items-center">
-                            <div><p className="text-xs font-bold text-gray-500 mb-1">Move-in Date</p><p className="text-sm font-bold text-gray-900">{new Date(l.startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p></div>
-                            <div className="text-right"><p className="text-xs font-bold text-gray-500 mb-1">Monthly Rent</p><p className="text-sm font-extrabold text-emerald-600">฿{l.room?.price?.toLocaleString() || '0'}</p></div>
-                          </div>
+                          {isEditing && editForm.roomId !== l.roomId ? (
+                            <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 mt-4 space-y-4">
+                              <h4 className="text-xs font-bold text-orange-800">🔄 Room Transfer Setup</h4>
+                              <p className="text-[10px] text-orange-600 leading-tight">Please enter the final meter readings for the old room ({l.room?.roomNumber || l.roomId}) and the start date for the new lease.</p>
+                              <div>
+                                <p className="text-xs font-bold text-gray-500 mb-1">Transfer / New Move-in Date</p>
+                                <input type="date" className="w-full bg-white border border-gray-300 rounded px-2 py-1 text-sm font-bold" value={editForm.startDate} onChange={e => setEditForm({...editForm, startDate: e.target.value})} />
+                              </div>
+                              <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                  <p className="text-xs font-bold text-gray-500 mb-1">Final Water Meter</p>
+                                  <input type="number" placeholder="e.g. 1042.5" className="w-full bg-white border border-gray-300 rounded px-2 py-1 text-sm font-bold" value={editForm.finalWaterMeter || ''} onChange={e => setEditForm({...editForm, finalWaterMeter: e.target.value})} />
+                                </div>
+                                <div>
+                                  <p className="text-xs font-bold text-gray-500 mb-1">Final Electric Meter</p>
+                                  <input type="number" placeholder="e.g. 5600" className="w-full bg-white border border-gray-300 rounded px-2 py-1 text-sm font-bold" value={editForm.finalElectricMeter || ''} onChange={e => setEditForm({...editForm, finalElectricMeter: e.target.value})} />
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex justify-between items-center">
+                              <div>
+                                <p className="text-xs font-bold text-gray-500 mb-1">Move-in Date</p>
+                                {isEditing ? (
+                                  <input type="date" className="bg-white border border-gray-300 rounded px-2 py-1 text-sm font-bold" value={editForm.startDate} onChange={e => setEditForm({...editForm, startDate: e.target.value})} />
+                                ) : (
+                                  <p className="text-sm font-bold text-gray-900">{new Date(l.startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+                                )}
+                              </div>
+                              <div className="text-right"><p className="text-xs font-bold text-gray-500 mb-1">Monthly Rent</p><p className="text-sm font-extrabold text-emerald-600">฿{l.room?.price?.toLocaleString() || '0'}</p></div>
+                            </div>
+                          )}
                         </>
                       )
                     })() : (
@@ -527,29 +800,34 @@ export default function Tenants({
                   </div>
                 </section>
 
-                {/* Documents (Mockup UI) */}
+                {/* Documents */}
                 <section>
                   <h3 className="text-[11px] font-extrabold text-gray-400 uppercase tracking-widest mb-4">Documents & Contracts</h3>
                   <div className="space-y-2">
-                    <div className="flex items-center gap-3 bg-white border border-gray-200 p-3 rounded-xl shadow-sm">
-                      <div className="w-10 h-10 bg-red-50 text-red-600 rounded-lg flex items-center justify-center font-black text-xs">PDF</div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold text-gray-900 truncate">Lease_Agreement_2025.pdf</p>
-                        <p className="text-[11px] text-gray-400">Signed on 1 Jan 2025 • 2.4 MB</p>
+                    {documents.map(doc => (
+                      <div key={doc.id} className="flex items-center gap-3 bg-white border border-gray-200 p-3 rounded-xl shadow-sm">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-black text-xs ${doc.type === 'PDF' ? 'bg-red-50 text-red-600' : 'bg-indigo-50 text-indigo-600'}`}>
+                          {doc.type}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-bold text-gray-900 truncate">{doc.name}</p>
+                          <p className="text-[11px] text-gray-400">
+                            Uploaded {new Date(doc.createdAt).toLocaleDateString()} • {(doc.size / 1024).toFixed(1)} KB
+                          </p>
+                        </div>
+                        <button onClick={() => handleDownloadDoc(doc.id, doc.name)} className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition"><Download size={16} /></button>
                       </div>
-                      <button className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition"><Download size={16} /></button>
-                    </div>
-                    <div className="flex items-center gap-3 bg-white border border-gray-200 p-3 rounded-xl shadow-sm">
-                      <div className="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center font-black text-xs">IMG</div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold text-gray-900 truncate">ID_Card_Copy.jpg</p>
-                        <p className="text-[11px] text-gray-400">Uploaded 1 Jan 2025 • 850 KB</p>
-                      </div>
-                      <button className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition"><Download size={16} /></button>
-                    </div>
+                    ))}
                     
-                    <button className="w-full mt-3 py-4 border-2 border-dashed border-gray-200 rounded-xl text-sm font-bold text-gray-500 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all flex items-center justify-center gap-2">
-                      <Plus size={16} /> Upload New Document
+                    {documents.length === 0 && <p className="text-xs text-gray-400 italic text-center py-2">No documents found.</p>}
+
+                    <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" accept=".pdf,.jpg,.jpeg,.png" />
+                    <button 
+                      onClick={() => fileInputRef.current?.click()} 
+                      disabled={uploadingDoc}
+                      className="w-full mt-3 py-4 border-2 border-dashed border-gray-200 rounded-xl text-sm font-bold text-gray-500 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                    >
+                      {uploadingDoc ? <Loader2 size={16} className="animate-spin" /> : <><Plus size={16} /> Upload New Document</>}
                     </button>
                   </div>
                 </section>
@@ -557,12 +835,57 @@ export default function Tenants({
               </div>
 
               {/* Footer */}
-              <div className="p-6 border-t border-gray-100 bg-gray-50/50">
-                <button className="w-full bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 py-3.5 rounded-xl font-extrabold text-sm transition-colors shadow-sm">
-                  Terminate Lease (Move Out)
-                </button>
+              <div className="p-6 border-t border-gray-100 bg-gray-50/50 mt-auto">
+                {isEditing ? (
+                  <div className="flex gap-3">
+                    <button onClick={() => setIsEditing(false)} className="flex-1 bg-white border border-gray-200 text-gray-600 py-3.5 rounded-xl font-extrabold hover:bg-gray-50 transition-all text-sm shadow-sm">Cancel</button>
+                    <button onClick={handleSaveEdit} disabled={submitting} className="flex-1 bg-emerald-500 text-white py-3.5 rounded-xl font-extrabold hover:bg-emerald-600 transition-all shadow-sm shadow-emerald-200 disabled:opacity-50 flex items-center justify-center text-sm">
+                      {submitting ? <Loader2 size={16} className="animate-spin" /> : 'Save Changes'}
+                    </button>
+                  </div>
+                ) : (
+                  selectedTenant.leases?.find((l:any)=>l.isActive) && (
+                    <button onClick={() => setShowTerminateModal(true)} className="w-full bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 py-3.5 rounded-xl font-extrabold text-sm transition-colors shadow-sm">
+                      Terminate Lease (Move Out)
+                    </button>
+                  )
+                )}
               </div>
 
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ── TERMINATE LEASE MODAL ── */}
+      <AnimatePresence>
+        {showTerminateModal && (
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowTerminateModal(false)} className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white w-full max-w-sm rounded-3xl shadow-2xl p-6">
+              <h2 className="text-lg font-black text-gray-900 mb-2">Terminate Lease</h2>
+              <p className="text-sm text-gray-500 mb-6">This will mark the lease as inactive and set the assigned room back to 'Available'. Please enter the final meter readings for the move-out bill.</p>
+              
+              <div className="space-y-4">
+                <Field label="Move-out Date">
+                  <input type="date" className={inp} value={terminateDate} onChange={e => setTerminateDate(e.target.value)} />
+                </Field>
+                <div className="grid grid-cols-2 gap-3">
+                  <Field label="Final Water Meter">
+                    <input type="number" placeholder="e.g. 1042.5" className={inp} value={finalWaterMeter} onChange={e => setFinalWaterMeter(e.target.value)} />
+                  </Field>
+                  <Field label="Final Electric Meter">
+                    <input type="number" placeholder="e.g. 5600" className={inp} value={finalElectricMeter} onChange={e => setFinalElectricMeter(e.target.value)} />
+                  </Field>
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-6">
+                <button onClick={() => setShowTerminateModal(false)} className="flex-1 bg-white border border-gray-200 text-gray-600 py-3 rounded-xl font-bold hover:bg-gray-50 transition-all text-sm">Cancel</button>
+                <button onClick={handleTerminateLease} disabled={submitting} className="flex-1 bg-red-600 text-white py-3 rounded-xl font-bold hover:bg-red-700 transition-all shadow-sm shadow-red-200 disabled:opacity-50 flex items-center justify-center text-sm">
+                  {submitting ? <Loader2 size={16} className="animate-spin" /> : 'Confirm Move Out'}
+                </button>
+              </div>
             </motion.div>
           </div>
         )}

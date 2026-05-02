@@ -1,4 +1,5 @@
 import express from 'express';
+// trigger restart
 import cors from 'cors';
 import 'dotenv/config';
 import bcrypt from 'bcrypt';
@@ -250,11 +251,175 @@ app.post('/api/tenants', async (req, res) => {
   }
 });
 
-// --- LEASES ---
+app.patch('/api/tenants/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email, phone, nationality, identityNumber, preferredLanguage, emergencyContact, visaExpiryDate, tm30Reported, roomId, startDate } = req.body;
+    
+    // 1. Update user info
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: {
+        name, email, phone, nationality, identityNumber, preferredLanguage, emergencyContact,
+        visaExpiryDate: visaExpiryDate ? new Date(visaExpiryDate) : null,
+        tm30Reported
+      }
+    });
+
+    // 2. Handle room/lease change if provided
+    if (roomId || startDate) {
+      const activeLease = await prisma.lease.findFirst({
+        where: { tenantId: id, isActive: true },
+        include: { room: true }
+      });
+
+      if (activeLease) {
+        // Room transfer
+        if (roomId && activeLease.roomId !== roomId) {
+          const newRoom = await prisma.room.findUnique({ where: { id: roomId } });
+          if (!newRoom || newRoom.status !== 'AVAILABLE') {
+            return res.status(400).json({ message: 'Target room is not available.' });
+          }
+          
+          // Terminate old lease
+          const transferDate = startDate ? new Date(startDate) : new Date();
+          await prisma.lease.update({
+            where: { id: activeLease.id },
+            data: { isActive: false, endDate: transferDate }
+          });
+
+          // Save final meters for old room
+          const fWater = req.body.finalWaterMeter;
+          const fElec = req.body.finalElectricMeter;
+          if (fWater !== undefined || fElec !== undefined) {
+            await prisma.meterReading.create({
+              data: {
+                roomId: activeLease.roomId,
+                readingDate: transferDate,
+                waterMeter: fWater ? parseFloat(fWater) : 0,
+                electricMeter: fElec ? parseFloat(fElec) : 0,
+                status: 'Unbilled',
+                notes: 'Auto-generated: Final reading for Room Transfer'
+              }
+            });
+          }
+
+          // Free old room
+          await prisma.room.update({ where: { id: activeLease.roomId }, data: { status: 'AVAILABLE' } });
+          // Occupy new room
+          await prisma.room.update({ where: { id: roomId }, data: { status: 'OCCUPIED' } });
+
+          // Create new lease
+          await prisma.lease.create({
+            data: {
+              roomId: roomId,
+              tenantId: id,
+              startDate: transferDate,
+              isActive: true
+            }
+          });
+        } else if (startDate) {
+          // Just update start date of current lease
+          await prisma.lease.update({
+            where: { id: activeLease.id },
+            data: { startDate: new Date(startDate) }
+          });
+        }
+      }
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// --- LEASES & DOCUMENTS ---
 app.get('/api/leases', async (req, res) => {
   try {
     const leases = await prisma.lease.findMany({ include: { room: true, tenant: true }});
     res.json(leases);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post('/api/leases/:id/terminate', async (req, res) => {
+  try {
+    const leaseId = req.params.id;
+    const { endDate, finalWaterMeter, finalElectricMeter } = req.body;
+    
+    const lease = await prisma.lease.findUnique({ where: { id: leaseId } });
+    if (!lease) return res.status(404).json({ message: 'Lease not found' });
+
+    // Update lease to inactive
+    await prisma.lease.update({
+      where: { id: leaseId },
+      data: { isActive: false, endDate: new Date(endDate || Date.now()) }
+    });
+
+    // Update room back to available
+    await prisma.room.update({
+      where: { id: lease.roomId },
+      data: { status: 'AVAILABLE' }
+    });
+
+    // Save final meter readings if provided
+    if (finalWaterMeter !== undefined && finalElectricMeter !== undefined) {
+      const dateObj = new Date(endDate || Date.now());
+      const monthStr = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}`;
+      await prisma.meterReading.create({
+        data: {
+          roomId: lease.roomId,
+          billingMonth: `${monthStr}-Final`,
+          waterMeter: parseFloat(finalWaterMeter),
+          electricMeter: parseFloat(finalElectricMeter)
+        }
+      });
+    }
+
+    res.json({ message: 'Lease terminated successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.get('/api/tenants/:id/documents', async (req, res) => {
+  try {
+    const docs = await prisma.tenantDocument.findMany({
+      where: { tenantId: req.params.id },
+      orderBy: { createdAt: 'desc' },
+      select: { id: true, name: true, type: true, size: true, createdAt: true } // Exclude fileData to save bandwidth
+    });
+    res.json(docs);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.get('/api/documents/:id/download', async (req, res) => {
+  try {
+    const doc = await prisma.tenantDocument.findUnique({ where: { id: req.params.id } });
+    if (!doc) return res.status(404).json({ message: 'Document not found' });
+    res.json({ fileData: doc.fileData, name: doc.name, type: doc.type });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post('/api/tenants/:id/documents', async (req, res) => {
+  try {
+    const { name, type, size, fileData } = req.body;
+    const newDoc = await prisma.tenantDocument.create({
+      data: {
+        tenantId: req.params.id,
+        name,
+        type,
+        size,
+        fileData
+      }
+    });
+    res.status(201).json({ id: newDoc.id, name: newDoc.name, type: newDoc.type, size: newDoc.size, createdAt: newDoc.createdAt });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

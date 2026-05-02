@@ -32,6 +32,7 @@ model User {
   assignedTickets     MaintenanceTicket[] @relation("Assignee")
   technicianAvailability TechnicianAvailability?
   technicianBlockedSlots TechnicianBlockedSlot[]
+  documents           TenantDocument[]
 }
 
 model Room {
@@ -135,4 +136,16 @@ model TechnicianBlockedSlot {
   reason   String?
 
   @@index([staffId, date])
+}
+
+model TenantDocument {
+  id        String   @id @default(cuid())
+  name      String
+  type      String
+  size      Int
+  fileData  String   // Store base64
+  createdAt DateTime @default(now())
+
+  tenantId  String
+  tenant    User     @relation(fields: [tenantId], references: [id])
 }
