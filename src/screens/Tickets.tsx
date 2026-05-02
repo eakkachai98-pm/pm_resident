@@ -38,6 +38,7 @@ export default function Maintenance({
   const [ratingValue, setRatingValue] = useState(0);
   const [hoveredStar, setHoveredStar] = useState(0);
   const [pickerDate, setPickerDate] = useState(new Date());
+  const [residentRoomName, setResidentRoomName] = useState('');
   const hasAvailabilityData = technicianAvailability.length > 0;
 
   const getSlotBookingCount = (dateString: string, slot: TimeSlot) =>
@@ -67,19 +68,29 @@ export default function Maintenance({
 
   const fetchData = async () => {
     try {
-      const [tRes, rRes, availabilityData] = await Promise.all([
+      const [tRes, rRes, availabilityData, lRes] = await Promise.all([
         fetch('/api/maintenance'),
         fetch('/api/rooms'),
-        api.getTechnicianAvailability()
+        api.getTechnicianAvailability(),
+        user.userRole === 'user' ? fetch('/api/leases') : Promise.resolve(null)
       ]);
       const tData = await tRes.json();
       const rData = await rRes.json();
+      const lData = lRes ? await lRes.json() : null;
       
       setAllTickets(tData);
       const filteredTickets = user.userRole === 'user' ? tData.filter((t: any) => t.reporterId === user.id) : tData;
       setTickets(filteredTickets);
       setRooms(rData);
       setTechnicianAvailability(availabilityData);
+
+      if (lData) {
+        const myActiveLease = lData.find((l: any) => l.tenantId === user.id && l.isActive);
+        if (myActiveLease) {
+          setSelectedRoomId(myActiveLease.roomId);
+          setResidentRoomName(myActiveLease.room?.roomNumber || '');
+        }
+      }
 
       if (initialTicketId) {
         const ticketToOpen = filteredTickets.find((t: any) => t.id === initialTicketId);
@@ -160,7 +171,9 @@ export default function Maintenance({
       
       showToast('Maintenance request submitted successfully');
       setShowCreateModal(false);
-      setTitle(''); setDescription(''); setSelectedRoomId(''); setCategory('General'); setScheduledDate(''); setScheduledSlot('Morning');
+      setTitle(''); setDescription(''); 
+      if (user.userRole !== 'user') setSelectedRoomId(''); 
+      setCategory('General'); setScheduledDate(''); setScheduledSlot('Morning');
       fetchData();
     } catch (error: any) {
       showToast(error.message || 'Could not submit request', 'error');
@@ -386,7 +399,19 @@ export default function Maintenance({
                 <div className="space-y-1.5"><label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Issue Title</label><input required className="w-full bg-[#F4F6F8] border-none rounded-xl py-4 px-6 text-sm font-medium focus:ring-2 focus:ring-primary-brand/20 transition-all" placeholder="e.g. Water leaking in bathroom" value={title} onChange={(e) => setTitle(e.target.value)} /></div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5"><label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Room</label><select required className="w-full bg-[#F4F6F8] border-none rounded-xl py-4 px-6 text-sm font-bold text-primary-brand" value={selectedRoomId} onChange={(e) => setSelectedRoomId(e.target.value)}><option value="">Select Room</option>{rooms.map(r => <option key={r.id} value={r.id}>Room {r.name.replace('Room ','')}</option>)}</select></div>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Room</label>
+                    {user.userRole === 'user' ? (
+                      <div className="w-full bg-[#E5E7EB] border-none rounded-xl py-4 px-6 text-sm font-bold text-gray-600 cursor-not-allowed">
+                        {residentRoomName ? `Room ${residentRoomName}` : 'No Active Room'}
+                      </div>
+                    ) : (
+                      <select required className="w-full bg-[#F4F6F8] border-none rounded-xl py-4 px-6 text-sm font-bold text-primary-brand" value={selectedRoomId} onChange={(e) => setSelectedRoomId(e.target.value)}>
+                        <option value="">Select Room</option>
+                        {rooms.map(r => <option key={r.id} value={r.id}>Room {r.name.replace('Room ','')}</option>)}
+                      </select>
+                    )}
+                  </div>
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Category</label>
                     <select className="w-full bg-[#F4F6F8] border-none rounded-xl py-4 px-6 text-sm font-bold text-primary-brand" value={category} onChange={(e) => setCategory(e.target.value)}>
