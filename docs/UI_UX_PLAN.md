@@ -110,3 +110,19 @@
 - [x] **Smart Calendar Booking System (Staff & Resident):** ✅ *ดำเนินการเสร็จสิ้นแล้ว*
 - [x] **Email Notification Integration:** ✅ *ดำเนินการเสร็จสิ้นแล้ว*
 - [x] **Minimalist Room Layout Redesign (UI Revamp Phase):** ✅ *ดำเนินการเสร็จสิ้นแล้ว*
+
+---
+## 🌐 Integration Architecture (สถาปัตยกรรมการเชื่อมต่อ)
+
+**แผนการเชื่อมต่อ API จากระบบภายนอก (External Master Data API Sync)**
+เพื่อเป็นการลดความซ้ำซ้อนและให้สอดคล้องกับระบบ IoT / ระบบฐานข้อมูลหลักของตึกที่มีอยู่แล้ว ระบบ Resident Soft จะเปลี่ยนจากสคริปต์การนำเข้าแบบ Static JSON ไปเป็น **Dynamic API Sync Service** โดยมีแนวทางดังนี้:
+
+1. **Scheduled Sync Job (Cron Job):**
+   - รันเซอร์วิสเพื่อดึงข้อมูลจาก External API (ที่มีโครงสร้างเดียวกับ `json_ห้องพัก.json`) เป็นระยะ (เช่น ทุกเที่ยงคืน หรือเมื่อกดปุ่ม Sync Manual จากหน้า Admin)
+
+2. **Smart Upsert Logic (ตรวจสอบและอัปเดต):**
+   - **Room & Pricing:** หากมีการปรับราคาห้องใน API ต้นทาง ระบบ Resident Soft จะอัปเดตราคาตาม
+   - **Tenant Synchronization:** ระบบจะนำ `room_owner` มาเปรียบเทียบ หากพบว่ามีการเปลี่ยนชื่อคนเช่า ระบบจะทำการ `Terminate Lease` (สิ้นสุดสัญญา) ลูกบ้านคนเก่า และสร้างบัญชีผู้ใช้งาน+สัญญาเช่าให้ลูกบ้านคนใหม่โดยอัตโนมัติ
+   - **Meter Readings:** วนลูปตรวจสอบ `water.history` และ `electricity.history` แบบ Upsert หากมีข้อมูลมิเตอร์ของเดือนใหม่เข้ามา (อิงตาม `datetime`) จะสร้าง Record ยอดการใช้น้ำ/ไฟของเดือนนั้นเตรียมไว้สำหรับระบบ Billing ในอนาคต
+
+*การออกแบบโครงสร้างนี้จะทำให้ Resident Soft ทำหน้าที่เป็น "ระบบต่อยอด (Add-on Module)" ที่เน้นจัดการเรื่องงานซ่อมบำรุง ลายเซ็นดิจิทัล และบิลค่าเช่า ได้อย่างสมบูรณ์แบบโดยไม่ต้องดูแล Data ซ้ำซ้อน*
