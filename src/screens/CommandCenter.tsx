@@ -71,7 +71,8 @@ export default function CommandCenter({ onNavigate, setHeaderAction }: { onNavig
       Time: a.time
     }));
     const csv = Papa.unparse(csvData);
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    // Add UTF-8 BOM (\uFEFF) so Excel opens Thai characters correctly
+    const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.setAttribute('download', `audit_trail_${new Date().toISOString().split('T')[0]}.csv`);
