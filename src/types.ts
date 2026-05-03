@@ -17,6 +17,8 @@ export interface Ticket {
   resolvedAt?: string;
   rating?: number;
   feedback?: string;
+  repairImage?: string;
+  residentSignature?: string;
 }
 
 export interface Personnel {

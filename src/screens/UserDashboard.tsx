@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Home, FileText, Wrench, AlertTriangle, CheckCircle, Zap, Droplets, Activity, TrendingUp, TrendingDown, Clock, Star, X, Wind } from 'lucide-react';
+import { Home, FileText, Wrench, AlertTriangle, CheckCircle, CheckCircle2, Zap, Droplets, Activity, TrendingUp, TrendingDown, Clock, Star, X, Wind, Camera, PenTool } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useToast } from '../context/ToastContext';
 import SystemAnnouncements from '../components/SystemAnnouncements';
@@ -421,17 +421,59 @@ export default function UserDashboard({ onViewTicket, onNavigate, user, setHeade
                   </div>
                 </div>
 
-                {selectedTicket.status === 'RESOLVED' && (selectedTicket.repairImage || selectedTicket.repairNotes) && (
-                  <div className="space-y-4 pt-4 border-t border-gray-100">
-                    <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Resolution Details</h4>
-                    {selectedTicket.repairImage && (
-                      <img src={selectedTicket.repairImage} alt="Repair Evidence" className="w-full max-h-[300px] object-cover rounded-xl border border-gray-200" />
-                    )}
-                    {selectedTicket.repairNotes && (
-                      <div className="bg-emerald-50 rounded-2xl p-4 text-sm text-emerald-800 font-medium whitespace-pre-wrap border border-emerald-100">
-                        {selectedTicket.repairNotes}
+                {selectedTicket.status === 'RESOLVED' && (selectedTicket.repairImage || selectedTicket.repairNotes || selectedTicket.residentSignature) && (
+                  <div className="mt-8 bg-gradient-to-br from-white to-gray-50/50 rounded-[2rem] border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
+                    <div className="px-6 py-4 border-b border-gray-50 bg-white flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                          <CheckCircle2 size={16} className="text-emerald-600" />
+                        </div>
+                        <h4 className="text-sm font-extrabold text-[#111827]">Resolution Summary</h4>
                       </div>
-                    )}
+                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-100 px-3 py-1 rounded-full">Completed</span>
+                    </div>
+                    
+                    <div className="p-6 md:p-8 space-y-8">
+                      {/* Notes Section */}
+                      {selectedTicket.repairNotes && (
+                        <div>
+                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Technician's Note</p>
+                          <div className="bg-white border border-gray-100 shadow-sm rounded-2xl p-5 text-sm text-gray-700 leading-relaxed font-medium relative overflow-hidden group">
+                            <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-400" />
+                            {selectedTicket.repairNotes}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Evidence & Signature Grid */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        {selectedTicket.repairImage && (
+                          <div className="space-y-3">
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                              <Camera size={12} /> Repair Evidence
+                            </p>
+                            <div className="group relative rounded-2xl overflow-hidden border border-gray-100 shadow-sm bg-gray-50 aspect-video">
+                              <img src={selectedTicket.repairImage} alt="Repair Evidence" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                              <div className="absolute inset-0 ring-1 ring-inset ring-black/5 rounded-2xl" />
+                            </div>
+                          </div>
+                        )}
+                        
+                        {selectedTicket.residentSignature && (
+                          <div className="space-y-3">
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                              <PenTool size={12} /> Resident Signature
+                            </p>
+                            <div className="rounded-2xl border border-gray-100 shadow-sm bg-white aspect-video flex items-center justify-center p-4 relative overflow-hidden">
+                              {/* Background pattern for authenticity */}
+                              <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
+                              <img src={selectedTicket.residentSignature} alt="Resident Signature" className="h-full object-contain mix-blend-multiply relative z-10" />
+                              <div className="absolute bottom-4 left-6 right-6 border-b border-gray-200 border-dashed" />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 )}
 

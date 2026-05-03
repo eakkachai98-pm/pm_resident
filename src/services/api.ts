@@ -164,11 +164,11 @@ export const api = {
     return response.json();
   },
 
-  async updateTicketStatus(id: string, status: string, repairNotes?: string, assigneeId?: string, repairImage?: string, rating?: number, feedback?: string): Promise<any> {
+  async updateTicketStatus(id: string, status: string, repairNotes?: string, assigneeId?: string, repairImage?: string, residentSignature?: string, rating?: number, feedback?: string): Promise<any> {
     const response = await fetch(`${API_BASE}/maintenance/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status, repairNotes, assigneeId, repairImage, rating, feedback })
+      body: JSON.stringify({ status, repairNotes, assigneeId, repairImage, residentSignature, rating, feedback })
     });
     if (!response.ok) throw new Error('Failed to update ticket');
     return response.json();

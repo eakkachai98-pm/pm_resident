@@ -115,6 +115,7 @@ model MaintenanceTicket {
   
   repairNotes    String?
   repairImage    String? // Store base64 or URL
+  residentSignature String? // Store base64
   rating         Int?
   feedback       String?
 }

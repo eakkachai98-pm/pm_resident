@@ -538,12 +538,13 @@ app.post('/api/maintenance', async (req, res) => {
 
 app.patch('/api/maintenance/:id', async (req, res) => {
   try {
-    const { status, assigneeId, repairNotes, repairImage, rating, feedback } = req.body;
+    const { status, assigneeId, repairNotes, repairImage, residentSignature, rating, feedback } = req.body;
     const data = {};
     if (status) data.status = status;
     if (assigneeId !== undefined) data.assigneeId = assigneeId;
     if (repairNotes !== undefined) data.repairNotes = repairNotes;
     if (repairImage !== undefined) data.repairImage = repairImage;
+    if (residentSignature !== undefined) data.residentSignature = residentSignature;
     if (rating !== undefined) data.rating = rating;
     if (feedback !== undefined) data.feedback = feedback;
     

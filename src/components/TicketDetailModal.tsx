@@ -129,7 +129,23 @@ export default function TicketDetailModal({ isOpen, onClose, ticket }: TicketDet
                     Resolution
                   </h3>
                   <div className="bg-emerald-50 rounded-xl p-4 text-sm text-emerald-800 leading-relaxed border border-emerald-100">
-                    {ticket.resolution}
+                    <p>{ticket.resolution}</p>
+                    {(ticket.repairImage || ticket.residentSignature) && (
+                      <div className="mt-4 flex gap-4 border-t border-emerald-100 pt-4">
+                        {ticket.repairImage && (
+                          <div>
+                            <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest mb-1">Repair Image</p>
+                            <img src={ticket.repairImage} alt="Repair Evidence" className="h-20 object-cover rounded-lg border border-emerald-200" />
+                          </div>
+                        )}
+                        {ticket.residentSignature && (
+                          <div>
+                            <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest mb-1">Signature</p>
+                            <img src={ticket.residentSignature} alt="Resident Signature" className="h-20 object-contain rounded-lg border border-emerald-200 bg-white" />
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

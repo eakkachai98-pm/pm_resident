@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Wrench, AlertTriangle, CheckCircle, Search, QrCode, Play, Check, Package, FileText, ChevronDown, History, X, Home, ClipboardList, Calendar, Settings as SettingsIcon, Clock, Trash2, ChevronLeft, ChevronRight, Sun, Moon } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Wrench, AlertTriangle, CheckCircle, CheckCircle2, Search, QrCode, Play, Check, Package, FileText, ChevronDown, History, X, Home, ClipboardList, Calendar, Settings as SettingsIcon, Clock, Trash2, ChevronLeft, ChevronRight, Sun, Moon, Camera, PenTool } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { api } from '../services/api';
 import { Asset, Ticket, Personnel, TechnicianAvailability, TechnicianBlockedSlot } from '../types';
@@ -54,7 +54,67 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
   const [resolvingTicketId, setResolvingTicketId] = useState<string | null>(null);
   const [resolutionNotes, setResolutionNotes] = useState('');
   const [resolutionImage, setResolutionImage] = useState<string | null>(null);
+  const [residentSignature, setResidentSignature] = useState<string | null>(null);
+  const sigCanvasRef = useRef<HTMLCanvasElement>(null);
+  const isDrawingSig = useRef(false);
   const [calDark, setCalDark] = useState(true);
+
+  const startDrawingSig = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    isDrawingSig.current = true;
+    const canvas = sigCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const clientX = 'touches' in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : (e as React.MouseEvent).clientY;
+    
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#000000';
+    
+    ctx.beginPath();
+    ctx.moveTo((clientX - rect.left) * scaleX, (clientY - rect.top) * scaleY);
+  };
+
+  const drawSig = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    if (!isDrawingSig.current) return;
+    const canvas = sigCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const clientX = 'touches' in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : (e as React.MouseEvent).clientY;
+    
+    ctx.lineTo((clientX - rect.left) * scaleX, (clientY - rect.top) * scaleY);
+    ctx.stroke();
+  };
+
+  const stopDrawingSig = () => {
+    if (isDrawingSig.current) {
+      isDrawingSig.current = false;
+      const canvas = sigCanvasRef.current;
+      if (canvas) {
+        setResidentSignature(canvas.toDataURL('image/png'));
+      }
+    }
+  };
+
+  const clearSignature = () => {
+    const canvas = sigCanvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+    setResidentSignature(null);
+  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -127,8 +187,12 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
           priority: t.priority || 'Medium',
           assetId: t.assetId,
           assigneeId: t.assigneeId,
-          resolution: t.resolution,
+          resolution: t.repairNotes,
           resolvedAt: t.resolvedAt,
+          repairImage: t.repairImage,
+          residentSignature: t.residentSignature,
+          rating: t.rating,
+          feedback: t.feedback,
           scheduledDate: t.scheduledDate,
           scheduledSlot: t.scheduledSlot,
           room: t.room,
@@ -295,12 +359,13 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
   const submitResolution = async () => {
     if (!resolvingTicketId) return;
     try {
-      await api.updateTicketStatus(resolvingTicketId, 'RESOLVED', resolutionNotes, user.id, resolutionImage || undefined);
+      await api.updateTicketStatus(resolvingTicketId, 'RESOLVED', resolutionNotes, user.id, resolutionImage || undefined, residentSignature || undefined);
       showToast('Ticket resolved successfully', 'success');
       setShowResolveModal(false);
       setResolvingTicketId(null);
       setResolutionNotes('');
       setResolutionImage(null);
+      setResidentSignature(null);
       await fetchData();
     } catch (error) {
       showToast('Failed to resolve ticket', 'error');
@@ -765,6 +830,27 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
                     {resolutionImage && <img src={resolutionImage} alt="Preview" className="w-12 h-12 rounded-lg object-cover border border-gray-200" />}
                   </div>
                 </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Resident Signature (Optional)</label>
+                    <button onClick={clearSignature} className="text-[10px] text-gray-400 hover:text-red-500 font-bold uppercase tracking-widest transition-colors">Clear</button>
+                  </div>
+                  <div className="border border-gray-200 rounded-2xl overflow-hidden bg-[#F4F6F8]">
+                    <canvas 
+                      ref={sigCanvasRef} 
+                      width={450}
+                      height={120}
+                      className="w-full h-[120px] cursor-crosshair touch-none bg-white" 
+                      onMouseDown={startDrawingSig} 
+                      onMouseMove={drawSig} 
+                      onMouseUp={stopDrawingSig} 
+                      onMouseLeave={stopDrawingSig}
+                      onTouchStart={startDrawingSig}
+                      onTouchMove={drawSig}
+                      onTouchEnd={stopDrawingSig}
+                    />
+                  </div>
+                </div>
                 <div className="flex gap-4">
                   <button onClick={() => setShowResolveModal(false)} className="flex-1 py-4 rounded-2xl bg-[#F9FAFB] text-gray-400 text-xs font-bold uppercase tracking-widest border border-gray-100 hover:bg-gray-50 transition-all">{t('tech.cancel' as any)}</button>
                   <button onClick={submitResolution} className="flex-1 py-4 rounded-2xl bg-emerald-500 text-white text-xs font-bold uppercase tracking-widest shadow-xl shadow-emerald-500/20 hover:scale-[1.02] active:scale-95 transition-all">{t('tech.completeRepair' as any)}</button>
@@ -803,6 +889,22 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
                           <div className="mt-3 bg-[#F9FAFB] p-3 rounded-xl border border-gray-50">
                             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{t('tech.resolutionNotes' as any)}</p>
                             <p className="text-xs text-gray-600 font-medium">{t.resolution}</p>
+                            {(t.repairImage || t.residentSignature) && (
+                              <div className="mt-3 flex gap-4">
+                                {t.repairImage && (
+                                  <div>
+                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Repair Image</p>
+                                    <img src={t.repairImage} alt="Repair" className="w-16 h-16 object-cover rounded-lg border border-gray-200" />
+                                  </div>
+                                )}
+                                {t.residentSignature && (
+                                  <div>
+                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Signature</p>
+                                    <img src={t.residentSignature} alt="Signature" className="h-16 object-contain rounded-lg border border-gray-200 bg-white" />
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </div>
                         )}
                         <div className="mt-3 flex justify-between items-center text-[11px] font-bold text-gray-400">
@@ -861,17 +963,59 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
                   </div>
                 </div>
 
-                {(selectedTaskDetail.status === 'RESOLVED' || selectedTaskDetail.status === 'CLOSED') && (selectedTaskDetail.repairImage || selectedTaskDetail.repairNotes) && (
-                  <div className="space-y-4 pt-4 border-t border-gray-100">
-                    <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Resolution Details</h4>
-                    {selectedTaskDetail.repairImage && (
-                      <img src={selectedTaskDetail.repairImage} alt="Repair Evidence" className="w-full max-h-[300px] object-cover rounded-xl border border-gray-200" />
-                    )}
-                    {selectedTaskDetail.repairNotes && (
-                      <div className="bg-emerald-50 rounded-2xl p-4 text-sm text-emerald-800 font-medium whitespace-pre-wrap border border-emerald-100">
-                        {selectedTaskDetail.repairNotes}
+                {(selectedTaskDetail.status === 'RESOLVED' || selectedTaskDetail.status === 'CLOSED') && (selectedTaskDetail.repairImage || selectedTaskDetail.repairNotes || selectedTaskDetail.residentSignature) && (
+                  <div className="mt-8 bg-gradient-to-br from-white to-gray-50/50 rounded-[2rem] border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
+                    <div className="px-6 py-4 border-b border-gray-50 bg-white flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                          <CheckCircle2 size={16} className="text-emerald-600" />
+                        </div>
+                        <h4 className="text-sm font-extrabold text-[#111827]">Resolution Summary</h4>
                       </div>
-                    )}
+                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-100 px-3 py-1 rounded-full">Completed</span>
+                    </div>
+                    
+                    <div className="p-6 md:p-8 space-y-8">
+                      {/* Notes Section */}
+                      {selectedTaskDetail.repairNotes && (
+                        <div>
+                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Technician's Note</p>
+                          <div className="bg-white border border-gray-100 shadow-sm rounded-2xl p-5 text-sm text-gray-700 leading-relaxed font-medium relative overflow-hidden group">
+                            <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-400" />
+                            {selectedTaskDetail.repairNotes}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Evidence & Signature Grid */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        {selectedTaskDetail.repairImage && (
+                          <div className="space-y-3">
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                              <Camera size={12} /> Repair Evidence
+                            </p>
+                            <div className="group relative rounded-2xl overflow-hidden border border-gray-100 shadow-sm bg-gray-50 aspect-video">
+                              <img src={selectedTaskDetail.repairImage} alt="Repair Evidence" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                              <div className="absolute inset-0 ring-1 ring-inset ring-black/5 rounded-2xl" />
+                            </div>
+                          </div>
+                        )}
+                        
+                        {selectedTaskDetail.residentSignature && (
+                          <div className="space-y-3">
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                              <PenTool size={12} /> Resident Signature
+                            </p>
+                            <div className="rounded-2xl border border-gray-100 shadow-sm bg-white aspect-video flex items-center justify-center p-4 relative overflow-hidden">
+                              {/* Background pattern for authenticity */}
+                              <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
+                              <img src={selectedTaskDetail.residentSignature} alt="Resident Signature" className="h-full object-contain mix-blend-multiply relative z-10" />
+                              <div className="absolute bottom-4 left-6 right-6 border-b border-gray-200 border-dashed" />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 )}
 
