@@ -86,6 +86,9 @@
   - **Card Layout:** สร้างกรอบ (Card) สรุปงานพร้อมแสงเงานุ่มๆ เพื่อสร้างความพรีเมียม
   - **Digital Signature Capture:** เพิ่มระบบให้ช่างสามารถขอลายเซ็นลูกบ้าน (ผ่าน Canvas แบบ Real-time sync) เมื่อทำงานเสร็จ โดยแสดงผลอยู่ใน **Signature Pad Authentication Box** พร้อมพื้นหลังแบบลายจุดไข่ปลา
   - **Grid System:** จัดวางรูปถ่ายผลงานซ่อม (Repair Evidence) และลายเซ็น (Resident Signature) ไว้คู่กันแบบ Responsive Grid (อัตราส่วนภาพ 16:9) เพื่อไม่ให้ภาพใหญ่จนล้นจอและรกสายตา
+- **Smart Room History & Warning:** 
+  - เพิ่มปุ่มคลิกดูประวัติห้อง (Room Repair History Timeline) เพื่อให้ช่างเห็นว่าห้องนี้เคยซ่อมอะไรไปบ้าง ใครเป็นคนซ่อม
+  - มีแถบเตือนสีเหลืองอัจฉริยะ (Smart Recurrence Warning) เด้งเตือนอัตโนมัติหากห้องนั้นมีการซ่อมหมวดหมู่เดียวกันในช่วง 30 วันที่ผ่านมา
 
 ## 7. หน้า Settings (ตั้งค่าระบบ) ✅
 - รื้อถอนหน้าจัดการ Hardware Categories และ Departments เดิมทิ้ง
@@ -93,12 +96,17 @@
 
 ---
 **🚀 Next Phase (Future Enhancements):**
-- [x] **Smart Calendar Booking System (Staff & Resident):**
-  - ฝั่งลูกบ้านเลือกระบุวัน/เวลา (Slot) ในการแจ้งซ่อมได้ (เสร็จสมบูรณ์ในหน้า Tickets)
-  - ฝั่งช่าง (Technician Dashboard) มีหน้าจอ Monthly Calendar เพื่อดูคิวงาน พร้อมระบบ Claim งานจาก Pool และแสดงงานของตัวเอง (แก้ไขปัญหาการดึงข้อมูลและระบบผูก ID ช่างเรียบร้อยแล้ว)
-- [ ] Payment Gateway Integration (QR PromptPay & Slip Upload)
-- [x] **Email Notification Integration** (แทนที่ Line Notify เนื่องจาก LINE ยกเลิกบริการ): แจ้งเตือนสถานะการซ่อมบำรุงให้ลูกบ้าน และแจ้งงานซ่อมใหม่ให้ช่างผ่านอีเมล (Nodemailer) ดำเนินการเสร็จสิ้นแล้วใน Backend
-- [x] **Minimalist Room Layout Redesign (UI Revamp Phase):** ✅ *ดำเนินการเสร็จสิ้นแล้ว (2026-05-02)*
-  - เปลี่ยนจาก Card สี่เหลี่ยมแข็งๆ เป็น Soft Rounded Cards พร้อม Pastel Background ตามสถานะ
-  - เพิ่ม Stat Cards สรุปภาพรวม, Toolbar พร้อม Legend และ Floor Header แสดงจำนวนห้องว่าง
-  - ไฟล์ที่แก้ไข: `src/screens/Inventory.tsx`
+- [ ] **ระบบบิลและการชำระเงิน (Billing & Payment Integration):**
+  - สร้าง QR Code PromptPay อัตโนมัติในหน้าบิลของลูกบ้าน
+  - ระบบอัปโหลดสลิป (Slip Upload) และหน้าแอดมินสำหรับตรวจสลิปกดยืนยันชำระเงิน
+- [ ] **ระบบบันทึกค่าใช้จ่ายและอะไหล่แบบยืดหยุ่น (Dynamic Parts & Expenses):**
+  - ให้ช่างสามารถกดเพิ่มรายการค่าใช้จ่าย (Add Item) ได้เรื่อยๆ ในหน้าต่างปิดงาน
+  - บันทึกข้อมูลเป็น `JSON Array` ใน Database เพื่อความยืดหยุ่น
+  - มีปุ่ม Toggle เลือกว่ายอดนี้ **"เก็บเงินลูกบ้าน"** (ไปโผล่ในบิลค่าเช่า) หรือ **"หอพักเป็นผู้ออกค่าใช้จ่าย"**
+- [ ] **ระบบออกรายงานประจำเดือน (Month-End Expense Report):**
+  - ออกแบบหน้า Print Preview สไตล์ A4 ดูเป็นมืออาชีพ
+  - สรุปยอดรวมค่าอะไหล่/ค่าใช้จ่ายทั้งหมด พร้อมตารางแจกแจงรายละเอียด
+  - มีช่องเซ็นชื่อผู้อนุมัติ เพื่อใช้เป็นหลักฐานเบิกจ่ายจริง
+- [x] **Smart Calendar Booking System (Staff & Resident):** ✅ *ดำเนินการเสร็จสิ้นแล้ว*
+- [x] **Email Notification Integration:** ✅ *ดำเนินการเสร็จสิ้นแล้ว*
+- [x] **Minimalist Room Layout Redesign (UI Revamp Phase):** ✅ *ดำเนินการเสร็จสิ้นแล้ว*

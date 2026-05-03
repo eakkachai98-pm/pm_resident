@@ -19,6 +19,7 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
   const [myTasks, setMyTasks] = useState<any[]>([]);
   const [unassignedPool, setUnassignedPool] = useState<any[]>([]);
   const [completedTasks, setCompletedTasks] = useState<any[]>([]);
+  const [allHistoricalTickets, setAllHistoricalTickets] = useState<any[]>([]);
   const [queue, setQueue] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
@@ -58,6 +59,7 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
   const sigCanvasRef = useRef<HTMLCanvasElement>(null);
   const isDrawingSig = useRef(false);
   const [calDark, setCalDark] = useState(true);
+  const [showRoomHistory, setShowRoomHistory] = useState(false);
 
   const startDrawingSig = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     isDrawingSig.current = true;
@@ -215,6 +217,7 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
       setMyTasks(activeMyTasks);
       setUnassignedPool(openUnassigned);
       setCompletedTasks(myCompleted);
+      setAllHistoricalTickets(mappedTickets.filter(t => t.status === 'RESOLVED' || t.status === 'CLOSED'));
       applyAvailabilityToState(availabilityList);
 
       setStats([
@@ -435,6 +438,21 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
       </div>
     </div>
   );
+
+  // --- Start Room History Calculation ---
+  const selectedTaskRoomId = selectedTaskDetail?.room?.id;
+  const selectedTaskCategory = selectedTaskDetail?.category;
+  
+  const roomHistory = selectedTaskRoomId 
+    ? allHistoricalTickets.filter(t => t.room?.id === selectedTaskRoomId && t.id !== selectedTaskDetail.id).sort((a,b) => new Date(b.resolvedAt || b.updatedAt).getTime() - new Date(a.resolvedAt || a.updatedAt).getTime()) 
+    : [];
+  
+  const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+  const recentSameCategoryWarning = roomHistory.find(t => 
+    t.category === selectedTaskCategory && 
+    (new Date().getTime() - new Date(t.resolvedAt || t.updatedAt).getTime() < THIRTY_DAYS)
+  );
+  // --- End Room History Calculation ---
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-brand"></div></div>;
 
@@ -948,7 +966,14 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
                   </div>
                   <div className="space-y-1">
                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Room</span>
-                    <div className="text-sm font-bold text-primary-brand">Room {selectedTaskDetail.room?.roomNumber}</div>
+                    {selectedTaskRoomId ? (
+                      <button onClick={() => setShowRoomHistory(!showRoomHistory)} className="flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-primary-brand rounded-full hover:bg-blue-100 transition-colors shadow-sm border border-blue-100 group">
+                        <Clock size={12} className="group-hover:-rotate-45 transition-transform" />
+                        <span className="text-sm font-bold">Room {selectedTaskDetail.room?.roomNumber}</span>
+                      </button>
+                    ) : (
+                      <div className="text-sm font-bold text-primary-brand">Room {selectedTaskDetail.room?.roomNumber}</div>
+                    )}
                   </div>
                   <div className="space-y-1">
                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Reporter</span>
@@ -962,6 +987,58 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
                     {selectedTaskDetail.description || 'No description provided.'}
                   </div>
                 </div>
+
+                {recentSameCategoryWarning && (
+                  <div className="bg-[#FEF9C3] border border-[#FEF08A] rounded-2xl p-5 flex items-start gap-4 shadow-sm relative overflow-hidden">
+                    <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-yellow-400" />
+                    <div className="text-yellow-500 mt-0.5 bg-white rounded-full p-1 shadow-sm"><AlertTriangle size={18} /></div>
+                    <div>
+                      <h4 className="text-sm font-extrabold text-yellow-800">Warning: Repeated Issue</h4>
+                      <p className="text-xs text-yellow-700 mt-1 font-medium leading-relaxed">This room had a similar <b>{selectedTaskCategory}</b> issue <span className="font-bold underline decoration-yellow-400 underline-offset-2">{(new Date().getTime() - new Date(recentSameCategoryWarning.resolvedAt || recentSameCategoryWarning.updatedAt).getTime()) / (1000 * 3600 * 24) | 0} days ago</span>. Please investigate thoroughly.</p>
+                    </div>
+                  </div>
+                )}
+
+                <AnimatePresence>
+                  {showRoomHistory && (
+                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                      <div className="bg-white border border-gray-100 rounded-[2rem] p-6 shadow-sm mt-4">
+                        <h4 className="text-sm font-extrabold text-[#111827] mb-6 flex items-center gap-2"><History size={16} className="text-gray-400" /> Room Repair History</h4>
+                        {roomHistory.length === 0 ? (
+                          <div className="text-center py-6 bg-gray-50 rounded-2xl border border-gray-100 border-dashed">
+                            <p className="text-xs text-gray-400 font-medium">No past repairs found for this room.</p>
+                          </div>
+                        ) : (
+                          <div className="relative border-l-2 border-gray-100 ml-3 space-y-6">
+                            {roomHistory.map((task) => (
+                              <div key={task.id} className="relative pl-6">
+                                <div className="absolute -left-[13px] top-1 bg-white p-1 rounded-full">
+                                  <div className="w-4 h-4 bg-emerald-100 rounded-full flex items-center justify-center">
+                                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                                  </div>
+                                </div>
+                                <div className="bg-gray-50/50 rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md hover:bg-white transition-all group">
+                                  <div className="flex justify-between items-start mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-xs font-bold text-[#111827]">Resolved - {task.category}</span>
+                                    </div>
+                                    <span className="text-[10px] font-bold text-gray-400 bg-white px-2 py-0.5 rounded-md border border-gray-100 shadow-sm">{new Date(task.resolvedAt || task.updatedAt).toLocaleDateString()}</span>
+                                  </div>
+                                  <p className="text-xs text-gray-600 leading-relaxed mb-3">{task.title}</p>
+                                  <div className="flex items-center gap-2 text-[10px] font-medium text-gray-500 bg-white p-2 rounded-lg border border-gray-100">
+                                    <span className="text-emerald-600 font-bold">Tech: {task.assigneeId || 'Unknown'}</span>
+                                    <span className="text-gray-300">|</span>
+                                    <span className="truncate text-gray-400">{task.resolution || 'No notes left'}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {(selectedTaskDetail.status === 'RESOLVED' || selectedTaskDetail.status === 'CLOSED') && (selectedTaskDetail.repairImage || selectedTaskDetail.repairNotes || selectedTaskDetail.residentSignature) && (
                   <div className="mt-8 bg-gradient-to-br from-white to-gray-50/50 rounded-[2rem] border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
