@@ -876,31 +876,31 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
                   <div className="text-center py-8 text-gray-400 text-sm font-medium">{t('tech.noCompletedTasks' as any)}</div>
                 ) : (
                   <div className="space-y-4">
-                    {completedTasks.map(t => (
-                      <div key={t.id} className="bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-md transition-all">
+                    {completedTasks.map(task => (
+                      <div key={task.id} className="bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-md transition-all">
                         <div className="flex justify-between items-start mb-2">
                           <div>
-                            <span className="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest mb-1 block">{t.id}</span>
-                            <h4 className="text-sm font-bold text-[#111827]">{t.title}</h4>
+                            <span className="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest mb-1 block">{task.id}</span>
+                            <h4 className="text-sm font-bold text-[#111827]">{task.title}</h4>
                           </div>
                           <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-1"><Check size={12} /> Resolved</span>
                         </div>
-                        {t.resolution && (
+                        {task.resolution && (
                           <div className="mt-3 bg-[#F9FAFB] p-3 rounded-xl border border-gray-50">
                             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{t('tech.resolutionNotes' as any)}</p>
-                            <p className="text-xs text-gray-600 font-medium">{t.resolution}</p>
-                            {(t.repairImage || t.residentSignature) && (
+                            <p className="text-xs text-gray-600 font-medium">{task.resolution}</p>
+                            {(task.repairImage || task.residentSignature) && (
                               <div className="mt-3 flex gap-4">
-                                {t.repairImage && (
+                                {task.repairImage && (
                                   <div>
                                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Repair Image</p>
-                                    <img src={t.repairImage} alt="Repair" className="w-16 h-16 object-cover rounded-lg border border-gray-200" />
+                                    <img src={task.repairImage} alt="Repair" className="w-16 h-16 object-cover rounded-lg border border-gray-200" />
                                   </div>
                                 )}
-                                {t.residentSignature && (
+                                {task.residentSignature && (
                                   <div>
                                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Signature</p>
-                                    <img src={t.residentSignature} alt="Signature" className="h-16 object-contain rounded-lg border border-gray-200 bg-white" />
+                                    <img src={task.residentSignature} alt="Signature" className="h-16 object-contain rounded-lg border border-gray-200 bg-white" />
                                   </div>
                                 )}
                               </div>
@@ -908,8 +908,8 @@ export default function TechnicianDashboard({ onSelectAsset, setHeaderAction, us
                           </div>
                         )}
                         <div className="mt-3 flex justify-between items-center text-[11px] font-bold text-gray-400">
-                          <span>{t('tech.asset' as any)} <span className="text-primary-brand cursor-pointer hover:underline" onClick={() => {setShowHistoryModal(false); onSelectAsset(t.assetId);}}>{t.assetId}</span></span>
-                          {t.resolvedAt && <span>{new Date(t.resolvedAt).toLocaleDateString()}</span>}
+                          <span>{t('tech.asset' as any)} <span className="text-primary-brand cursor-pointer hover:underline" onClick={() => {setShowHistoryModal(false); onSelectAsset(task.assetId);}}>{task.assetId}</span></span>
+                          {task.resolvedAt && <span>{new Date(task.resolvedAt).toLocaleDateString()}</span>}
                         </div>
                       </div>
                     ))}
